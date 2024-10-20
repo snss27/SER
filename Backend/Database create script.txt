@@ -1,0 +1,85 @@
+CREATE TABLE "students" (
+  "id" uuid PRIMARY KEY,
+  "name" varchar NOT NULL,
+  "surname" varchar,
+  "patronymic" varchar,
+  "gender" int,
+  "date_of_birth" date,
+  "phone_number" varchar,
+  "representative_phone_number" varchar,
+  "is_on_paid_study" bool,
+  "snils" varchar,
+  "group_id" uuid NOT NULL,
+  "pasport_id" uuid,
+  "work_places_info_id" uuid,
+  "additional_qualifications" uuid[] NOT NULL,
+  "target_agreement" bool,
+  "target_agreement_file" varchar,
+  "army_status" int,
+  "army_subpoena_file" varchar,
+  "army_serve_date" date,
+  "peculiarities" int,
+  "created_date_time_utc" timestamp NOT NULL,
+  "modified_date_time_utc" timestamp,
+  "is_removed" bool NOT NULL
+);
+
+CREATE TABLE "groups" (
+  "id" uuid PRIMARY KEY,
+  "group_number" varchar NOT NULL,
+  "structural_unit" int NOT NULL,
+  "speciality_id" uuid NOT NULL,
+  "enrollment_year" int NOT NULL,
+  "curator_name" varchar NOT NULL,
+  "created_date_time_utc" timestamp NOT NULL,
+  "modified_date_time_utc" timestamp,
+  "is_removed" bool NOT NULL
+);
+
+CREATE TABLE "specialties" (
+  "id" uuid PRIMARY KEY,
+  "name" varchar NOT NULL,
+  "years_of_study" int NOT NULL,
+  "created_date_time_utc" timestamp NOT NULL,
+  "modified_date_time_utc" timestamp,
+  "is_removed" bool NOT NULL
+);
+
+CREATE TABLE "pasports" (
+  "id" uuid PRIMARY KEY,
+  "number" varchar NOT NULL,
+  "series" varchar NOT NULL,
+  "files" varchar[] NOT NULL,
+  "created_date_time_utc" timestamp NOT NULL,
+  "modified_date_time_utc" timestamp,
+  "is_removed" bool NOT NULL
+);
+
+CREATE TABLE "work_places_info" (
+  "id" uuid PRIMARY KEY,
+  "prev_work_places" uuid[] NOT NULL,
+  "curent_work_place" uuid,
+  "created_date_time_utc" timestamp NOT NULL,
+  "modified_date_time_utc" timestamp,
+  "is_removed" bool NOT NULL
+);
+
+CREATE TABLE "work_places" (
+  "id" uuid PRIMARY KEY,
+  "name" varchar NOT NULL,
+  "post" varchar,
+  "work_book_extract_file" varchar,
+  "start_date" date NOT NULL,
+  "finish_date" date,
+  "created_date_time_utc" timestamp NOT NULL,
+  "modified_date_time_utc" timestamp,
+  "is_removed" bool NOT NULL
+);
+
+CREATE TABLE "additional_qualifications" (
+  "id" uuid PRIMARY KEY,
+  "name" varchar,
+  "created_date_time_utc" timestamp NOT NULL,
+  "modified_date_time_utc" timestamp,
+  "is_removed" bool NOT NULL
+);

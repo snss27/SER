@@ -2,4 +2,6 @@
 
 Student Employment Records
 
-# Database diagram - https://dbdiagram.io/d/SER-66eb00f1a0828f8aa6485ed7
+# DB
+
+## Database diagram - https://dbdiagram.io/d/SER-66eb00f1a0828f8aa6485ed7. Для понятности на диаграмме есть внешние ключи и используются enum, на практике в базе внешних ключей нет (всё связанно на уровне сервера) и вместо enum-ов в базе лежат int (enum используются так же только на уровне сервера). Скрипт для создания правильной базы лежит в корне папки "Backend"
