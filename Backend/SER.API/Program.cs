@@ -3,10 +3,14 @@ using PMS.Domain;
 using SER.Configurator.Extensions;
 using SER.Tools.Binders;
 using SER.Tools.Json;
+using SER.Services.Configurator;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-builder.Host.ConfigureWeb((context, serviceCollection) => { });
+builder.Host.ConfigureWeb((context, serviceCollection) => 
+{
+    serviceCollection.Initialize();
+});
 
 builder.Services.AddResponseCompression(options =>
 {

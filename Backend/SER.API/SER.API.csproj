@@ -9,6 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\SER.Configurator\SER.Configurator.csproj" />
     <ProjectReference Include="..\SER.Domain\SER.Domain.csproj" />
+    <ProjectReference Include="..\SER.Services.Configurator\SER.Services.Configurator.csproj" />
     <ProjectReference Include="..\SER.Tools\SER.Tools.csproj" />
   </ItemGroup>
 

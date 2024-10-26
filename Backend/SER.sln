@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SER.Tools", "SER.Tools\SER.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SER.Services", "SER.Services\SER.Services.csproj", "{1F79D29F-32EC-43D6-81F2-A6FB58F20D2D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SER.Configurator", "SER.Configurator\SER.Configurator.csproj", "{A3BD6F7A-2E50-4BEA-85D9-3240A2BE2640}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SER.Configurator", "SER.Configurator\SER.Configurator.csproj", "{A3BD6F7A-2E50-4BEA-85D9-3240A2BE2640}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SER.Services.Configurator", "SER.Services.Configurator\SER.Services.Configurator.csproj", "{397050DF-F73D-43A7-868E-C594A3138972}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{A3BD6F7A-2E50-4BEA-85D9-3240A2BE2640}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A3BD6F7A-2E50-4BEA-85D9-3240A2BE2640}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A3BD6F7A-2E50-4BEA-85D9-3240A2BE2640}.Release|Any CPU.Build.0 = Release|Any CPU
+		{397050DF-F73D-43A7-868E-C594A3138972}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{397050DF-F73D-43A7-868E-C594A3138972}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{397050DF-F73D-43A7-868E-C594A3138972}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{397050DF-F73D-43A7-868E-C594A3138972}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
