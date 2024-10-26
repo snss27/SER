@@ -1,15 +1,44 @@
-var builder = WebApplication.CreateBuilder(args);
+using Microsoft.AspNetCore.ResponseCompression;
+using PMS.Domain;
+using SER.Configurator.Extensions;
+using SER.Tools.Binders;
+using SER.Tools.Json;
 
-// Add services to the container.
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Host.ConfigureWeb((context, serviceCollection) => { });
 
-var app = builder.Build();
+builder.Services.AddResponseCompression(options =>
+{
+    options.EnableForHttps = true;
+    options.Providers.Add<GzipCompressionProvider>();
+    options.Providers.Add<BrotliCompressionProvider>();
+});
 
-// Configure the HTTP request pipeline.
+builder.Services.AddControllers(mvcOptions =>
+    {
+        mvcOptions.ModelBinderProviders.Insert(0, new IDModelBinderProvider());
+    })
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions
+            .AddJsonSettings()
+            .ApplyToolsConverters()
+            .ApplyAnyTypeConverters(DomainAssembly.Itself);
+    });
 
-app.UseAuthorization();
+WebApplication application = builder.Build();
 
-app.MapControllers();
+if (application.Environment.IsDevelopment())
+    application.UseDeveloperExceptionPage();
 
-app.Run();
+application
+    .UseResponseCompression()
+    .UseHttpsRedirection()
+    .UseRouting()
+    .UseEndpoints(endpoints =>
+    {
+        endpoints.MapControllers();
+    });
+
+application.Run();

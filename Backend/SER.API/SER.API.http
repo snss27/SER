@@ -1,6 +1,0 @@
-@SER.API_HostAddress = http://localhost:5027
-
-GET {{SER.API_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
