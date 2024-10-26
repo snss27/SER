@@ -5,18 +5,24 @@ import "@fontsource/roboto/500.css"
 import "@fontsource/roboto/700.css"
 import { CssBaseline, ThemeProvider } from "@mui/material"
 import { AppProps } from "next/app"
+import Head from "next/head"
 import theme from "../constants/muiTheme"
 import "../styles/global.css"
 
 const App = ({ Component, pageProps }: AppProps) => {
     return (
-        <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <Sidebar />
-            <main>
-                <Component {...pageProps} />
-            </main>
-        </ThemeProvider>
+        <>
+            <Head>
+                <title>Система управление трудоустройством студентов</title>
+            </Head>
+            <ThemeProvider theme={theme}>
+                <CssBaseline />
+                <Sidebar />
+                <main>
+                    <Component {...pageProps} />
+                </main>
+            </ThemeProvider>
+        </>
     )
 }
 
