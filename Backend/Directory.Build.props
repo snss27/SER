@@ -3,6 +3,8 @@
 	<PropertyGroup>
 		<OutputPath>$(MSBuildThisFileDirectory)bin\$(MSBuildProjectName)\$(Configuration)\</OutputPath>
 		<BaseIntermediateOutputPath>$(MSBuildThisFileDirectory)obj\$(MSBuildProjectName)\$(Configuration)\</BaseIntermediateOutputPath>
+		<DisableDefaultOutputPath>true</DisableDefaultOutputPath>
+		<DisableDefaultIntermediateOutputPath>true</DisableDefaultIntermediateOutputPath>
 		<TargetFramework>net8.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<LangVersion>12</LangVersion>
