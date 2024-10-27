@@ -8,7 +8,7 @@ import {
     ListItemText,
 } from "@mui/material"
 import { useRouter } from "next/router"
-import { SideBarElementUtils } from "../models/enums/sideBarElements"
+import { SideBarElementUtils } from "../enums/sideBarElements"
 
 const Sidebar = () => {
     const router = useRouter()
