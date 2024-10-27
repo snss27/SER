@@ -18,10 +18,8 @@ const App = ({ Component, pageProps }: AppProps) => {
             <ThemeProvider theme={theme}>
                 <CssBaseline />
                 <Sidebar />
-                <main>
-                    <Box sx={{ flexGrow: 1, height: "100vh", padding: "8px" }}>
-                        <Component {...pageProps} />
-                    </Box>
+                <main style={{ flexGrow: 1, height: "100vh", padding: "8px" }}>
+                    <Component {...pageProps} />
                 </main>
             </ThemeProvider>
         </Box>
