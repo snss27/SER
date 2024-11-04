@@ -1,10 +1,18 @@
-import StudentsTable from "@/components/studentsTable/studentsTable"
+import { IconPosition, IconType } from "@/components/shared/buttons"
+import Button from "@/components/shared/buttons/button"
 import { Box } from "@mui/material"
 
 const MainPage = () => {
     return (
         <Box>
-            <StudentsTable />
+            <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+                <Button
+                    text="Добавить студента"
+                    href="/student/edit"
+                    icon={{ type: IconType.Add, position: IconPosition.Start }}
+                />
+            </Box>
+            {/* <StudentsTable /> */}
         </Box>
     )
 }
