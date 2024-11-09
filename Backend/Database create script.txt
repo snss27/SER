@@ -36,10 +36,10 @@ CREATE TABLE "groups" (
   "is_removed" bool NOT NULL
 );
 
-CREATE TABLE "specialties" (
+CREATE TABLE "specialities" (
   "id" uuid PRIMARY KEY,
   "name" varchar NOT NULL,
-  "years_of_study" int NOT NULL,
+  "study_years" int NOT NULL,
   "created_date_time_utc" timestamp NOT NULL,
   "modified_date_time_utc" timestamp,
   "is_removed" bool NOT NULL

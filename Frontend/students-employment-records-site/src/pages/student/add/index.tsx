@@ -19,7 +19,7 @@ const AddStudentPage = () => {
         <Box sx={{ display: "flex", flexDirection: "column", gap: 3, padding: 2 }}>
             <Box>
                 <Typography variant="h1" textAlign="center">
-                    Добавление студента
+                    Новый студент
                 </Typography>
             </Box>
 

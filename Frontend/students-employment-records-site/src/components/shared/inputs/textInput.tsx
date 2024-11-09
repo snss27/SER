@@ -2,11 +2,10 @@ import { TextField } from "@mui/material"
 import { forwardRef } from "react"
 
 interface Props {
-    value?: string | null
+    value: string | null
     label?: string
-    variant?: "outlined" | "filled" | "standard"
     placeholder?: string
-    onChange?: (value: string) => void
+    onChange: (value: string) => void
 }
 
 const TextInput = forwardRef((props: Props, ref: any) => {
@@ -17,12 +16,10 @@ const TextInput = forwardRef((props: Props, ref: any) => {
                 inputRef={ref}
                 label={props.label ?? "Введите текст"}
                 value={props.value ?? ""}
-                variant={props.variant ?? "outlined"}
+                variant="outlined"
                 placeholder={props.placeholder}
                 fullWidth
-                onChange={(event) =>
-                    props.onChange ? props.onChange(event.target.value) : undefined
-                }
+                onChange={(event) => props.onChange(event.target.value)}
             />
         </form>
     )

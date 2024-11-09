@@ -11,10 +11,10 @@ const AddGroupPage = () => {
     const [groupBlank, dispatch] = useReducer(GroupBlank.reducer, GroupBlank.empty())
 
     return (
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 2, padding: 2 }}>
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 3, padding: 2 }}>
             <Box>
                 <Typography variant="h1" textAlign="center">
-                    Добавление группы
+                    Новая группа
                 </Typography>
             </Box>
 
