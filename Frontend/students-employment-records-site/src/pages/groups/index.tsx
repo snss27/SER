@@ -4,21 +4,20 @@ import PageUrls from "@/constants/pages"
 import { Box } from "@mui/material"
 import { useRouter } from "next/navigation"
 
-const MainPage = () => {
+const GroupsPage = () => {
     const navigator = useRouter()
 
     return (
         <Box>
             <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
                 <Button
-                    text="Добавить студента"
-                    onClick={() => navigator.push(PageUrls.AddStudent)}
+                    text="Добавить группу"
+                    onClick={() => navigator.push(PageUrls.AddGroup)}
                     icon={{ type: IconType.Add, position: IconPosition.Start }}
                 />
             </Box>
-            {/* <StudentsTable /> */}
         </Box>
     )
 }
 
-export default MainPage
+export default GroupsPage

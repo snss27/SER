@@ -12,6 +12,7 @@ export interface Props<T> {
     isOptionEqualToValue?: (first: T, second: T) => boolean
 }
 
+//TODO Возможно лучше написать через TextField с пропсом Select (в документации MUI есть пример)
 const Select = <T,>(props: Props<T>) => {
     function isOptionEqualToValue(first: T, second: T) {
         if (props.isOptionEqualToValue) return props.isOptionEqualToValue(first, second)

@@ -8,12 +8,12 @@ import {
     ListItemText,
 } from "@mui/material"
 import { useRouter } from "next/router"
-import { SideBarElementUtils } from "./enums/sideBarElements"
+import { SideBarElements } from "./enums/sideBarElements"
 
 const Sidebar = () => {
     const router = useRouter()
 
-    const elements = SideBarElementUtils.getAll()
+    const elements = SideBarElements.getAll()
 
     return (
         <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -22,12 +22,10 @@ const Sidebar = () => {
                     {elements.map((element, index) => (
                         <ListItem key={index} disablePadding>
                             <ListItemButton
-                                onClick={() =>
-                                    router.push(SideBarElementUtils.getRouterPath(element))
-                                }>
-                                <ListItemIcon>{SideBarElementUtils.getIcon(element)}</ListItemIcon>
+                                onClick={() => router.push(SideBarElements.getUrl(element))}>
+                                <ListItemIcon>{SideBarElements.getIcon(element)}</ListItemIcon>
                                 <ListItemText
-                                    primary={SideBarElementUtils.getText(element)}
+                                    primary={SideBarElements.getText(element)}
                                     sx={{ fontSize: "24px" }}
                                 />
                             </ListItemButton>

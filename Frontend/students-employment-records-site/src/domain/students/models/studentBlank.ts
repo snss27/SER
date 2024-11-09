@@ -3,6 +3,7 @@ import { Genders } from "../enums/genders"
 import { Peculiarities } from "../enums/peculiarities"
 
 export interface StudentBlank {
+    id: string | null
     name: string | null
     surname: string | null
     patronymic: string | null
@@ -27,6 +28,7 @@ export interface StudentBlank {
 export namespace StudentBlank {
     export function empty(): StudentBlank {
         return {
+            id: null,
             name: null,
             surname: null,
             patronymic: null,

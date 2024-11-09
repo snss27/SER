@@ -1,6 +1,8 @@
-enum Pages {
+enum PageUrls {
     Main = "/",
     AddStudent = "/student/add",
+    Groups = "/groups",
+    AddGroup = "/groups/add",
 }
 
-export default Pages
+export default PageUrls

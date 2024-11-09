@@ -12,7 +12,7 @@ import { StudentBlank } from "@/domain/students/models/studentBlank"
 import { Box, Typography } from "@mui/material"
 import { useReducer } from "react"
 
-const AddStudent = () => {
+const AddStudentPage = () => {
     const [studentBlank, dispatch] = useReducer(StudentBlank.reducer, StudentBlank.empty())
 
     return (
@@ -184,4 +184,4 @@ const AddStudent = () => {
     )
 }
 
-export default AddStudent
+export default AddStudentPage

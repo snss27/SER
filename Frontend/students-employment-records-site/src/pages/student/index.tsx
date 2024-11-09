@@ -1,7 +1,7 @@
 import { Box } from "@mui/material"
 
-const StudentInfo = () => {
+const StudentInfoPage = () => {
     return <Box>StudentInfo</Box>
 }
 
-export default StudentInfo
+export default StudentInfoPage
