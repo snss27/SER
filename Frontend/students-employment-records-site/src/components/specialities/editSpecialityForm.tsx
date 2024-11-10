@@ -40,6 +40,7 @@ const EditSpecialityForm = (props: Props) => {
                 display: "flex",
                 flexDirection: "column",
                 gap: 3,
+                width: "50%",
             }}>
             <Typography variant="h1" textAlign="center">
                 Редактор специальности

@@ -50,73 +50,66 @@ const SpecialitiesPage = () => {
 
     return (
         <Box sx={{ width: "100%", height: "100%", padding: 2 }}>
-            <Box sx={{ width: "70%", margin: "auto" }}>
-                <Box
-                    sx={{
-                        display: "flex",
-                        justifyContent: "flex-end",
-                        alignItems: "center",
-                        marginBottom: 3,
-                    }}>
-                    <Typography variant="h1" sx={{ flex: 1 }} textAlign="center">
-                        Специальности
-                    </Typography>
-                    <Button
-                        text="Добавить специальность"
-                        onClick={() => navigator.push(PageUrls.AddSpeciality)}
-                        icon={{ type: IconType.Add, position: IconPosition.Start }}
-                    />
-                </Box>
-                <Box sx={{ height: "100%" }}>
-                    <TableContainer component={Paper}>
-                        <Table stickyHeader>
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell
-                                        sx={{ fontWeight: "bold", fontSize: 18, width: "50%" }}>
-                                        Название
+            <Box
+                sx={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    alignItems: "center",
+                    marginBottom: 3,
+                }}>
+                <Typography variant="h1" sx={{ flex: 1 }} textAlign="center">
+                    Специальности
+                </Typography>
+                <Button
+                    text="Добавить специальность"
+                    onClick={() => navigator.push(PageUrls.AddSpeciality)}
+                    icon={{ type: IconType.Add, position: IconPosition.Start }}
+                />
+            </Box>
+            <Box sx={{ height: "100%" }}>
+                <TableContainer component={Paper}>
+                    <Table stickyHeader>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell sx={{ fontWeight: "bold", fontSize: 18, width: "50%" }}>
+                                    Название
+                                </TableCell>
+                                <TableCell
+                                    align="right"
+                                    sx={{ fontWeight: "bold", fontSize: 18, width: "25%" }}>
+                                    Время обучение (лет)
+                                </TableCell>
+                                <TableCell
+                                    align="right"
+                                    sx={{ fontWeight: "bold", fontSize: 18, width: "25%" }}>
+                                    Действия
+                                </TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {specialities.map((speciality) => (
+                                <TableRow key={speciality.id}>
+                                    <TableCell sx={{ fontSize: 16, width: "50%" }}>
+                                        {speciality.name}
                                     </TableCell>
-                                    <TableCell
-                                        align="right"
-                                        sx={{ fontWeight: "bold", fontSize: 18, width: "25%" }}>
-                                        Время обучение (лет)
+                                    <TableCell align="right" sx={{ fontSize: 16, width: "25%" }}>
+                                        {speciality.studyYears}
                                     </TableCell>
-                                    <TableCell
-                                        align="right"
-                                        sx={{ fontWeight: "bold", fontSize: 18, width: "25%" }}>
-                                        Действия
+                                    <TableCell align="right" sx={{ fontSize: 16, width: "25%" }}>
+                                        <IconButton
+                                            icon={IconType.Edit}
+                                            onClick={() => handleEditButton(speciality.id)}
+                                        />
+                                        <IconButton
+                                            icon={IconType.Delete}
+                                            onClick={() => handleRemoveButton(speciality.id)}
+                                        />
                                     </TableCell>
                                 </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {specialities.map((speciality) => (
-                                    <TableRow key={speciality.id}>
-                                        <TableCell sx={{ fontSize: 16, width: "50%" }}>
-                                            {speciality.name}
-                                        </TableCell>
-                                        <TableCell
-                                            align="right"
-                                            sx={{ fontSize: 16, width: "25%" }}>
-                                            {speciality.studyYears}
-                                        </TableCell>
-                                        <TableCell
-                                            align="right"
-                                            sx={{ fontSize: 16, width: "25%" }}>
-                                            <IconButton
-                                                icon={IconType.Edit}
-                                                onClick={() => handleEditButton(speciality.id)}
-                                            />
-                                            <IconButton
-                                                icon={IconType.Delete}
-                                                onClick={() => handleRemoveButton(speciality.id)}
-                                            />
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-                </Box>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
             </Box>
         </Box>
     )

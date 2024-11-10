@@ -8,7 +8,7 @@ const GroupsPage = () => {
     const navigator = useRouter()
 
     return (
-        <Box>
+        <Box sx={{ padding: 2 }}>
             <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
                 <Button
                     text="Добавить группу"
