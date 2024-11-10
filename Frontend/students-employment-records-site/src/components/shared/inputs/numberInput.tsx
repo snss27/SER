@@ -9,12 +9,8 @@ export interface IProps {
     step?: number
     onChange: (value: number | null) => void
 }
-
+//TODO Можно вводить букву e
 export const NumberInput = (props: IProps) => {
-    function getNumberDecimalPlaces(value: number) {
-        return value.toString().split(".")[1]?.length || 0
-    }
-
     function onChange(event: ChangeEvent<HTMLInputElement>) {
         const inputValue = event.currentTarget.value.replace(",", ".")
         if (inputValue === "") return props.onChange(null)
@@ -30,12 +26,13 @@ export const NumberInput = (props: IProps) => {
 
     return (
         <TextField
+            value={props.value?.toString() || ""}
             type="number"
             label={props.label}
             fullWidth
-            onChange={onChange}
-            value={props.value?.toString() || ""}
             variant="outlined"
+            autoComplete="new-password"
+            onChange={onChange}
         />
     )
 }

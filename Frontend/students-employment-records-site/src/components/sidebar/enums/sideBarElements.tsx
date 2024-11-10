@@ -1,4 +1,4 @@
-import PageUrls from "@/constants/pages"
+import PageUrls from "@/constants/pageUrls"
 import { enumToArrayNumber } from "@/tools/enums/enumUtils"
 import { NeverUnreachable } from "@/tools/neverUreachable"
 import EngineeringIcon from "@mui/icons-material/Engineering"

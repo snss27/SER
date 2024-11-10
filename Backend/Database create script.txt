@@ -4,45 +4,45 @@ CREATE TABLE "students" (
   "surname" varchar,
   "patronymic" varchar,
   "gender" int,
-  "birth_date" date,
-  "phone_number" varchar,
-  "representative_phone_number" varchar,
-  "is_on_paid_study" bool,
+  "birthDate" date,
+  "phonenumber" varchar,
+  "representativephonenumber" varchar,
+  "isonpaidstudy" bool,
   "snils" varchar,
-  "group_id" bytea NOT NULL,
-  "passport_id" bytea,
-  "work_places_info_id" bytea,
-  "additional_qualifications" bytea[] NOT NULL,
-  "is_target_agreement" bool,
-  "target_agreement_file" varchar,
-  "army_status" int,
-  "army_subpoena_file" varchar,
-  "army_serve_date" date,
+  "groupid" bytea NOT NULL,
+  "passportid" bytea,
+  "workplacesinfoid" bytea,
+  "additionalqualifications" bytea[] NOT NULL,
+  "istargetagreement" bool,
+  "targetagreementfile" varchar,
+  "armystatus" int,
+  "armysubpoenafile" varchar,
+  "armyservedate" date,
   "peculiarity" int,
-  "created_date_time_utc" timestamp NOT NULL,
-  "modified_date_time_utc" timestamp,
-  "is_removed" bool NOT NULL
+  "createddatetimeutc" timestamp NOT NULL,
+  "modifieddatetimeutc" timestamp,
+  "isremoved" bool NOT NULL
 );
 
 CREATE TABLE "groups" (
   "id" bytea PRIMARY KEY,
-  "group_number" varchar NOT NULL,
-  "structural_unit" int NOT NULL,
-  "speciality_id" bytea NOT NULL,
-  "enrollment_year" int NOT NULL,
-  "curator_name" varchar NOT NULL,
-  "created_date_time_utc" timestamp NOT NULL,
-  "modified_date_time_utc" timestamp,
-  "is_removed" bool NOT NULL
+  "groupnumber" varchar NOT NULL,
+  "structuralunit" int NOT NULL,
+  "specialityid" bytea NOT NULL,
+  "enrollmentyear" int NOT NULL,
+  "curatorname" varchar NOT NULL,
+  "createddatetimeutc" timestamp NOT NULL,
+  "modifieddatetimeutc" timestamp,
+  "isremoved" bool NOT NULL
 );
 
 CREATE TABLE "specialities" (
   "id" bytea PRIMARY KEY,
   "name" varchar NOT NULL,
-  "study_years" int NOT NULL,
-  "created_date_time_utc" timestamp NOT NULL,
-  "modified_date_time_utc" timestamp,
-  "is_removed" bool NOT NULL
+  "studyyears" int NOT NULL,
+  "createddatetimeutc" timestamp NOT NULL,
+  "modifieddatetimeutc" timestamp,
+  "isremoved" bool NOT NULL
 );
 
 CREATE TABLE "pasports" (
@@ -50,36 +50,36 @@ CREATE TABLE "pasports" (
   "number" varchar NOT NULL,
   "series" varchar NOT NULL,
   "files" varchar[] NOT NULL,
-  "created_date_time_utc" timestamp NOT NULL,
-  "modified_date_time_utc" timestamp,
-  "is_removed" bool NOT NULL
+  "createddatetimeutc" timestamp NOT NULL,
+  "modifieddatetimeutc" timestamp,
+  "isremoved" bool NOT NULL
 );
 
-CREATE TABLE "work_places_info" (
+CREATE TABLE "workplacesinfo" (
   "id" bytea PRIMARY KEY,
-  "prev_work_places" bytea[] NOT NULL,
-  "curent_work_place" bytea,
-  "created_date_time_utc" timestamp NOT NULL,
-  "modified_date_time_utc" timestamp,
-  "is_removed" bool NOT NULL
+  "prevworkplaces" bytea[] NOT NULL,
+  "curentworkplace" bytea,
+  "createddatetimeutc" timestamp NOT NULL,
+  "modifieddatetimeutc" timestamp,
+  "isremoved" bool NOT NULL
 );
 
-CREATE TABLE "work_places" (
+CREATE TABLE "workplaces" (
   "id" bytea PRIMARY KEY,
   "name" varchar NOT NULL,
   "post" varchar,
-  "work_book_extract_file" varchar,
-  "start_date" date NOT NULL,
-  "finish_date" date,
-  "created_date_time_utc" timestamp NOT NULL,
-  "modified_date_time_utc" timestamp,
-  "is_removed" bool NOT NULL
+  "workbookextractfile" varchar,
+  "startdate" date NOT NULL,
+  "finishdate" date,
+  "createddatetimeutc" timestamp NOT NULL,
+  "modifieddatetimeutc" timestamp,
+  "isremoved" bool NOT NULL
 );
 
-CREATE TABLE "additional_qualifications" (
+CREATE TABLE "additionalqualifications" (
   "id" bytea PRIMARY KEY,
   "name" varchar,
-  "created_date_time_utc" timestamp NOT NULL,
-  "modified_date_time_utc" timestamp,
-  "is_removed" bool NOT NULL
+  "createddatetimeutc" timestamp NOT NULL,
+  "modifieddatetimeutc" timestamp,
+  "isremoved" bool NOT NULL
 );

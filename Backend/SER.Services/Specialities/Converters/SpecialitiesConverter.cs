@@ -14,4 +14,9 @@ internal static class SpecialitiesConverter
 			db.ModifiedDateTime
 		);
 	}
+
+	public static Speciality[] ToSpecialities(this SpecialityDB[] dbs)
+	{
+		return dbs.Select(ToSpeciality).ToArray();
+	}
 }

@@ -31,16 +31,7 @@ const Select = <T,>(props: Props<T>) => {
             onChange={(_, value) => props.onChange(value)}
             getOptionLabel={props.getOptionLabel}
             renderInput={(params) => (
-                <TextField
-                    {...params}
-                    label={props.label}
-                    slotProps={{
-                        htmlInput: {
-                            ...params.inputProps,
-                            autoComplete: "new-password",
-                        },
-                    }}
-                />
+                <TextField {...params} label={props.label} autoComplete="password" />
             )}
         />
     )

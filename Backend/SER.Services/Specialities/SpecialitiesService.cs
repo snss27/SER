@@ -16,7 +16,7 @@ public class SpecialitiesService : ISpecialitiesService
 
 	public async Task<Result> Save(SpecialityBlank blank)
 	{
-		if (blank.Name is null) return Result.Fail("Укажите название");
+		if (String.IsNullOrWhiteSpace(blank.Name)) return Result.Fail("Укажите название");
 
 		if (blank.StudyYears is null) return Result.Fail("Укажите количество лет для обучения");
 		if (blank.StudyYears > 10) return Result.Fail("Количество лет для обучение не может быть больше 10 лет");
@@ -24,5 +24,20 @@ public class SpecialitiesService : ISpecialitiesService
 		blank.Id ??= ID.New();
 
 		return await _specialitiesRepository.Save(blank);
+	}
+
+	public async Task<Result> Remove(ID id)
+	{
+		return await _specialitiesRepository.Remove(id);
+	}
+
+	public async Task<Speciality> Get(ID id)
+	{
+		return await _specialitiesRepository.Get(id);
+	}
+
+	public async Task<Speciality[]> GetAll()
+	{
+		return await _specialitiesRepository.GetAll();
 	}
 }

@@ -5,6 +5,7 @@ enum PageUrls {
     AddGroup = "/groups/add",
     Specialities = "/specialities",
     AddSpeciality = "/specialities/add",
+    EditSpeciality = "/specialities/edit",
 }
 
 export default PageUrls

@@ -3,7 +3,7 @@ export class Result {
 
     public isSuccess = this.errors.length === 0
 
-    public get getError() {
+    public get getErrorString() {
         return this.errors[0].message
     }
 

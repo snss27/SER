@@ -61,12 +61,7 @@ const AsyncAutocomplete = <T,>(props: Props<T>) => {
                 {...params}
                 label={props.label}
                 placeholder={props.placeholder}
-                slotProps={{
-                    htmlInput: {
-                        ...params.inputProps,
-                        autoComplete: "new-password",
-                    },
-                }}
+                autoComplete="password"
                 onChange={(event) => onChangeSearch(event.target.value)}
             />
         )

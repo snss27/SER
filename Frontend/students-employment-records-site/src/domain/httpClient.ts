@@ -28,8 +28,6 @@ export class HttpClient {
             params != null ? HttpClient.toQueryString(params) : ""
         }`
 
-        console.log(JSON.stringify(data))
-
         const response = await HttpClient.httpHandler(
             await fetch(fullUrl, {
                 method: "POST",
