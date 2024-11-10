@@ -1,5 +1,5 @@
 CREATE TABLE "students" (
-  "id" uuid PRIMARY KEY,
+  "id" bytea PRIMARY KEY,
   "name" varchar NOT NULL,
   "surname" varchar,
   "patronymic" varchar,
@@ -9,10 +9,10 @@ CREATE TABLE "students" (
   "representative_phone_number" varchar,
   "is_on_paid_study" bool,
   "snils" varchar,
-  "group_id" uuid NOT NULL,
-  "passport_id" uuid,
-  "work_places_info_id" uuid,
-  "additional_qualifications" uuid[] NOT NULL,
+  "group_id" bytea NOT NULL,
+  "passport_id" bytea,
+  "work_places_info_id" bytea,
+  "additional_qualifications" bytea[] NOT NULL,
   "is_target_agreement" bool,
   "target_agreement_file" varchar,
   "army_status" int,
@@ -25,10 +25,10 @@ CREATE TABLE "students" (
 );
 
 CREATE TABLE "groups" (
-  "id" uuid PRIMARY KEY,
+  "id" bytea PRIMARY KEY,
   "group_number" varchar NOT NULL,
   "structural_unit" int NOT NULL,
-  "speciality_id" uuid NOT NULL,
+  "speciality_id" bytea NOT NULL,
   "enrollment_year" int NOT NULL,
   "curator_name" varchar NOT NULL,
   "created_date_time_utc" timestamp NOT NULL,
@@ -37,7 +37,7 @@ CREATE TABLE "groups" (
 );
 
 CREATE TABLE "specialities" (
-  "id" uuid PRIMARY KEY,
+  "id" bytea PRIMARY KEY,
   "name" varchar NOT NULL,
   "study_years" int NOT NULL,
   "created_date_time_utc" timestamp NOT NULL,
@@ -46,7 +46,7 @@ CREATE TABLE "specialities" (
 );
 
 CREATE TABLE "pasports" (
-  "id" uuid PRIMARY KEY,
+  "id" bytea PRIMARY KEY,
   "number" varchar NOT NULL,
   "series" varchar NOT NULL,
   "files" varchar[] NOT NULL,
@@ -56,16 +56,16 @@ CREATE TABLE "pasports" (
 );
 
 CREATE TABLE "work_places_info" (
-  "id" uuid PRIMARY KEY,
-  "prev_work_places" uuid[] NOT NULL,
-  "curent_work_place" uuid,
+  "id" bytea PRIMARY KEY,
+  "prev_work_places" bytea[] NOT NULL,
+  "curent_work_place" bytea,
   "created_date_time_utc" timestamp NOT NULL,
   "modified_date_time_utc" timestamp,
   "is_removed" bool NOT NULL
 );
 
 CREATE TABLE "work_places" (
-  "id" uuid PRIMARY KEY,
+  "id" bytea PRIMARY KEY,
   "name" varchar NOT NULL,
   "post" varchar,
   "work_book_extract_file" varchar,
@@ -77,7 +77,7 @@ CREATE TABLE "work_places" (
 );
 
 CREATE TABLE "additional_qualifications" (
-  "id" uuid PRIMARY KEY,
+  "id" bytea PRIMARY KEY,
   "name" varchar,
   "created_date_time_utc" timestamp NOT NULL,
   "modified_date_time_utc" timestamp,

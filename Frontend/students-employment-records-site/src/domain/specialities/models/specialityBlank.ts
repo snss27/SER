@@ -1,5 +1,5 @@
 export interface SpecialityBlank {
-    id: null
+    id: string | null
     name: string | null
     studyYears: number | null
 }

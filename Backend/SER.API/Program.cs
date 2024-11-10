@@ -31,6 +31,17 @@ builder.Services.AddControllers(mvcOptions =>
             .ApplyAnyTypeConverters(DomainAssembly.Itself);
     });
 
+builder.Services.AddCors(options =>
+{
+	options.AddDefaultPolicy(builder =>
+	{
+		builder
+			.AllowAnyOrigin()
+			.AllowAnyMethod()
+			.AllowAnyHeader();
+	});
+});
+
 WebApplication application = builder.Build();
 
 if (application.Environment.IsDevelopment())
@@ -39,7 +50,8 @@ if (application.Environment.IsDevelopment())
 application
     .UseResponseCompression()
     .UseHttpsRedirection()
-    .UseRouting()
+	.UseCors()
+	.UseRouting()
     .UseEndpoints(endpoints =>
     {
         endpoints.MapControllers();

@@ -1,0 +1,8 @@
+using SER.Domain.Specialities;
+using SER.Tools.Types.Results;
+
+namespace SER.Domain.Services;
+public interface ISpecialitiesService
+{
+	public Task<Result> Save(SpecialityBlank blank);  
+}

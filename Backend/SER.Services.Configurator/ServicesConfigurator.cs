@@ -1,5 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using SER.Configurator.Connectors;
+using Microsoft.Extensions.DependencyInjection;
+using SER.Domain.Services;
+using SER.Services.Specialities;
+using SER.Services.Specialities.Repositories;
 using SER.Services.Students;
 using SER.Services.Students.Repositories;
 
@@ -11,12 +13,14 @@ public static class ServicesConfigurator
         #region Services
 
         services.AddSingleton<IStudentsService, StudentsService>();
+		services.AddSingleton<ISpecialitiesService, SpecialitiesService>();
 
         #endregion
 
         #region Repositories
 
         services.AddSingleton<IStudentsRepository, StudentsRepository>();
+		services.AddSingleton<ISpecialitiesRepository, SpecialitiesRepository>();
 
         #endregion
 

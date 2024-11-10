@@ -10,6 +10,7 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3"
 import { ru } from "date-fns/locale/ru"
 import { AppProps } from "next/app"
 import Head from "next/head"
+import { SnackbarProvider } from "notistack"
 import "../styles/global.css"
 
 const App = ({ Component, pageProps }: AppProps) => {
@@ -20,11 +21,13 @@ const App = ({ Component, pageProps }: AppProps) => {
             </Head>
             <ThemeProvider theme={theme}>
                 <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={ru}>
-                    <CssBaseline />
-                    <Sidebar />
-                    <main style={{ flexGrow: 1, height: "100vh", padding: "8px" }}>
-                        <Component {...pageProps} />
-                    </main>
+                    <SnackbarProvider>
+                        <CssBaseline />
+                        <Sidebar />
+                        <main style={{ flexGrow: 1, height: "100vh", padding: "8px" }}>
+                            <Component {...pageProps} />
+                        </main>
+                    </SnackbarProvider>
                 </LocalizationProvider>
             </ThemeProvider>
         </Box>

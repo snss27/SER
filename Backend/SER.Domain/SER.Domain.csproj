@@ -1,3 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
+  <ItemGroup>
+    <ProjectReference Include="..\SER.Tools\SER.Tools.csproj" />
+  </ItemGroup>
 </Project>
