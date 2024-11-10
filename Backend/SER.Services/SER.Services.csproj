@@ -37,4 +37,9 @@
     <ProjectReference Include="..\SER.Tools\SER.Tools.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Groups\Converters\" />
+    <Folder Include="Groups\Models\" />
+  </ItemGroup>
+
 </Project>

@@ -17,13 +17,13 @@ public class SpecialitiesRepository : ISpecialitiesRepository
 	{
 		_connector = connector;
 	}
-	public async Task<Result> Save(SpecialityBlank db)
+	public async Task<Result> Save(SpecialityBlank blank)
 	{
 		Query query = _connector.CreateQuery(Sql.Specialities_Save);
 		{
-			query.Add(db.Id);
-			query.Add(db.Name);
-			query.Add(db.StudyYears);
+			query.Add(blank.Id);
+			query.Add(blank.Name);
+			query.Add(blank.StudyYears);
 			query.Add(DateTime.UtcNow, "p_currentdatetimeutc");
 		}
 
@@ -39,6 +39,7 @@ public class SpecialitiesRepository : ISpecialitiesRepository
 		Query query = _connector.CreateQuery(Sql.Specialities_Remove);
 		{
 			query.Add(id);
+			query.Add(DateTime.UtcNow, "p_currentdatetimeutc");
 		}
 
 		await using IAsyncSeparatelySession session = await _connector.CreateAsyncSession();

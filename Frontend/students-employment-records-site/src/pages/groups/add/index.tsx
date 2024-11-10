@@ -5,9 +5,11 @@ import Select from "@/components/shared/inputs/select"
 import TextInput from "@/components/shared/inputs/textInput"
 import YearPicker from "@/components/shared/inputs/yearPicker"
 import { StructuralUnits } from "@/domain/groups/enums/structuralUnits"
+import GroupsProvider from "@/domain/groups/groupsProvider"
 import { GroupBlank } from "@/domain/groups/models/groupBlank"
 import Speciality from "@/domain/specialities/models/speciality"
-import { SpecialitiesProvider } from "@/domain/specialities/specialitiesProvider"
+import SpecialitiesProvider from "@/domain/specialities/specialitiesProvider"
+import useNotifications from "@/hooks/useNotifications"
 import { Box, Typography } from "@mui/material"
 import { useRouter } from "next/router"
 import { useEffect, useReducer, useState } from "react"
@@ -17,6 +19,7 @@ const AddGroupPage = () => {
     const [specialities, setSpecialities] = useState<Speciality[]>([])
 
     const navigator = useRouter()
+    const { showError, showSuccess } = useNotifications()
 
     useEffect(() => {
         async function loadSpecialities() {
@@ -32,7 +35,13 @@ const AddGroupPage = () => {
         navigator.back()
     }
 
-    function handleSaveButton() {}
+    async function handleSaveButton() {
+        const result = await GroupsProvider.save(groupBlank)
+        if (!result.isSuccess) return showError(result.getErrorString)
+
+        showSuccess("Изменения сохранены")
+        navigator.back()
+    }
 
     return (
         <Box

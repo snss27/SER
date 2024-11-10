@@ -3,7 +3,7 @@ import Button from "@/components/shared/buttons/button"
 import IconButton from "@/components/shared/buttons/iconButtons"
 import PageUrls from "@/constants/pageUrls"
 import Speciality from "@/domain/specialities/models/speciality"
-import { SpecialitiesProvider } from "@/domain/specialities/specialitiesProvider"
+import SpecialitiesProvider from "@/domain/specialities/specialitiesProvider"
 import useNotifications from "@/hooks/useNotifications"
 import {
     Box,

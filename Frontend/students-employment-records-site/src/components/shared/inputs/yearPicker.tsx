@@ -10,7 +10,7 @@ const YearPicker = (props: Props) => {
     function handleChange(value: Date | null) {
         if (value === null) return props.onChange(null)
 
-        return value.getFullYear()
+        props.onChange(value.getFullYear())
     }
 
     return (

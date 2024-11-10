@@ -3,7 +3,7 @@ import HttpClient from "../httpClient"
 import Speciality from "./models/speciality"
 import { SpecialityBlank } from "./models/specialityBlank"
 
-export class SpecialitiesProvider {
+class SpecialitiesProvider {
     public static async save(blank: SpecialityBlank): Promise<Result> {
         const result = await HttpClient.postJsonAsync("/specialities/save", blank)
         return Result.fromAny(result)
@@ -24,3 +24,5 @@ export class SpecialitiesProvider {
         return Speciality.fromAny(result)
     }
 }
+
+export default SpecialitiesProvider

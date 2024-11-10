@@ -2,10 +2,10 @@ import { enumToArrayNumber } from "@/tools/enums/enumUtils"
 import { NeverUnreachable } from "@/tools/neverUreachable"
 
 export enum StructuralUnits {
-    SP1,
-    SP2,
-    SP3,
-    SP4,
+    SP1 = 1,
+    SP2 = 2,
+    SP3 = 3,
+    SP4 = 4,
 }
 
 export namespace StructuralUnits {

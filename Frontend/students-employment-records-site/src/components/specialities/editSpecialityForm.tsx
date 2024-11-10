@@ -1,5 +1,5 @@
 import { SpecialityBlank } from "@/domain/specialities/models/specialityBlank"
-import { SpecialitiesProvider } from "@/domain/specialities/specialitiesProvider"
+import SpecialitiesProvider from "@/domain/specialities/specialitiesProvider"
 import useNotifications from "@/hooks/useNotifications"
 import { Box, Typography } from "@mui/material"
 import { useRouter } from "next/router"

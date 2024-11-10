@@ -1,6 +1,6 @@
 import EditSpecialityForm from "@/components/specialities/editSpecialityForm"
 import { SpecialityBlank } from "@/domain/specialities/models/specialityBlank"
-import { SpecialitiesProvider } from "@/domain/specialities/specialitiesProvider"
+import SpecialitiesProvider from "@/domain/specialities/specialitiesProvider"
 import { Box } from "@mui/material"
 import { useParams } from "next/navigation"
 import { useEffect, useState } from "react"

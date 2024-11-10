@@ -26,7 +26,7 @@ CREATE TABLE "students" (
 
 CREATE TABLE "groups" (
   "id" bytea PRIMARY KEY,
-  "groupnumber" varchar NOT NULL,
+  "number" varchar NOT NULL,
   "structuralunit" int NOT NULL,
   "specialityid" bytea NOT NULL,
   "enrollmentyear" int NOT NULL,
