@@ -38,4 +38,19 @@ public class GroupsService : IGroupsService
 
 		return await _groupsRepository.Save(blank);
 	}
+
+	public async Task<Result> Remove(ID id)
+	{
+		return await _groupsRepository.Remove(id);
+	}
+
+	public async Task<Group> Get(ID id)
+	{
+		return await _groupsRepository.Get(id);
+	}
+
+	public async Task<Group[]> GetAll()
+	{
+		return await _groupsRepository.GetAll();
+	}
 }
