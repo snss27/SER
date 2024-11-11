@@ -12,7 +12,7 @@ internal static class GroupsConverter
 			db.StructuralUnit,
 			db.SpecialityId,
 			db.EnrollmentYear,
-			db.CuratorName,
+			db.CuratorId,
 			db.CreatedDateTimeUtc,
 			db.ModifiedDateTimeUtc
 		);

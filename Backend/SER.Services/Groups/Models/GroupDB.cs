@@ -9,7 +9,7 @@ public class GroupDB
 	public StructuralUnits StructuralUnit { get; set; }
 	public ID SpecialityId { get; set; }
 	public Int32 EnrollmentYear { get; set; }
-	public String CuratorName { get; set; }
+	public ID CuratorId { get; set; }
 
 	public DateTime CreatedDateTimeUtc { get; set; }
 	public DateTime? ModifiedDateTimeUtc { get; set; }

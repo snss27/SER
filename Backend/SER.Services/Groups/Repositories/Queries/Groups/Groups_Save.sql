@@ -4,7 +4,7 @@ INSERT INTO groups(
 	structuralunit,
 	specialityid,
 	enrollmentyear,
-	curatorname,
+	curatorid,
 	createddatetimeutc,
 	modifieddatetimeutc,
 	isremoved
@@ -15,7 +15,7 @@ VALUES(
 	@p_structuralunit,
 	@p_specialityid,
 	@p_enrollmentyear,
-	@p_curatorname,
+	@p_curatorid,
 	@p_currentdatetimeutc,
 	null,
 	false
@@ -25,5 +25,5 @@ ON CONFLICT (id) DO UPDATE SET
 	structuralunit = @p_structuralunit, 
 	specialityid = @p_specialityid,
 	enrollmentyear = @p_enrollmentyear,
-	curatorname = @p_curatorname,
+	curatorid = @p_curatorid,
 	modifieddatetimeutc = @p_currentdatetimeutc

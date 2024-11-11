@@ -9,5 +9,5 @@ public class GroupBlank
 	public StructuralUnits? StructuralUnit { get; set; }
 	public ID? SpecialityId {  get; set; }
 	public Int32? EnrollmentYear { get; set; }
-	public String? CuratorName { get; set; }
+	public ID? CuratorId { get; set; }
 }

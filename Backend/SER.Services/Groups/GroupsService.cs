@@ -30,9 +30,7 @@ public class GroupsService : IGroupsService
 
 		if (blank.EnrollmentYear is null) return Result.Fail("Выберите год поступления");
 
-		if (String.IsNullOrWhiteSpace(blank.CuratorName)) return Result.Fail("Введите имя куратора");
-
-		blank.CuratorName = blank.CuratorName.Trim();
+		if (blank.CuratorId is null) return Result.Fail("Выберите куратора");
 
 		blank.Id ??= ID.New();
 

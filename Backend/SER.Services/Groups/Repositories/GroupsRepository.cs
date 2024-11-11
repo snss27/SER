@@ -30,7 +30,7 @@ public class GroupsRepository : IGroupsRepository
 			query.Add(blank.StructuralUnit);
 			query.Add(blank.SpecialityId);
 			query.Add(blank.EnrollmentYear);
-			query.Add(blank.CuratorName);
+			query.Add(blank.CuratorId);
 			query.Add(DateTime.UtcNow, "p_currentdatetimeutc");
 		}
 

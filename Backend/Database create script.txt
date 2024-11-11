@@ -30,7 +30,7 @@ CREATE TABLE "groups" (
   "structuralunit" int NOT NULL,
   "specialityid" bytea NOT NULL,
   "enrollmentyear" int NOT NULL,
-  "curatorname" varchar NOT NULL,
+  "curatorid" bytea NOT NULL,
   "createddatetimeutc" timestamp NOT NULL,
   "modifieddatetimeutc" timestamp,
   "isremoved" bool NOT NULL

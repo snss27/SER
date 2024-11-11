@@ -9,18 +9,18 @@ public class Group
 	public StructuralUnits StructuralUnit { get;  }
 	public ID SpecialityId { get; }
 	public Int32 EnrollmentYear { get; }
-	public String CuratorName { get; }
+	public ID CuratorId { get; }
 	public DateTime CreatedDateTimeUtc { get; }
 	public DateTime? ModifiedDateTimeUtc { get; }
 
-	public Group(ID id, String number, StructuralUnits structuralUnit, ID specialityId, Int32 enrollmentYear, String curatorName, DateTime createdDateTimeUtc, DateTime? modifiedDateTimeUtc)
+	public Group(ID id, String number, StructuralUnits structuralUnit, ID specialityId, Int32 enrollmentYear, ID curatorId, DateTime createdDateTimeUtc, DateTime? modifiedDateTimeUtc)
 	{
 		Id = id;
 		Number = number;
 		StructuralUnit = structuralUnit;
 		SpecialityId = specialityId;
 		EnrollmentYear = enrollmentYear;
-		CuratorName = curatorName;
+		CuratorId = curatorId;
 		CreatedDateTimeUtc = createdDateTimeUtc;
 		ModifiedDateTimeUtc = modifiedDateTimeUtc;
 	}
