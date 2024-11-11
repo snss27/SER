@@ -83,3 +83,13 @@ CREATE TABLE "additionalqualifications" (
   "modifieddatetimeutc" timestamp,
   "isremoved" bool NOT NULL
 );
+
+CREATE TABLE "curators" (
+  "id" bytea PRIMARY KEY,
+  "name" varchar NOT NULL,
+  "surname" varchar,
+  "patronymic" varchar,
+  "createddatetimeutc" timestamp NOT NULL,
+  "modifieddatetimeutc" timestamp,
+  "isremoved" bool NOT NULL
+);
