@@ -57,7 +57,7 @@ const theme = createTheme({
     },
 
     typography: {
-        fontFamily: '"Montserrat"',
+        fontFamily: '"Helvetica"',
 
         h1: {
             fontSize: "2rem",
