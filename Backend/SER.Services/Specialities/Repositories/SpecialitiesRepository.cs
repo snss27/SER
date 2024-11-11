@@ -1,5 +1,6 @@
 using SER.Configurator.Connectors;
 using SER.Domain.Specialities;
+using SER.Services._base;
 using SER.Services.Specialities.Converters;
 using SER.Services.Specialities.Models;
 using SER.Services.Specialities.Repositories.Queries;
@@ -9,14 +10,10 @@ using SER.Tools.Types.IDs;
 using SER.Tools.Types.Results;
 
 namespace SER.Services.Specialities.Repositories;
-public class SpecialitiesRepository : ISpecialitiesRepository
+public class SpecialitiesRepository : BaseRepository, ISpecialitiesRepository
 {
-	private readonly MainConnector _connector;
+	public SpecialitiesRepository(MainConnector connector) : base(connector) { }
 
-	public SpecialitiesRepository(MainConnector connector)
-	{
-		_connector = connector;
-	}
 	public async Task<Result> Save(SpecialityBlank blank)
 	{
 		Query query = _connector.CreateQuery(Sql.Specialities_Save);

@@ -1,5 +1,6 @@
 using SER.Configurator.Connectors;
 using SER.Domain.Groups;
+using SER.Services._base;
 using SER.Services.Groups.Converters;
 using SER.Services.Groups.Models;
 using SER.Services.Groups.Repositories.Queries;
@@ -10,16 +11,9 @@ using SER.Tools.Types.IDs;
 using SER.Tools.Types.Results;
 
 namespace SER.Services.Groups.Repositories;
-public class GroupsRepository : IGroupsRepository
+public class GroupsRepository : BaseRepository, IGroupsRepository
 {
-	//TODO Сделать BaseRepository, чтобы не писать каждый раз это?
-
-	private readonly MainConnector _connector;
-
-	public GroupsRepository(MainConnector connector)
-	{
-		_connector = connector;
-	}
+	public GroupsRepository(MainConnector connector) : base(connector) { }
 
 	public async Task<Result> Save(GroupBlank blank)
 	{
