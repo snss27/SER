@@ -55,7 +55,7 @@ const GroupsPage = () => {
 
     async function handleRemoveButton(id: string) {
         const result = await GroupsProvider.remove(id)
-        if (!result.isSuccess) return showError(result.getErrorString)
+        if (!result.isSuccess) return showError(result.getErrorsString)
 
         await loadGroups()
         return showSuccess("Группа успешно удалена")

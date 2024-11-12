@@ -9,7 +9,7 @@ INSERT INTO curators(
 )
 VALUES(
 	@p_id,
-	@p_namer,
+	@p_name,
 	@p_surname,
 	@p_patronymic,
 	@p_currentdatetimeutc,

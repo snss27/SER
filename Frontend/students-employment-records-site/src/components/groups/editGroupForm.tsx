@@ -41,7 +41,7 @@ const EditGroupForm = (props: Props) => {
 
     async function handleSaveButton() {
         const result = await GroupsProvider.save(groupBlank)
-        if (!result.isSuccess) return showError(result.getErrorString)
+        if (!result.isSuccess) return showError(result.getErrorsString)
 
         showSuccess("Изменения сохранены")
         navigator.back()

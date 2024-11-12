@@ -7,6 +7,8 @@ enum PageUrls {
     Specialities = "/specialities",
     AddSpeciality = "/specialities/add",
     EditSpeciality = "/specialities/edit",
+    Curators = "/curators",
+    AddCurators = "/curators/add",
 }
 
 export default PageUrls

@@ -3,8 +3,8 @@ export class Result {
 
     public isSuccess = this.errors.length === 0
 
-    public get getErrorString() {
-        return this.errors[0].message
+    public get getErrorsString() {
+        return this.errors.map((error) => error.message).join(". ")
     }
 
     public static success<T>(): Result {

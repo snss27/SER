@@ -42,7 +42,7 @@ const SpecialitiesPage = () => {
 
     async function handleRemoveButton(id: string) {
         const result = await SpecialitiesProvider.remove(id)
-        if (!result.isSuccess) return showError(result.getErrorString)
+        if (!result.isSuccess) return showError(result.getErrorsString)
 
         await loadSpecialities()
         return showSuccess("Специальность успешно удалена")
