@@ -15,7 +15,7 @@ import "../styles/global.css"
 
 const App = ({ Component, pageProps }: AppProps) => {
     return (
-        <Box sx={{ display: "flex" }}>
+        <Box>
             <Head>
                 <title>Система управление трудоустройством студентов</title>
             </Head>
@@ -24,9 +24,17 @@ const App = ({ Component, pageProps }: AppProps) => {
                     <SnackbarProvider>
                         <CssBaseline />
                         <Sidebar />
-                        <main style={{ flexGrow: 1, height: "100vh", padding: "8px" }}>
+                        <Box
+                            component="main"
+                            sx={{
+                                width: "calc(100% - 220px)",
+                                ml: "220px",
+                                height: "100vh",
+                                padding: 3,
+                                overflow: "auto",
+                            }}>
                             <Component {...pageProps} />
-                        </main>
+                        </Box>
                     </SnackbarProvider>
                 </LocalizationProvider>
             </ThemeProvider>

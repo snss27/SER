@@ -16,7 +16,14 @@ const Sidebar = () => {
     const elements = SideBarElements.getAll()
 
     return (
-        <Box sx={{ display: "flex", alignItems: "center" }}>
+        <Box
+            component="aside"
+            sx={{
+                position: "fixed",
+                left: 0,
+                top: 0,
+                width: "220px",
+            }}>
             <Box sx={{ width: "200px", height: "100vh" }}>
                 <List>
                     {elements.map((element, index) => (
@@ -34,8 +41,14 @@ const Sidebar = () => {
                 </List>
             </Box>
             <Divider
+                component="hr"
                 orientation="vertical"
-                sx={{ height: "calc(100% - 16px)", marginLeft: "10px" }}
+                sx={{
+                    position: "absolute",
+                    right: 0,
+                    top: 8,
+                    height: "calc(100% - 16px)",
+                }}
             />
         </Box>
     )
