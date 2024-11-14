@@ -8,6 +8,7 @@ using SER.Tools.DataBase;
 using SER.Tools.DataBase.Query;
 using SER.Tools.Types.IDs;
 using SER.Tools.Types.Results;
+using static SER.Tools.Utils.NumberUtils;
 
 namespace SER.Services.Specialities.Repositories;
 public class SpecialitiesRepository : BaseRepository, ISpecialitiesRepository
@@ -21,6 +22,7 @@ public class SpecialitiesRepository : BaseRepository, ISpecialitiesRepository
 			query.Add(blank.Id);
 			query.Add(blank.Name);
 			query.Add(blank.StudyYears);
+			query.Add(blank.StudyMonths);
 			query.Add(DateTime.UtcNow, "p_currentdatetimeutc");
 		}
 
@@ -58,9 +60,14 @@ public class SpecialitiesRepository : BaseRepository, ISpecialitiesRepository
 		return (await session.Get<SpecialityDB>(query)).ToSpeciality();
 	}
 
-	public async Task<Speciality[]> GetAll()
+	public async Task<Speciality[]> GetPage(Int32 page, Int32 pageSize)
 	{
-		Query query = _connector.CreateQuery(Sql.Specialities_GetAll);
+		Query query = _connector.CreateQuery(Sql.Specialities_GetPage);
+		{
+			(Int32 offset, Int32 limit) = NormalizeRange(page, pageSize);
+			query.Add(offset);
+			query.Add(limit);
+		}
 
 		await using IAsyncSeparatelySession session = await _connector.CreateAsyncSession();
 

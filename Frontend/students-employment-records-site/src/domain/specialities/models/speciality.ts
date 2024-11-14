@@ -1,14 +1,28 @@
+import { conjugate } from "@/tools/conjugate"
 import { SpecialityBlank } from "./specialityBlank"
 
 class Speciality {
     constructor(
         public readonly id: string,
         public readonly name: string,
-        public readonly studyYears: number
+        public readonly studyYears: number,
+        public readonly studyMonths: number
     ) {}
 
+    public get studyPeriodString() {
+        return this.studyYearsString + " " + this.studyMonthsString
+    }
+
+    private get studyYearsString() {
+        return conjugate(this.studyYears, "год", "года", "лет")
+    }
+
+    private get studyMonthsString() {
+        return conjugate(this.studyMonths, "месяц", "месяца", "месяцев")
+    }
+
     public static fromAny(any: any): Speciality {
-        return new Speciality(any.id, any.name, any.studyYears)
+        return new Speciality(any.id, any.name, any.studyYears, any.studyMonths)
     }
 
     public toBlank(): SpecialityBlank {
@@ -16,6 +30,7 @@ class Speciality {
             id: this.id,
             name: this.name,
             studyYears: this.studyYears,
+            studyMonths: this.studyMonths,
         }
     }
 }

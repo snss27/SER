@@ -14,14 +14,14 @@ class SpecialitiesProvider {
         return Result.fromAny(result)
     }
 
-    public static async getAll(): Promise<Speciality[]> {
-        const result = await HttpClient.getJsonAsync("/specialities/get/all")
-        return (result as any[]).map(Speciality.fromAny)
-    }
-
     public static async get(id: string): Promise<Speciality> {
         const result = await HttpClient.getJsonAsync("/specialities/get", { id })
         return Speciality.fromAny(result)
+    }
+
+    public static async getPage(page: number, pageSize: number): Promise<Speciality[]> {
+        const result = await HttpClient.getJsonAsync("/specialities/get_page", { page, pageSize })
+        return (result as any[]).map(Speciality.fromAny)
     }
 }
 

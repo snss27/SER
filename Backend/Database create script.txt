@@ -40,6 +40,7 @@ CREATE TABLE "specialities" (
   "id" bytea PRIMARY KEY,
   "name" varchar NOT NULL,
   "studyyears" int NOT NULL,
+  "studymonths" int NOT NULL,
   "createddatetimeutc" timestamp NOT NULL,
   "modifieddatetimeutc" timestamp,
   "isremoved" bool NOT NULL

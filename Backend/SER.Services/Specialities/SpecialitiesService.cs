@@ -18,8 +18,11 @@ public class SpecialitiesService : ISpecialitiesService
 	{
 		if (String.IsNullOrWhiteSpace(blank.Name)) return Result.Fail("Укажите название");
 
-		if (blank.StudyYears is null) return Result.Fail("Укажите количество лет для обучения");
-		if (blank.StudyYears > 10) return Result.Fail("Количество лет для обучение не может быть больше 10 лет");
+		if (blank.StudyYears is null) return Result.Fail("Укажите количество лет обучения");
+		if (blank.StudyYears > 10) return Result.Fail("Количество лет обучение не может быть больше 10 лет");
+
+		if (blank.StudyMonths is null) return Result.Fail("Укажите количество месяцев обучения");
+		if (blank.StudyMonths > 12) return Result.Fail("Количество месяцев обучения не может быть больше 12");
 
 		blank.Id ??= ID.New();
 
@@ -36,8 +39,8 @@ public class SpecialitiesService : ISpecialitiesService
 		return await _specialitiesRepository.Get(id);
 	}
 
-	public async Task<Speciality[]> GetAll()
+	public async Task<Speciality[]> GetPage(Int32 page, Int32 pageSize)
 	{
-		return await _specialitiesRepository.GetAll();
+		return await _specialitiesRepository.GetPage(page, pageSize);
 	}
 }

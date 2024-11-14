@@ -33,9 +33,9 @@ public class SpecialitiesController : ControllerBase
 		return await _specialitiesService.Get(id);
 	}
 
-	[HttpGet("api/specialities/get/all")]
-	public async Task<Speciality[]> GetAll()
+	[HttpGet("api/specialities/get_page")]
+	public async Task<Speciality[]> GetPage([FromQuery] Int32 page, [FromQuery] Int32 pageSize)
 	{
-		return await _specialitiesService.GetAll();
+		return await _specialitiesService.GetPage(page, pageSize);
 	}
 }

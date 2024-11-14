@@ -10,6 +10,7 @@ internal static class SpecialitiesConverter
 			db.Id,
 			db.Name,
 			db.StudyYears,
+			db.StudyMonths,
 			db.CreatedDateTime,
 			db.ModifiedDateTime
 		);

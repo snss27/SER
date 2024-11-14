@@ -7,7 +7,7 @@ const AddCuratorsPage: React.FC = () => {
         <Box className="container-fill">
             <Box className="edit-page-container">
                 <Typography variant="h1" textAlign="center">
-                    Добавить куратора
+                    Добавление куратора
                 </Typography>
                 <EditCuratorForm initialBlank={CuratorBlank.empty()} />
             </Box>

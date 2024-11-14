@@ -1,7 +1,5 @@
-"use client"
-
 import PageUrls from "@/constants/pageUrls"
-import CuratorsProvider from "@/domain/curators/curatorsProvider"
+import SpecialitiesProvider from "@/domain/specialities/specialitiesProvider"
 import useDialog from "@/hooks/useDialog/useDialog"
 import useLazyLoad from "@/hooks/useLazyLoad"
 import useNotifications from "@/hooks/useNotifications"
@@ -15,40 +13,39 @@ import {
     TableRow,
 } from "@mui/material"
 import { useRouter } from "next/router"
-import React from "react"
 import { IconType } from "../shared/buttons"
 import IconButton from "../shared/buttons/iconButtons"
 import ConfirmModal from "../shared/modals/confirmModal"
 
-const CuratorsTable: React.FC = () => {
+const SpecialitiesTable: React.FC = () => {
     const navigator = useRouter()
     const { showError, showSuccess } = useNotifications()
     const {
-        values: curators,
+        values: specialities,
         lastElementRef,
         updateValues,
-    } = useLazyLoad({ paginationFunction: CuratorsProvider.getPage })
+    } = useLazyLoad({ paginationFunction: SpecialitiesProvider.getPage })
     const confirmDialog = useDialog(ConfirmModal)
 
     function handleEditButton(id: string) {
-        navigator.push(`${PageUrls.EditCurators}/${id}`)
+        navigator.push(`${PageUrls.EditSpecialities}/${id}`)
     }
 
     async function handleRemoveButton(id: string) {
-        const curator = curators.find((curator) => curator.id === id) ?? null
-        if (!curator) return
+        const speciality = specialities.find((speciality) => speciality.id === id) ?? null
+        if (!speciality) return
 
         const dialogResult = await confirmDialog.show({
-            title: `Вы уверены, что хотите удалить куратора "${curator.formattedFullName}"?`,
+            title: `Вы уверены, что хотите удалить специальность "${speciality.name}"?`,
         })
         if (!dialogResult) return
 
-        const result = await CuratorsProvider.remove(id)
+        const result = await SpecialitiesProvider.remove(id)
         if (!result.isSuccess) return showError(result.getErrorsString)
 
         await updateValues()
 
-        return showSuccess("Куратор успешно удалён")
+        return showSuccess("Специальность успешно удалена")
     }
 
     return (
@@ -57,29 +54,37 @@ const CuratorsTable: React.FC = () => {
                 <Table stickyHeader>
                     <TableHead>
                         <TableRow sx={{ paddingX: 1 }}>
-                            <TableCell sx={{ width: "75%", fontWeight: "bold" }}>ФИО</TableCell>
+                            <TableCell sx={{ width: "35%", fontWeight: "bold" }}>
+                                Название
+                            </TableCell>
+                            <TableCell sx={{ width: "35%", fontWeight: "bold" }}>
+                                Время обучения
+                            </TableCell>
                             <TableCell align="right" sx={{ width: "25%", fontWeight: "bold" }}>
                                 Действия
                             </TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {curators.map((curator, index) => (
+                        {specialities.map((speciality, index) => (
                             <TableRow
-                                key={curator.id}
+                                key={speciality.id}
                                 sx={{ paddingX: 1 }}
-                                ref={index === curators.length - 1 ? lastElementRef : undefined}>
-                                <TableCell sx={{ width: "75%" }}>
-                                    {curator.formattedFullName}
+                                ref={
+                                    index === specialities.length - 1 ? lastElementRef : undefined
+                                }>
+                                <TableCell sx={{ width: "35%" }}>{speciality.name}</TableCell>
+                                <TableCell sx={{ width: "35%" }}>
+                                    {speciality.studyPeriodString}
                                 </TableCell>
                                 <TableCell align="right" sx={{ width: "25%" }}>
                                     <IconButton
                                         icon={IconType.Edit}
-                                        onClick={() => handleEditButton(curator.id)}
+                                        onClick={() => handleEditButton(speciality.id)}
                                     />
                                     <IconButton
                                         icon={IconType.Delete}
-                                        onClick={() => handleRemoveButton(curator.id)}
+                                        onClick={() => handleRemoveButton(speciality.id)}
                                     />
                                 </TableCell>
                             </TableRow>
@@ -91,4 +96,4 @@ const CuratorsTable: React.FC = () => {
     )
 }
 
-export default CuratorsTable
+export default SpecialitiesTable

@@ -2,6 +2,7 @@ export interface SpecialityBlank {
     id: string | null
     name: string | null
     studyYears: number | null
+    studyMonths: number | null
 }
 
 export namespace SpecialityBlank {
@@ -10,6 +11,7 @@ export namespace SpecialityBlank {
             id: null,
             name: null,
             studyYears: null,
+            studyMonths: null,
         }
     }
 
@@ -20,6 +22,9 @@ export namespace SpecialityBlank {
 
             case "CHANGE_STUDY_YEARS":
                 return { ...state, studyYears: action.payload.studyYears }
+
+            case "CHANGE_STUDY_MONTHS":
+                return { ...state, studyMonths: action.payload.studyMonths }
 
             default:
                 return { ...state }
@@ -35,4 +40,8 @@ type Action =
     | {
           type: "CHANGE_STUDY_YEARS"
           payload: { studyYears: number | null }
+      }
+    | {
+          type: "CHANGE_STUDY_MONTHS"
+          payload: { studyMonths: number | null }
       }

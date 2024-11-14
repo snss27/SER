@@ -1,7 +1,7 @@
 import EditSpecialityForm from "@/components/specialities/editSpecialityForm"
 import { SpecialityBlank } from "@/domain/specialities/models/specialityBlank"
 import SpecialitiesProvider from "@/domain/specialities/specialitiesProvider"
-import { Box } from "@mui/material"
+import { Box, Typography } from "@mui/material"
 import { useParams } from "next/navigation"
 import { useEffect, useState } from "react"
 
@@ -23,15 +23,13 @@ const EditSpecialityPage = () => {
     if (specialityBlank === null) return null
 
     return (
-        <Box
-            sx={{
-                width: "100%",
-                height: "100%",
-                padding: 2,
-                display: "flex",
-                justifyContent: "center",
-            }}>
-            <EditSpecialityForm initialSpecialityBlank={specialityBlank} />
+        <Box className="container-fill">
+            <Box className="edit-page-container">
+                <Typography variant="h1" textAlign="center">
+                    Редактирование специальности
+                </Typography>
+                <EditSpecialityForm initialSpecialityBlank={specialityBlank} />
+            </Box>
         </Box>
     )
 }
