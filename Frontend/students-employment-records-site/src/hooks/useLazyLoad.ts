@@ -1,21 +1,45 @@
-import { useEffect, useRef, useState } from "react"
-
-interface Props<T> {
-    load: () => Promise<T[]>
-}
+import { useCallback, useEffect, useRef, useState } from "react"
 
 interface Returns<T> {
     values: T[]
-    page: number
-    nextPage: () => void
     isLoading: boolean
+    lastElementRef: (node: HTMLTableRowElement) => void
+    nextPage: () => void
+    updateValues: () => Promise<void>
 }
 
-const useLazyLoad = <T>({ load }: Props<T>): Returns<T> => {
+interface Props<T> {
+    paginationFunction: (page: number, pageSize: number) => Promise<T[]>
+    pageSize?: number
+}
+
+//TODO Проверить работу функции updateValues
+const useLazyLoad = <T>({ paginationFunction, pageSize = 20 }: Props<T>): Returns<T> => {
     const [page, setPage] = useState(1)
     const [values, setValues] = useState<T[]>([])
     const [isLoading, setIsLoading] = useState(false)
     const hasMoreRef = useRef(true)
+
+    async function load() {
+        return await paginationFunction(page, pageSize)
+    }
+
+    const observerRef = useRef<IntersectionObserver>()
+
+    const lastElementRef = useCallback(
+        (node: HTMLTableRowElement) => {
+            if (isLoading) return
+
+            if (observerRef.current) observerRef.current.disconnect()
+
+            observerRef.current = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting) nextPage()
+            })
+
+            if (node) observerRef.current.observe(node)
+        },
+        [isLoading]
+    )
 
     useEffect(() => {
         loadData()
@@ -37,7 +61,14 @@ const useLazyLoad = <T>({ load }: Props<T>): Returns<T> => {
         setPage((prev) => prev + 1)
     }
 
-    return { values, page, nextPage, isLoading }
+    async function updateValues() {
+        setIsLoading(true)
+        const updatedValues = await paginationFunction(1, values.length - 1)
+        setValues(updatedValues)
+        setIsLoading(false)
+    }
+
+    return { values, nextPage, isLoading, lastElementRef, updateValues }
 }
 
 export default useLazyLoad

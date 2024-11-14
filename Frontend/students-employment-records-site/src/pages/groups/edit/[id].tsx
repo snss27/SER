@@ -14,8 +14,6 @@ const EditGroupPage = () => {
         async function loadGroup() {
             const group = await GroupsProvider.get(id)
 
-            console.log(group)
-
             setGroupBlank(group.toBlank())
         }
 

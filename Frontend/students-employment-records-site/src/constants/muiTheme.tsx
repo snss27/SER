@@ -9,6 +9,14 @@ const theme = createTheme({
             dark: "#C6BEBC",
         },
 
+        success: {
+            main: "#2e7d32",
+        },
+
+        error: {
+            main: "#d32f2f",
+        },
+
         info: {
             main: "#EE823D",
         },

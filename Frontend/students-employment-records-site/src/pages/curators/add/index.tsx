@@ -2,7 +2,7 @@ import EditCuratorForm from "@/components/curators/editCuratorForm"
 import { CuratorBlank } from "@/domain/curators/models/curatorBlank"
 import { Box, Typography } from "@mui/material"
 
-const AddCuratorsPage = () => {
+const AddCuratorsPage: React.FC = () => {
     return (
         <Box className="container-fill">
             <Box className="edit-page-container">

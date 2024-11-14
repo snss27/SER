@@ -1,5 +1,6 @@
 import Sidebar from "@/components/sidebar/sidebar"
 import theme from "@/constants/muiTheme"
+import { DialogProvider } from "@/hooks/useDialog/dialogProvider"
 import "@fontsource/roboto/300.css"
 import "@fontsource/roboto/400.css"
 import "@fontsource/roboto/500.css"
@@ -22,19 +23,21 @@ const App = ({ Component, pageProps }: AppProps) => {
             <ThemeProvider theme={theme}>
                 <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={ru}>
                     <SnackbarProvider>
-                        <CssBaseline />
-                        <Sidebar />
-                        <Box
-                            component="main"
-                            sx={{
-                                width: "calc(100% - 220px)",
-                                ml: "220px",
-                                height: "100vh",
-                                padding: 3,
-                                overflow: "auto",
-                            }}>
-                            <Component {...pageProps} />
-                        </Box>
+                        <DialogProvider>
+                            <CssBaseline />
+                            <Sidebar />
+                            <Box
+                                component="main"
+                                sx={{
+                                    width: "calc(100% - 220px)",
+                                    ml: "220px",
+                                    height: "100vh",
+                                    padding: 3,
+                                    overflow: "auto",
+                                }}>
+                                <Component {...pageProps} />
+                            </Box>
+                        </DialogProvider>
                     </SnackbarProvider>
                 </LocalizationProvider>
             </ThemeProvider>

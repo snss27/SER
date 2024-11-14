@@ -5,6 +5,7 @@ interface Props {
     text: string
     variant?: "text" | "contained" | "outlined"
     icon?: ButtonIcon
+    color?: "error" | "success"
     onClick: () => void
 }
 
@@ -12,7 +13,11 @@ const Button = (props: Props) => {
     const iconProps = typeof props.icon === "object" ? getIconProps(props.icon) : {}
 
     return (
-        <CButton variant={props.variant ?? "outlined"} {...iconProps} onClick={props.onClick}>
+        <CButton
+            variant={props.variant ?? "outlined"}
+            onClick={props.onClick}
+            color={props.color}
+            {...iconProps}>
             {props.text}
         </CButton>
     )

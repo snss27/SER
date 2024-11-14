@@ -30,4 +30,9 @@ public class CuratorsService : ICuratorsService
 	{
 		return await _curatorsRepository.Get(id);
 	}
+
+	public async Task<Curator[]> GetCuratorsPage(Int32 page, Int32 pageSize)
+	{
+		return await _curatorsRepository.GetPage(page, pageSize);
+	}
 }

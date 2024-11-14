@@ -1,6 +1,9 @@
 import { NeverUnreachable } from "@/tools/neverUreachable"
 import AddIcon from "@mui/icons-material/Add"
 import ArrowBackIcon from "@mui/icons-material/ArrowBack"
+import CancelIcon from "@mui/icons-material/Cancel"
+import CheckIcon from "@mui/icons-material/Check"
+import CloseIcon from "@mui/icons-material/Close"
 import DeleteIcon from "@mui/icons-material/Delete"
 import EditIcon from "@mui/icons-material/Edit"
 import SaveIcon from "@mui/icons-material/Save"
@@ -16,6 +19,9 @@ export enum IconType {
     Add,
     Back,
     Delete,
+    Close,
+    Check,
+    Cancel,
 }
 
 export type ButtonIcon = { type: IconType; position?: IconPosition }
@@ -43,6 +49,12 @@ export function getIconComponent(type: IconType): JSX.Element {
             return <ArrowBackIcon />
         case IconType.Delete:
             return <DeleteIcon />
+        case IconType.Check:
+            return <CheckIcon />
+        case IconType.Close:
+            return <CloseIcon />
+        case IconType.Cancel:
+            return <CancelIcon />
         default:
             throw new NeverUnreachable(type)
     }

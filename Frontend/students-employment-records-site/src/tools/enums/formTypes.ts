@@ -6,7 +6,7 @@ export enum FormTypes {
 }
 
 export namespace FormTypes {
-    export function getSuccessSaveDisplay(type: FormTypes): string {
+    export function getSuccessSaveText(type: FormTypes): string {
         switch (type) {
             case FormTypes.Add:
                 return "сохранен"

@@ -9,6 +9,7 @@ enum PageUrls {
     EditSpeciality = "/specialities/edit",
     Curators = "/curators",
     AddCurators = "/curators/add",
+    EditCurators = "/curators/edit",
 }
 
 export default PageUrls

@@ -6,7 +6,7 @@ import useNotifications from "@/hooks/useNotifications"
 import { FormTypes } from "@/tools/enums/formTypes"
 import { Box } from "@mui/material"
 import { useRouter } from "next/router"
-import { useReducer } from "react"
+import React, { useReducer } from "react"
 import { IconPosition, IconType } from "../shared/buttons"
 import Button from "../shared/buttons/button"
 import TextInput from "../shared/inputs/textInput"
@@ -15,15 +15,15 @@ interface Props {
     initialBlank: CuratorBlank
 }
 
-const EditCuratorForm = (props: Props) => {
-    const formType = props.initialBlank.id === null ? FormTypes.Add : FormTypes.Edit
+const EditCuratorForm: React.FC<Props> = ({ initialBlank }) => {
+    const formType = initialBlank.id === null ? FormTypes.Add : FormTypes.Edit
 
-    const [curatorBlank, dispatch] = useReducer(CuratorBlank.reducer, props.initialBlank)
+    const [curatorBlank, dispatch] = useReducer(CuratorBlank.reducer, initialBlank)
 
     const navigator = useRouter()
     const { showError, showSuccess } = useNotifications()
 
-    function handleBackButton() {
+    async function handleBackButton() {
         navigator.back()
     }
 
@@ -31,7 +31,7 @@ const EditCuratorForm = (props: Props) => {
         const result = await CuratorsProvider.save(curatorBlank)
         if (!result.isSuccess) return showError(result.getErrorsString)
 
-        showSuccess(`Куратор успешно ${FormTypes.getSuccessSaveDisplay(formType)}`)
+        showSuccess(`Куратор успешно ${FormTypes.getSuccessSaveText(formType)}`)
         navigator.back()
     }
 

@@ -61,8 +61,6 @@ const GroupsPage = () => {
         return showSuccess("Группа успешно удалена")
     }
 
-    console.log(groups)
-
     return (
         <Box sx={{ width: "100%", height: "100%", padding: 2 }}>
             <Box

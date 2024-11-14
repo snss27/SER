@@ -8,4 +8,5 @@ public interface ICuratorsService
 	public Task<Result> Save(CuratorBlank blank);
 	public Task<Result> Remove(ID id);
 	public Task<Curator> Get(ID id);
+	public Task<Curator[]> GetCuratorsPage(Int32 page, Int32 pageSize);
 }

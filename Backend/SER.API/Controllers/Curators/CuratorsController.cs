@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using SER.Domain.Curators;
 using SER.Domain.Services;
-using SER.Services.Curators.Repositories;
 using SER.Tools.Types.IDs;
 using SER.Tools.Types.Results;
 
@@ -31,5 +30,11 @@ public class CuratorsController : ControllerBase
 	public async Task<Curator> Get([FromQuery] ID id)
 	{
 		return await _curatorsService.Get(id);
+	}
+
+	[HttpGet("api/curators/get_page")]
+	public async Task<Curator[]> GetCuratorsPage([FromQuery] Int32 page, [FromQuery] Int32 pageSize)
+	{
+		return await _curatorsService.GetCuratorsPage(page, pageSize);
 	}
 }

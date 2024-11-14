@@ -1,10 +1,12 @@
+import CuratorsTable from "@/components/curators/curatorsTable"
 import { IconPosition, IconType } from "@/components/shared/buttons"
 import Button from "@/components/shared/buttons/button"
 import PageUrls from "@/constants/pageUrls"
 import { Box, Typography } from "@mui/material"
 import { useRouter } from "next/router"
+import React from "react"
 
-const CuratorsPage = () => {
+const CuratorsPage: React.FC = () => {
     const navigator = useRouter()
 
     return (
@@ -20,6 +22,7 @@ const CuratorsPage = () => {
                         icon={{ type: IconType.Add, position: IconPosition.Start }}
                     />
                 </Box>
+                <CuratorsTable />
             </Box>
         </Box>
     )
