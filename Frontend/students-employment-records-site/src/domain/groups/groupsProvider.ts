@@ -1,9 +1,11 @@
 import { Result } from "@/tools/result"
 import HttpClient from "../httpClient"
 import Group from "./models/group"
+import { GroupBlank } from "./models/groupBlank"
 
+//TODO обработать null из get. (Все провайдеры)
 class GroupsProvider {
-    public static async save(blank: GroupsProvider): Promise<Result> {
+    public static async save(blank: GroupBlank): Promise<Result> {
         const result = await HttpClient.postJsonAsync("/groups/save", blank)
         return Result.fromAny(result)
     }
@@ -13,14 +15,14 @@ class GroupsProvider {
         return Result.fromAny(result)
     }
 
-    public static async getAll(): Promise<Group[]> {
-        const result = await HttpClient.getJsonAsync("/groups/get/all")
-        return (result as any[]).map(Group.fromAny)
-    }
-
     public static async get(id: string): Promise<Group> {
         const result = await HttpClient.getJsonAsync("/groups/get", { id })
         return Group.fromAny(result)
+    }
+
+    public static async getPage(page: number, pageSize: number): Promise<Group[]> {
+        const result = await HttpClient.getJsonAsync("/groups/get_page", { page, pageSize })
+        return (result as any[]).map(Group.fromAny)
     }
 }
 

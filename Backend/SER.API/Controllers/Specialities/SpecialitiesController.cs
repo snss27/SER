@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
+using SER.Domain.Curators;
 using SER.Domain.Services;
 using SER.Domain.Specialities;
+using SER.Services.Curators;
 using SER.Tools.Types.IDs;
 using SER.Tools.Types.Results;
 
@@ -28,7 +30,7 @@ public class SpecialitiesController : ControllerBase
 	}
 
 	[HttpGet("api/specialities/get")]
-	public async Task<Speciality> Get([FromQuery] ID id)
+	public async Task<Speciality?> Get([FromQuery] ID id)
 	{
 		return await _specialitiesService.Get(id);
 	}
@@ -37,5 +39,11 @@ public class SpecialitiesController : ControllerBase
 	public async Task<Speciality[]> GetPage([FromQuery] Int32 page, [FromQuery] Int32 pageSize)
 	{
 		return await _specialitiesService.GetPage(page, pageSize);
+	}
+
+	[HttpGet("api/specialities/get_by_search_text")]
+	public async Task<Speciality[]> GetBySearchText([FromQuery] String searchText)
+	{
+		return await _specialitiesService.Get(searchText);
 	}
 }

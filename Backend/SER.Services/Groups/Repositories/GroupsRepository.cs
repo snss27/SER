@@ -4,11 +4,11 @@ using SER.Services._base;
 using SER.Services.Groups.Converters;
 using SER.Services.Groups.Models;
 using SER.Services.Groups.Repositories.Queries;
-using SER.Services.Specialities.Models;
 using SER.Tools.DataBase;
 using SER.Tools.DataBase.Query;
 using SER.Tools.Types.IDs;
 using SER.Tools.Types.Results;
+using static SER.Tools.Utils.NumberUtils;
 
 namespace SER.Services.Groups.Repositories;
 public class GroupsRepository : BaseRepository, IGroupsRepository
@@ -22,9 +22,9 @@ public class GroupsRepository : BaseRepository, IGroupsRepository
 			query.Add(blank.Id);
 			query.Add(blank.Number);
 			query.Add(blank.StructuralUnit);
-			query.Add(blank.SpecialityId);
+			query.Add(blank.Speciality?.Id, "p_specialityid");
 			query.Add(blank.EnrollmentYear);
-			query.Add(blank.CuratorId);
+			query.Add(blank.Curator?.Id, "p_curatorid");
 			query.Add(DateTime.UtcNow, "p_currentdatetimeutc");
 		}
 
@@ -50,7 +50,7 @@ public class GroupsRepository : BaseRepository, IGroupsRepository
 		return Result.Success();
 	}
 
-	public async Task<Group> Get(ID id)
+	public async Task<Group?> Get(ID id)
 	{
 		Query query = _connector.CreateQuery(Sql.Groups_Get);
 		{
@@ -59,12 +59,17 @@ public class GroupsRepository : BaseRepository, IGroupsRepository
 
 		await using IAsyncSeparatelySession session = await _connector.CreateAsyncSession();
 
-		return (await session.Get<GroupDB>(query)).ToGroup();
+		return (await session.Get<GroupDB?>(query))?.ToGroup();
 	}
 
-	public async Task<Group[]> GetAll()
+	public async Task<Group[]> GetPage(Int32 page, Int32 pageSize)
 	{
-		Query query = _connector.CreateQuery(Sql.Groups_GetAll);
+		Query query = _connector.CreateQuery(Sql.Groups_GetPage);
+		{
+			(Int32 offset, Int32 limit) = NormalizeRange(page, pageSize);
+			query.Add(offset);
+			query.Add(limit);
+		}
 
 		await using IAsyncSeparatelySession session = await _connector.CreateAsyncSession();
 

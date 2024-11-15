@@ -27,7 +27,7 @@ public class CuratorsController : ControllerBase
 	}
 
 	[HttpGet("api/curators/get")]
-	public async Task<Curator> Get([FromQuery] ID id)
+	public async Task<Curator?> Get([FromQuery] ID id)
 	{
 		return await _curatorsService.Get(id);
 	}
@@ -36,5 +36,11 @@ public class CuratorsController : ControllerBase
 	public async Task<Curator[]> GetCuratorsPage([FromQuery] Int32 page, [FromQuery] Int32 pageSize)
 	{
 		return await _curatorsService.GetCuratorsPage(page, pageSize);
+	}
+
+	[HttpGet("api/curators/get_by_search_text")]
+	public async Task<Curator[]> GetBySearchText([FromQuery] String searchText)
+	{
+		return await _curatorsService.Get(searchText);
 	}
 }

@@ -34,7 +34,7 @@ namespace State {
 const AsyncAutocomplete = <T,>(props: Props<T>) => {
     const [state, setState] = useState(State.empty<T>)
 
-    useDebounce(() => loadOptions(), [state.searchString], 500, true)
+    useDebounce(() => loadOptions(), [state.searchString], 300, true)
 
     async function loadOptions() {
         if (!state.searchString || state.searchString === "") {

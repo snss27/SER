@@ -7,6 +7,6 @@ public interface IGroupsRepository
 {
 	public Task<Result> Save(GroupBlank blank);
 	public Task<Result> Remove(ID id);
-	public Task<Group> Get(ID id);
-	public Task<Group[]> GetAll();
+	public Task<Group?> Get(ID id);
+	public Task<Group[]> GetPage(Int32 page, Int32 pageSize);
 }

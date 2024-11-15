@@ -28,9 +28,9 @@ CREATE TABLE "groups" (
   "id" bytea PRIMARY KEY,
   "number" varchar NOT NULL,
   "structuralunit" int NOT NULL,
-  "specialityid" bytea NOT NULL,
+  "specialityid" bytea,
   "enrollmentyear" int NOT NULL,
-  "curatorid" bytea NOT NULL,
+  "curatorid" bytea,
   "createddatetimeutc" timestamp NOT NULL,
   "modifieddatetimeutc" timestamp,
   "isremoved" bool NOT NULL

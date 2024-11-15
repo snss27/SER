@@ -1,7 +1,7 @@
 import EditGroupForm from "@/components/groups/editGroupForm"
 import GroupsProvider from "@/domain/groups/groupsProvider"
 import { GroupBlank } from "@/domain/groups/models/groupBlank"
-import { Box } from "@mui/material"
+import { Box, Typography } from "@mui/material"
 import { useParams } from "next/navigation"
 import { useEffect, useState } from "react"
 
@@ -23,15 +23,13 @@ const EditGroupPage = () => {
     if (groupBlank === null) return null
 
     return (
-        <Box
-            sx={{
-                width: "100%",
-                height: "100%",
-                padding: 2,
-                display: "flex",
-                justifyContent: "center",
-            }}>
-            <EditGroupForm initialGroupBlank={groupBlank} />
+        <Box className="container-fill">
+            <Box className="edit-page-container">
+                <Typography variant="h1" textAlign="center">
+                    Редактирование группы
+                </Typography>
+                <EditGroupForm initialGroupBlank={groupBlank} />
+            </Box>
         </Box>
     )
 }

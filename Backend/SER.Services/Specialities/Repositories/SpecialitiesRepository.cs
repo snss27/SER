@@ -48,7 +48,7 @@ public class SpecialitiesRepository : BaseRepository, ISpecialitiesRepository
 		return Result.Success();
 	}
 
-	public async Task<Speciality> Get(ID id)
+	public async Task<Speciality?> Get(ID id)
 	{
 		Query query = _connector.CreateQuery(Sql.Specialities_Get);
 		{
@@ -57,7 +57,19 @@ public class SpecialitiesRepository : BaseRepository, ISpecialitiesRepository
 
 		await using IAsyncSeparatelySession session = await _connector.CreateAsyncSession();
 
-		return (await session.Get<SpecialityDB>(query)).ToSpeciality();
+		return (await session.Get<SpecialityDB?>(query))?.ToSpeciality();
+	}
+
+	public async Task<Speciality[]> Get(ID[] ids)
+	{
+		Query query = _connector.CreateQuery(Sql.Specialities_GetByIds);
+		{
+			query.Add(ids);
+		}
+
+		await using IAsyncSeparatelySession session = await _connector.CreateAsyncSession();
+
+		return (await session.GetArray<SpecialityDB>(query)).ToSpecialities();
 	}
 
 	public async Task<Speciality[]> GetPage(Int32 page, Int32 pageSize)
@@ -67,6 +79,18 @@ public class SpecialitiesRepository : BaseRepository, ISpecialitiesRepository
 			(Int32 offset, Int32 limit) = NormalizeRange(page, pageSize);
 			query.Add(offset);
 			query.Add(limit);
+		}
+
+		await using IAsyncSeparatelySession session = await _connector.CreateAsyncSession();
+
+		return (await session.GetArray<SpecialityDB>(query)).ToSpecialities();
+	}
+
+	public async Task<Speciality[]> Get(String searchText)
+	{
+		Query query = _connector.CreateQuery(Sql.Specialities_GetBySearchText);
+		{
+			query.Add(searchText);
 		}
 
 		await using IAsyncSeparatelySession session = await _connector.CreateAsyncSession();

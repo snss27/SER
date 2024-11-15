@@ -22,6 +22,11 @@ class CuratorsProvider {
         const result = await HttpClient.getJsonAsync("/curators/get_page", { page, pageSize })
         return (result as any[]).map(Curator.fromAny)
     }
+
+    public static async getBySearchText(searchText: string): Promise<Curator[]> {
+        const result = await HttpClient.getJsonAsync("/curators/get_by_search_text", { searchText })
+        return (result as any[]).map(Curator.fromAny)
+    }
 }
 
 export default CuratorsProvider

@@ -1,9 +1,11 @@
 using SER.Configurator.Connectors;
 using SER.Domain.Curators;
+using SER.Domain.Specialities;
 using SER.Services._base;
 using SER.Services.Curators.Converters;
 using SER.Services.Curators.Models;
 using SER.Services.Curators.Repositories.Queries;
+using SER.Services.Specialities.Models;
 using SER.Tools.DataBase;
 using SER.Tools.DataBase.Query;
 using SER.Tools.Types.IDs;
@@ -46,7 +48,7 @@ public class CuratorsRepository : BaseRepository, ICuratorsRepository
 
 		return Result.Success();
 	}
-	public async Task<Curator> Get(ID id)
+	public async Task<Curator?> Get(ID id)
 	{
 		Query query = _connector.CreateQuery(Sql.Curators_Get);
 		{
@@ -55,7 +57,19 @@ public class CuratorsRepository : BaseRepository, ICuratorsRepository
 
 		await using IAsyncSeparatelySession session = await _connector.CreateAsyncSession();
 
-		return (await session.Get<CuratorDB>(query)).ToCurator();
+		return (await session.Get<CuratorDB?>(query))?.ToCurator();
+	}
+
+	public async Task<Curator[]> Get(ID[] ids)
+	{
+		Query query = _connector.CreateQuery(Sql.Curators_GetByIds);
+		{
+			query.Add(ids);
+		}
+
+		await using IAsyncSeparatelySession session = await _connector.CreateAsyncSession();
+
+		return (await session.GetArray<CuratorDB>(query)).ToCurators();
 	}
 
 	public async Task<Curator[]> GetPage(Int32 page, Int32 pageSize)
@@ -65,6 +79,18 @@ public class CuratorsRepository : BaseRepository, ICuratorsRepository
 			(Int32 offset, Int32 limit) = NormalizeRange(page, pageSize);
 			query.Add(offset);
 			query.Add(limit);
+		}
+
+		await using IAsyncSeparatelySession session = await _connector.CreateAsyncSession();
+
+		return (await session.GetArray<CuratorDB>(query)).ToCurators();
+	}
+
+	public async Task<Curator[]> Get(String searchText)
+	{
+		Query query = _connector.CreateQuery(Sql.Curators_GetBySearchText);
+		{
+			query.Add(searchText);
 		}
 
 		await using IAsyncSeparatelySession session = await _connector.CreateAsyncSession();

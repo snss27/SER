@@ -7,6 +7,8 @@ public interface ICuratorsRepository
 {
 	public Task<Result> Save(CuratorBlank blank);
 	public Task<Result> Remove(ID id);
-	public Task<Curator> Get(ID id);
-	public Task<Curator[]> GetPage(Int32 page, Int32 pageSize); 
+	public Task<Curator?> Get(ID id);
+	public Task<Curator[]> Get(ID[] ids);
+	public Task<Curator[]> GetPage(Int32 page, Int32 pageSize);
+	public Task<Curator[]> Get(String searchText);
 }

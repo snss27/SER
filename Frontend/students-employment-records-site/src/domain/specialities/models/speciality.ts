@@ -1,6 +1,7 @@
 import { conjugate } from "@/tools/conjugate"
 import { SpecialityBlank } from "./specialityBlank"
 
+//TODO!!! specialityCode (нужен код специальности помимо названия)
 class Speciality {
     constructor(
         public readonly id: string,

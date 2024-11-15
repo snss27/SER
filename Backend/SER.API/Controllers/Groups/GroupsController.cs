@@ -1,8 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using SER.Domain.Groups;
 using SER.Domain.Services;
-using SER.Domain.Specialities;
-using SER.Services.Specialities;
 using SER.Tools.Types.IDs;
 using SER.Tools.Types.Results;
 
@@ -29,14 +27,14 @@ public class GroupsController : ControllerBase
 	}
 
 	[HttpGet("api/groups/get")]
-	public async Task<Group> Get([FromQuery] ID id)
+	public async Task<GroupDto?> Get([FromQuery] ID id)
 	{
 		return await _groupsService.Get(id);
 	}
 
-	[HttpGet("api/groups/get/all")]
-	public async Task<Group[]> GetAll()
+	[HttpGet("api/groups/get_page")]
+	public async Task<GroupDto[]> GetAll(Int32 page, Int32 pageSize)
 	{
-		return await _groupsService.GetAll();
+		return await _groupsService.GetPage(page, pageSize);
 	}
 }

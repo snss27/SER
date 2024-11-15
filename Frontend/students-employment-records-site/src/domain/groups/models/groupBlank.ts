@@ -1,12 +1,14 @@
+import Curator from "@/domain/curators/models/curator"
+import Speciality from "@/domain/specialities/models/speciality"
 import { StructuralUnits } from "../enums/structuralUnits"
 
 export interface GroupBlank {
     id: string | null
     number: string | null
     structuralUnit: StructuralUnits | null
-    specialityId: string | null
+    speciality: Speciality | null
     enrollmentYear: number | null
-    curatorName: string | null
+    curator: Curator | null
 }
 
 export namespace GroupBlank {
@@ -15,9 +17,9 @@ export namespace GroupBlank {
             id: null,
             number: null,
             structuralUnit: null,
-            specialityId: null,
+            speciality: null,
             enrollmentYear: null,
-            curatorName: null,
+            curator: null,
         }
     }
 
@@ -30,13 +32,13 @@ export namespace GroupBlank {
                 return { ...state, structuralUnit: action.payload.structuralUnit }
 
             case "CHANGE_SPECIALITY":
-                return { ...state, specialityId: action.payload.specialityId }
+                return { ...state, speciality: action.payload.speciality }
 
             case "CHANGE_ENROLLMENT_YEAR":
                 return { ...state, enrollmentYear: action.payload.enrollmentYear }
 
-            case "CHANGE_CURATOR_NAME":
-                return { ...state, curatorName: action.payload.curatorName }
+            case "CHANGE_CURATOR":
+                return { ...state, curator: action.payload.curator }
 
             default:
                 return { ...state }
@@ -55,13 +57,13 @@ type Action =
       }
     | {
           type: "CHANGE_SPECIALITY"
-          payload: { specialityId: string | null }
+          payload: { speciality: Speciality | null }
       }
     | {
           type: "CHANGE_ENROLLMENT_YEAR"
           payload: { enrollmentYear: number | null }
       }
     | {
-          type: "CHANGE_CURATOR_NAME"
-          payload: { curatorName: string | null }
+          type: "CHANGE_CURATOR"
+          payload: { curator: Curator | null }
       }

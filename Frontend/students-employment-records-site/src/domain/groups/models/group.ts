@@ -1,3 +1,5 @@
+import Curator from "@/domain/curators/models/curator"
+import Speciality from "@/domain/specialities/models/speciality"
 import { StructuralUnits } from "../enums/structuralUnits"
 import { GroupBlank } from "./groupBlank"
 
@@ -6,19 +8,21 @@ class Group {
         public readonly id: string,
         public readonly number: string,
         public readonly structuralUnit: StructuralUnits,
-        public readonly specialityId: string,
+        public readonly speciality: Speciality | null,
         public readonly enrollmentYear: number,
-        public readonly curatorName: string
+        public readonly curator: Curator | null
     ) {}
 
     public static fromAny(any: any): Group {
+        const speciality = any.speciality === null ? null : Speciality.fromAny(any.speciality)
+        const curator = any.curator === null ? null : Curator.fromAny(any.speciality)
         return new Group(
             any.id,
             any.number,
             any.structuralUnit,
-            any.specialityId,
+            speciality,
             any.enrollmentYear,
-            any.curatorName
+            curator
         )
     }
 
@@ -27,9 +31,9 @@ class Group {
             id: this.id,
             number: this.number,
             structuralUnit: this.structuralUnit,
-            specialityId: this.specialityId,
+            speciality: this.speciality,
             enrollmentYear: this.enrollmentYear,
-            curatorName: this.curatorName,
+            curator: this.curator,
         }
     }
 }

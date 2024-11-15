@@ -1,5 +1,4 @@
 using SER.Domain.Groups;
-using SER.Domain.Specialities;
 using SER.Tools.Types.IDs;
 using SER.Tools.Types.Results;
 
@@ -8,6 +7,6 @@ public interface IGroupsService
 {
 	public Task<Result> Save(GroupBlank blank);
 	public Task<Result> Remove(ID id);
-	public Task<Group> Get(ID id);
-	public Task<Group[]> GetAll();
+	public Task<GroupDto?> Get(ID id);
+	public Task<GroupDto[]> GetPage(Int32 page, Int32 pageSize);
 }

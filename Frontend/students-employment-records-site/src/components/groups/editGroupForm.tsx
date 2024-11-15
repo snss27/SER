@@ -1,17 +1,17 @@
+import CuratorsProvider from "@/domain/curators/curatorsProvider"
 import { StructuralUnits } from "@/domain/groups/enums/structuralUnits"
 import GroupsProvider from "@/domain/groups/groupsProvider"
 import { GroupBlank } from "@/domain/groups/models/groupBlank"
-import Speciality from "@/domain/specialities/models/speciality"
 import SpecialitiesProvider from "@/domain/specialities/specialitiesProvider"
 import useNotifications from "@/hooks/useNotifications"
-import { Box, Typography } from "@mui/material"
+import { Box } from "@mui/material"
 import { useRouter } from "next/router"
-import { useEffect, useReducer, useState } from "react"
+import { useReducer } from "react"
 import { IconPosition, IconType } from "../shared/buttons"
 import Button from "../shared/buttons/button"
+import AsyncAutocomplete from "../shared/inputs/asyncAutocomplete"
 import GroupNumberInput from "../shared/inputs/maskedInputs/groupNumberInput"
 import Select from "../shared/inputs/select"
-import TextInput from "../shared/inputs/textInput"
 import YearPicker from "../shared/inputs/yearPicker"
 
 interface Props {
@@ -20,20 +20,9 @@ interface Props {
 
 const EditGroupForm = (props: Props) => {
     const [groupBlank, dispatch] = useReducer(GroupBlank.reducer, props.initialGroupBlank)
-    const [specialities, setSpecialities] = useState<Speciality[]>([])
 
     const navigator = useRouter()
     const { showError, showSuccess } = useNotifications()
-
-    useEffect(() => {
-        async function loadSpecialities() {
-            const specialities = await SpecialitiesProvider.getAll()
-
-            setSpecialities(specialities)
-        }
-
-        loadSpecialities()
-    }, [])
 
     function handleBackButton() {
         navigator.back()
@@ -47,12 +36,16 @@ const EditGroupForm = (props: Props) => {
         navigator.back()
     }
 
-    return (
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 3, width: "50%" }}>
-            <Typography variant="h1" textAlign="center">
-                Новая группа
-            </Typography>
+    async function loadSpecialities(searchText: string) {
+        return await SpecialitiesProvider.getBySearchText(searchText)
+    }
 
+    async function loadCurators(searchText: string) {
+        return await CuratorsProvider.getBySearchText(searchText)
+    }
+
+    return (
+        <Box component="form" className="edit-form-container">
             <GroupNumberInput
                 value={groupBlank.number}
                 onChange={(number) =>
@@ -74,19 +67,15 @@ const EditGroupForm = (props: Props) => {
                     })
                 }
             />
-            <Select
-                options={specialities.map((s) => s.id)}
-                value={groupBlank.specialityId}
-                label="Выберите специальность"
-                getOptionLabel={(specialityId) =>
-                    //TODO Исправить костыль
-                    specialities.length > 0
-                        ? specialities.find((speciality) => speciality.id === specialityId)!.name
-                        : ""
+            <AsyncAutocomplete
+                value={groupBlank.speciality}
+                label="Специальность"
+                loadOptions={loadSpecialities}
+                onChange={(speciality) =>
+                    dispatch({ type: "CHANGE_SPECIALITY", payload: { speciality } })
                 }
-                onChange={(specialityId) =>
-                    dispatch({ type: "CHANGE_SPECIALITY", payload: { specialityId } })
-                }
+                getOptionLabel={(speciality) => speciality.name}
+                isOptionEqualToValue={(first, second) => first.id === second.id}
             />
             <YearPicker
                 value={groupBlank.enrollmentYear}
@@ -98,20 +87,16 @@ const EditGroupForm = (props: Props) => {
                     })
                 }
             />
-            <TextInput
-                value={groupBlank.curatorName}
-                label="Куратор группы"
-                onChange={(curatorName) =>
-                    dispatch({ type: "CHANGE_CURATOR_NAME", payload: { curatorName } })
-                }
+            <AsyncAutocomplete
+                value={groupBlank.curator}
+                label="Куратор"
+                loadOptions={loadCurators}
+                onChange={(curator) => dispatch({ type: "CHANGE_CURATOR", payload: { curator } })}
+                getOptionLabel={(curator) => curator.formattedFullName}
+                isOptionEqualToValue={(first, second) => first.id === second.id}
             />
 
-            <Box
-                sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                }}>
+            <Box className="edit-form-footer">
                 <Button
                     text="Назад"
                     icon={{ type: IconType.Back, position: IconPosition.Start }}

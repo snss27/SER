@@ -23,6 +23,13 @@ class SpecialitiesProvider {
         const result = await HttpClient.getJsonAsync("/specialities/get_page", { page, pageSize })
         return (result as any[]).map(Speciality.fromAny)
     }
+
+    public static async getBySearchText(searchText: string): Promise<Speciality[]> {
+        const result = await HttpClient.getJsonAsync("/specialities/get_by_search_text", {
+            searchText,
+        })
+        return (result as any[]).map(Speciality.fromAny)
+    }
 }
 
 export default SpecialitiesProvider

@@ -34,13 +34,23 @@ public class SpecialitiesService : ISpecialitiesService
 		return await _specialitiesRepository.Remove(id);
 	}
 
-	public async Task<Speciality> Get(ID id)
+	public async Task<Speciality?> Get(ID id)
 	{
 		return await _specialitiesRepository.Get(id);
+	}
+
+	public async Task<Speciality[]> Get(ID[] ids)
+	{
+		return await _specialitiesRepository.Get(ids);
 	}
 
 	public async Task<Speciality[]> GetPage(Int32 page, Int32 pageSize)
 	{
 		return await _specialitiesRepository.GetPage(page, pageSize);
+	}
+
+	public async Task<Speciality[]> Get(String searchText)
+	{
+		return await _specialitiesRepository.Get(searchText);
 	}
 }
