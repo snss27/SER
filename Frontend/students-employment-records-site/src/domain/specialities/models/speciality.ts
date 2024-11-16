@@ -1,14 +1,18 @@
 import { conjugate } from "@/tools/conjugate"
 import { SpecialityBlank } from "./specialityBlank"
-
-//TODO!!! specialityCode (нужен код специальности помимо названия)
 class Speciality {
     constructor(
         public readonly id: string,
         public readonly name: string,
+        public readonly code: string,
         public readonly studyYears: number,
         public readonly studyMonths: number
     ) {}
+
+    public get displayName() {
+        console.log(this)
+        return `${this.name} (${this.code})`
+    }
 
     public get studyPeriodString() {
         return this.studyYearsString + " " + this.studyMonthsString
@@ -23,13 +27,14 @@ class Speciality {
     }
 
     public static fromAny(any: any): Speciality {
-        return new Speciality(any.id, any.name, any.studyYears, any.studyMonths)
+        return new Speciality(any.id, any.name, any.code, any.studyYears, any.studyMonths)
     }
 
     public toBlank(): SpecialityBlank {
         return {
             id: this.id,
             name: this.name,
+            code: this.code,
             studyYears: this.studyYears,
             studyMonths: this.studyMonths,
         }

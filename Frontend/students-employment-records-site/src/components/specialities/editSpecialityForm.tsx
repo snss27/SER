@@ -41,6 +41,11 @@ const EditSpecialityForm = (props: Props) => {
                 label="Название"
                 onChange={(name) => dispatch({ type: "CHANGE_NAME", payload: { name } })}
             />
+            <TextInput
+                value={specialityBlank.code}
+                label="Код"
+                onChange={(code) => dispatch({ type: "CHANGE_CODE", payload: { code } })}
+            />
             <NumberInput
                 value={specialityBlank.studyYears}
                 label="Лет обучения"

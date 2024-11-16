@@ -39,6 +39,7 @@ CREATE TABLE "groups" (
 CREATE TABLE "specialities" (
   "id" bytea PRIMARY KEY,
   "name" varchar NOT NULL,
+  "code" varchar NOT NULL,
   "studyyears" int NOT NULL,
   "studymonths" int NOT NULL,
   "createddatetimeutc" timestamp NOT NULL,

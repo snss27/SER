@@ -18,6 +18,8 @@ public class SpecialitiesService : ISpecialitiesService
 	{
 		if (String.IsNullOrWhiteSpace(blank.Name)) return Result.Fail("Укажите название");
 
+		if (String.IsNullOrWhiteSpace(blank.Code)) return Result.Fail("Укажите код");
+
 		if (blank.StudyYears is null) return Result.Fail("Укажите количество лет обучения");
 		if (blank.StudyYears > 10) return Result.Fail("Количество лет обучение не может быть больше 10 лет");
 

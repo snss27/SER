@@ -9,6 +9,7 @@ internal static class SpecialitiesConverter
 		return new Speciality(
 			db.Id,
 			db.Name,
+			db.Code,
 			db.StudyYears,
 			db.StudyMonths,
 			db.CreatedDateTime,

@@ -73,7 +73,9 @@ const SpecialitiesTable: React.FC = () => {
                                 ref={
                                     index === specialities.length - 1 ? lastElementRef : undefined
                                 }>
-                                <TableCell sx={{ width: "35%" }}>{speciality.name}</TableCell>
+                                <TableCell sx={{ width: "35%" }}>
+                                    {speciality.displayName}
+                                </TableCell>
                                 <TableCell sx={{ width: "35%" }}>
                                     {speciality.studyPeriodString}
                                 </TableCell>
