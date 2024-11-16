@@ -14,8 +14,9 @@ class Group {
     ) {}
 
     public static fromAny(any: any): Group {
+        console.log(any)
         const speciality = any.speciality === null ? null : Speciality.fromAny(any.speciality)
-        const curator = any.curator === null ? null : Curator.fromAny(any.speciality)
+        const curator = any.curator === null ? null : Curator.fromAny(any.curator)
         return new Group(
             any.id,
             any.number,

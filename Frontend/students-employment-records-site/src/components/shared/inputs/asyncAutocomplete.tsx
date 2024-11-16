@@ -13,6 +13,7 @@ interface Props<T> {
     loadOptions: (searchString: string) => Promise<T[]>
     getOptionLabel: (value: T) => string
     isOptionEqualToValue?: (option: T, value: T) => boolean
+    keyExtractor?: (option: T) => string | number
 }
 
 interface State<T> {
@@ -90,6 +91,7 @@ const AsyncAutocomplete = <T,>(props: Props<T>) => {
             renderInput={renderInput}
             value={props.value}
             clearIcon={<ClearIcon />}
+            getOptionKey={props.keyExtractor}
             noOptionsText={props.noOptionsText ?? "Ничего не найдено"}
         />
     )

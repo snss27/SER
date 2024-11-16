@@ -55,18 +55,14 @@ const GroupsTable: React.FC = () => {
                 <Table stickyHeader>
                     <TableHead>
                         <TableRow sx={{ paddingX: 1 }}>
-                            <TableCell sx={{ width: "15%", fontWeight: "bold" }}>Номер</TableCell>
-                            <TableCell sx={{ width: "15%", fontWeight: "bold" }}>
+                            <TableCell sx={{ fontWeight: "bold" }}>Номер</TableCell>
+                            <TableCell sx={{ fontWeight: "bold", width: "20%" }}>
                                 Структурное подразделение
                             </TableCell>
-                            <TableCell sx={{ width: "30%", fontWeight: "bold" }}>
-                                Специальность
-                            </TableCell>
-                            <TableCell sx={{ width: "15%", fontWeight: "bold" }}>
-                                Год поступления
-                            </TableCell>
-                            <TableCell sx={{ width: "20%", fontWeight: "bold" }}>Куратор</TableCell>
-                            <TableCell align="right" sx={{ width: "15%", fontWeight: "bold" }}>
+                            <TableCell sx={{ fontWeight: "bold" }}>Специальность</TableCell>
+                            <TableCell sx={{ fontWeight: "bold" }}>Год поступления</TableCell>
+                            <TableCell sx={{ fontWeight: "bold" }}>Куратор</TableCell>
+                            <TableCell align="right" sx={{ fontWeight: "bold" }}>
                                 Действия
                             </TableCell>
                         </TableRow>
@@ -77,18 +73,14 @@ const GroupsTable: React.FC = () => {
                                 key={group.id}
                                 sx={{ paddingX: 1 }}
                                 ref={index === groups.length - 1 ? lastElementRef : undefined}>
-                                <TableCell sx={{ width: "15%" }}>{group.number}</TableCell>
-                                <TableCell sx={{ width: "15%" }}>
+                                <TableCell>{group.number}</TableCell>
+                                <TableCell>
                                     {StructuralUnits.getDisplayText(group.structuralUnit)}
                                 </TableCell>
-                                <TableCell sx={{ width: "30%" }}>
-                                    {group.speciality?.name ?? "—"}
-                                </TableCell>
-                                <TableCell sx={{ width: "15%" }}>{group.enrollmentYear}</TableCell>
-                                <TableCell sx={{ width: "20%" }}>
-                                    {group.curator?.formattedFullName ?? "—"}
-                                </TableCell>
-                                <TableCell sx={{ width: "15%" }}>
+                                <TableCell>{group.speciality?.name ?? "—"}</TableCell>
+                                <TableCell>{group.enrollmentYear}</TableCell>
+                                <TableCell>{group.curator?.formattedFullName ?? "—"}</TableCell>
+                                <TableCell align="right">
                                     <IconButton
                                         icon={IconType.Edit}
                                         onClick={() => handleEditButton(group.id)}

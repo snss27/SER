@@ -63,7 +63,7 @@ const useLazyLoad = <T>({ paginationFunction, pageSize = 20 }: Props<T>): Return
 
     async function updateValues() {
         setIsLoading(true)
-        const updatedValues = await paginationFunction(1, values.length - 1)
+        const updatedValues = await paginationFunction(1, page * pageSize)
         setValues(updatedValues)
         setIsLoading(false)
     }

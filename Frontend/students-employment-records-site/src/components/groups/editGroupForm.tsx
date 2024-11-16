@@ -76,6 +76,7 @@ const EditGroupForm = (props: Props) => {
                 }
                 getOptionLabel={(speciality) => speciality.name}
                 isOptionEqualToValue={(first, second) => first.id === second.id}
+                keyExtractor={(speciality) => speciality.id}
             />
             <YearPicker
                 value={groupBlank.enrollmentYear}
@@ -94,6 +95,7 @@ const EditGroupForm = (props: Props) => {
                 onChange={(curator) => dispatch({ type: "CHANGE_CURATOR", payload: { curator } })}
                 getOptionLabel={(curator) => curator.formattedFullName}
                 isOptionEqualToValue={(first, second) => first.id === second.id}
+                keyExtractor={(curator) => curator.id}
             />
 
             <Box className="edit-form-footer">

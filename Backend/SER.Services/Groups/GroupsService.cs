@@ -29,7 +29,7 @@ public class GroupsService : IGroupsService
 
 		blank.Number = blank.Number.Trim();
 
-		if (!Int32.TryParse(blank.Number, out Int32 id)) return Result.Fail("Номер группы должен быть целым числом");
+		if (!Int32.TryParse(blank.Number, out Int32 _)) return Result.Fail("Номер группы должен быть целым числом");
 
 		if (blank.Number.Length != 5) return Result.Fail("Номер группы должен состоять из 5 цифр");
 
