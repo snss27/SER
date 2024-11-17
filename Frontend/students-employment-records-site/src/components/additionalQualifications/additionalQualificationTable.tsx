@@ -1,5 +1,5 @@
 import PageUrls from "@/constants/pageUrls"
-import SpecialitiesProvider from "@/domain/specialities/specialitiesProvider"
+import AdditionalQualificationsProvider from "@/domain/additionalQualifications/additionalQualificationsProvider"
 import useDialog from "@/hooks/useDialog/useDialog"
 import useLazyLoad from "@/hooks/useLazyLoad"
 import useNotifications from "@/hooks/useNotifications"
@@ -17,35 +17,36 @@ import { IconType } from "../shared/buttons"
 import IconButton from "../shared/buttons/iconButtons"
 import ConfirmModal from "../shared/modals/confirmModal"
 
-const SpecialitiesTable: React.FC = () => {
+const AdditionalQualificationsTable: React.FC = () => {
     const navigator = useRouter()
     const { showError, showSuccess } = useNotifications()
     const {
-        values: specialities,
+        values: additionalQualifications,
         lastElementRef,
         updateValues,
-    } = useLazyLoad({ paginationFunction: SpecialitiesProvider.getPage })
+    } = useLazyLoad({ paginationFunction: AdditionalQualificationsProvider.getPage })
     const confirmDialog = useDialog(ConfirmModal)
 
     function handleEditButton(id: string) {
-        navigator.push(`${PageUrls.EditSpecialities}/${id}`)
+        navigator.push(`${PageUrls.EditAdditionalQualifications}/${id}`)
     }
 
     async function handleRemoveButton(id: string) {
-        const speciality = specialities.find((speciality) => speciality.id === id) ?? null
-        if (!speciality) return
+        const additionalQualification =
+            additionalQualifications.find((qualification) => qualification.id === id) ?? null
+        if (!additionalQualification) return
 
         const dialogResult = await confirmDialog.show({
-            title: `Вы уверены, что хотите удалить специальность "${speciality.name}"?`,
+            title: `Вы уверены, что хотите удалить квалификацию "${additionalQualification.name}"?`,
         })
         if (!dialogResult) return
 
-        const result = await SpecialitiesProvider.remove(id)
+        const result = await AdditionalQualificationsProvider.remove(id)
         if (!result.isSuccess) return showError(result.getErrorsString)
 
         await updateValues()
 
-        return showSuccess("Специальность успешно удалена")
+        return showSuccess("Квалификация успешно удалена")
     }
 
     return (
@@ -66,27 +67,29 @@ const SpecialitiesTable: React.FC = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {specialities.map((speciality, index) => (
+                        {additionalQualifications.map((qualification, index) => (
                             <TableRow
-                                key={speciality.id}
+                                key={qualification.id}
                                 sx={{ paddingX: 1 }}
                                 ref={
-                                    index === specialities.length - 1 ? lastElementRef : undefined
+                                    index === additionalQualifications.length - 1
+                                        ? lastElementRef
+                                        : undefined
                                 }>
                                 <TableCell sx={{ width: "35%" }}>
-                                    {speciality.displayName}
+                                    {qualification.displayName}
                                 </TableCell>
                                 <TableCell sx={{ width: "35%" }}>
-                                    {speciality.studyPeriodString}
+                                    {qualification.studyPeriodString}
                                 </TableCell>
                                 <TableCell align="right" sx={{ width: "25%" }}>
                                     <IconButton
                                         icon={IconType.Edit}
-                                        onClick={() => handleEditButton(speciality.id)}
+                                        onClick={() => handleEditButton(qualification.id)}
                                     />
                                     <IconButton
                                         icon={IconType.Delete}
-                                        onClick={() => handleRemoveButton(speciality.id)}
+                                        onClick={() => handleRemoveButton(qualification.id)}
                                     />
                                 </TableCell>
                             </TableRow>
@@ -98,4 +101,4 @@ const SpecialitiesTable: React.FC = () => {
     )
 }
 
-export default SpecialitiesTable
+export default AdditionalQualificationsTable

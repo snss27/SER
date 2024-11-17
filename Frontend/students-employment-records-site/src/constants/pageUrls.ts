@@ -11,6 +11,9 @@ enum PageUrls {
     Curators = "/curators",
     AddCurators = "/curators/add",
     EditCurators = "/curators/edit",
+    AdditionalQualifications = "/additionalQualifications",
+    AddAdditionalQualifications = "/additionalQualifications/add",
+    EditAdditionalQualifications = "/additionalQualifications/edit",
 }
 
 export default PageUrls
