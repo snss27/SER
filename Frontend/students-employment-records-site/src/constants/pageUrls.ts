@@ -1,6 +1,7 @@
 enum PageUrls {
-    Main = "/",
-    AddStudent = "/student/add",
+    Students = "/students",
+    AddStudents = "/students/add",
+    EditStudents = "/students/edit",
     Groups = "/groups",
     AddGroups = "/groups/add",
     EditGroups = "/groups/edit",

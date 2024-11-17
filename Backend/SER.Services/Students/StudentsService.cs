@@ -1,6 +1,7 @@
 using SER.Domain.Services;
 using SER.Domain.Students;
 using SER.Services.Students.Repositories;
+using SER.Tools.Types.Results;
 
 namespace SER.Services.Students;
 
@@ -13,10 +14,9 @@ public class StudentsService : IStudentsService
         _studentsRepository = studentsRepository;
     }
 
-    public async Task<FlatStudent[]> GetFlatStudentsPage(Int32 page)
+	//TODO не реализовал
+    public async Task<Result> Save(StudentBlank blank)
     {
-        if (page < 0) throw new ArgumentOutOfRangeException(nameof(page));
-
-        return await _studentsRepository.GetFlatStudentsPage(page);
+        return await _studentsRepository.Save(blank);
     }
 }

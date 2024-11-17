@@ -4,10 +4,10 @@ import { NeverUnreachable } from "@/tools/neverUreachable"
 import EmojiPeopleIcon from "@mui/icons-material/EmojiPeople"
 import EngineeringIcon from "@mui/icons-material/Engineering"
 import GroupsIcon from "@mui/icons-material/Groups"
-import HomeIcon from "@mui/icons-material/Home"
+import SchoolIcon from "@mui/icons-material/School"
 
 export enum SideBarElements {
-    Main = 1,
+    Students = 1,
     Groups = 2,
     Specialities = 3,
     Curators = 4,
@@ -19,13 +19,13 @@ export namespace SideBarElements {
     }
 
     export function getDefault() {
-        return SideBarElements.Main
+        return SideBarElements.Students
     }
 
     export function getIcon(element: SideBarElements): JSX.Element {
         switch (element) {
-            case SideBarElements.Main:
-                return <HomeIcon />
+            case SideBarElements.Students:
+                return <SchoolIcon />
             case SideBarElements.Groups:
                 return <GroupsIcon />
             case SideBarElements.Specialities:
@@ -39,8 +39,8 @@ export namespace SideBarElements {
 
     export function getText(element: SideBarElements): string {
         switch (element) {
-            case SideBarElements.Main:
-                return "Главная"
+            case SideBarElements.Students:
+                return "Студенты"
             case SideBarElements.Groups:
                 return "Группы"
             case SideBarElements.Specialities:
@@ -54,8 +54,8 @@ export namespace SideBarElements {
 
     export function getUrl(element: SideBarElements) {
         switch (element) {
-            case SideBarElements.Main:
-                return PageUrls.Main
+            case SideBarElements.Students:
+                return PageUrls.Students
             case SideBarElements.Groups:
                 return PageUrls.Groups
             case SideBarElements.Specialities:

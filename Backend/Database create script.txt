@@ -15,7 +15,7 @@ CREATE TABLE "students" (
   "additionalqualifications" bytea[] NOT NULL,
   "istargetagreement" bool,
   "targetagreementfile" varchar,
-  "armystatus" int,
+  "issubjecttodraft" bool,
   "armysubpoenafile" varchar,
   "armyservedate" date,
   "peculiarity" int,
@@ -80,7 +80,10 @@ CREATE TABLE "workplaces" (
 
 CREATE TABLE "additionalqualifications" (
   "id" bytea PRIMARY KEY,
-  "name" varchar,
+  "name" varchar NOT NULL,
+  "code" varchar NOT NULL,
+  "studyyears" int NULL,
+  "studymonths" int NOT NULL,
   "createddatetimeutc" timestamp NOT NULL,
   "modifieddatetimeutc" timestamp,
   "isremoved" bool NOT NULL

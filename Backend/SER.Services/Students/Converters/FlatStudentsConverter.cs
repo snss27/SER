@@ -5,12 +5,12 @@ namespace SER.Services.Students.Converters;
 
 internal static class FlatStudentsConverter
 {
-    public static FlatStudent ToFlatStudent(this StudentDB studentDb)
+    public static Student ToFlatStudent(this StudentDB studentDb)
     {
-        return new FlatStudent();
+        return new Student();
     }
 
-    public static FlatStudent[] ToFlatStudents(this StudentDB[] studentDbs)
+    public static Student[] ToFlatStudents(this StudentDB[] studentDbs)
     {
         return studentDbs.Select(ToFlatStudent).ToArray();
     }

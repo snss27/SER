@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SER.Domain.Services;
 using SER.Domain.Students;
+using SER.Tools.Types.Results;
 
 namespace SER.API.Controllers.Students;
 
@@ -13,11 +14,9 @@ public class StudentsController : ControllerBase
 		_studentsService = studentsService;
 	}
 
-	[HttpPost("api/students/get_page")]
-	public async Task<IActionResult> AddErrorOld([FromQuery] Int32 page)
+	[HttpPost("api/students/save")]
+	public async Task<Result> Save([FromBody] StudentBlank blank)
 	{
-		FlatStudent[] students = await _studentsService.GetFlatStudentsPage(page);
-
-		return new JsonResult(students);
+		return await _studentsService.Save(blank);
 	}
 }

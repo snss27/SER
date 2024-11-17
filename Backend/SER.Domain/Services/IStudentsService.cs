@@ -1,7 +1,8 @@
 using SER.Domain.Students;
+using SER.Tools.Types.Results;
 
 namespace SER.Domain.Services;
 public interface IStudentsService
 {
-    public Task<FlatStudent[]> GetFlatStudentsPage(Int32 page);
+    public Task<Result> Save(StudentBlank blank);
 }
