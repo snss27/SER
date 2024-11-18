@@ -1,5 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using SER.Domain.Services;
+using SER.Services.AdditionalQualifications;
+using SER.Services.AdditionalQualifications.Repositories;
 using SER.Services.Curators;
 using SER.Services.Curators.Repositories;
 using SER.Services.Groups;
@@ -20,6 +22,7 @@ public static class ServicesConfigurator
 		services.AddSingleton<ISpecialitiesService, SpecialitiesService>();
 		services.AddSingleton<IGroupsService, GroupsService>();
 		services.AddSingleton<ICuratorsService, CuratorsService>();
+		services.AddSingleton<IAdditionalQualificationsService, AdditionalQualificationsService>();
 
         #endregion
 
@@ -29,6 +32,7 @@ public static class ServicesConfigurator
 		services.AddSingleton<ISpecialitiesRepository, SpecialitiesRepository>();
 		services.AddSingleton<IGroupsRepository, GroupsRepository>();
 		services.AddSingleton<ICuratorsRepository, CuratorsRepository>();
+		services.AddSingleton<IAdditionalQualificationsRepository, AdditionalQualificationsRepository>();
 
 		#endregion
 

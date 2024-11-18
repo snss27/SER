@@ -12,8 +12,8 @@ internal static class SpecialitiesConverter
 			db.Code,
 			db.StudyYears,
 			db.StudyMonths,
-			db.CreatedDateTime,
-			db.ModifiedDateTime
+			db.CreatedDateTimeUtc,
+			db.ModifiedDateTimeUtc
 		);
 	}
 

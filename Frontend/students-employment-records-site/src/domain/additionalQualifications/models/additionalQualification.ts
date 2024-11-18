@@ -6,7 +6,7 @@ class AdditionalQualification {
         public readonly id: string,
         public readonly name: string,
         public readonly code: string,
-        public readonly studyYears: number,
+        public readonly studyYears: number | null,
         public readonly studyMonths: number
     ) {}
 
@@ -20,6 +20,7 @@ class AdditionalQualification {
     }
 
     private get studyYearsString() {
+        if (this.studyYears === null) return ""
         return conjugate(this.studyYears, "год", "года", "лет")
     }
 
