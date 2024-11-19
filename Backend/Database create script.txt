@@ -57,6 +57,14 @@ CREATE TABLE "pasports" (
   "isremoved" bool NOT NULL
 );
 
+CREATE TABLE "workposts" (
+  "id" bytea PRIMARY KEY,
+  "name" varchar NOT NULL,
+  "createddatetimeutc" timestamp NOT NULL,
+  "modifieddatetimeutc" timestamp,
+  "isremoved" bool NOT NULL
+);
+
 CREATE TABLE "workplacesinfo" (
   "id" bytea PRIMARY KEY,
   "prevworkplaces" bytea[] NOT NULL,
