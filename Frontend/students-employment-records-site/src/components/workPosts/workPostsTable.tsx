@@ -13,6 +13,8 @@ import {
     TableRow,
 } from "@mui/material"
 import { useRouter } from "next/router"
+import { IconType } from "../shared/buttons"
+import IconButton from "../shared/buttons/iconButtons"
 import ConfirmModal from "../shared/modals/confirmModal"
 
 const WorkPostsTable: React.FC = () => {
@@ -52,7 +54,9 @@ const WorkPostsTable: React.FC = () => {
                 <Table stickyHeader>
                     <TableHead>
                         <TableRow sx={{ paddingX: 1 }}>
-                            <TableCell sx={{ fontWeight: "bold" }}>Название</TableCell>
+                            <TableCell sx={{ width: "75%", fontWeight: "bold" }}>
+                                Название
+                            </TableCell>
                             <TableCell align="right" sx={{ width: "25%", fontWeight: "bold" }}>
                                 Действия
                             </TableCell>
@@ -64,7 +68,17 @@ const WorkPostsTable: React.FC = () => {
                                 key={workPost.id}
                                 sx={{ paddingX: 1 }}
                                 ref={index === workPosts.length - 1 ? lastElementRef : undefined}>
-                                <TableCell sx={{ width: "35%" }}>{workPost.name}</TableCell>
+                                <TableCell sx={{ width: "75%" }}>{workPost.name}</TableCell>
+                                <TableCell align="right" sx={{ width: "25%" }}>
+                                    <IconButton
+                                        icon={IconType.Edit}
+                                        onClick={() => handleEditButton(workPost.id)}
+                                    />
+                                    <IconButton
+                                        icon={IconType.Delete}
+                                        onClick={() => handleRemoveButton(workPost.id)}
+                                    />
+                                </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
