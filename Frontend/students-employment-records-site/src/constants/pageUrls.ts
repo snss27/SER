@@ -14,6 +14,9 @@ enum PageUrls {
     AdditionalQualifications = "/additionalQualifications",
     AddAdditionalQualifications = "/additionalQualifications/add",
     EditAdditionalQualifications = "/additionalQualifications/edit",
+    WorkPosts = "/workPosts",
+    AddWorkPosts = "/workPosts/add",
+    EditWorkPosts = "/workPosts/edit",
 }
 
 export default PageUrls

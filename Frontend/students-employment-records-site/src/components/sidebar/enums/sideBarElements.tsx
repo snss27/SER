@@ -1,6 +1,7 @@
 import PageUrls from "@/constants/pageUrls"
 import { enumToArrayNumber } from "@/tools/enums/enumUtils"
 import { NeverUnreachable } from "@/tools/neverUreachable"
+import ApartmentIcon from "@mui/icons-material/Apartment"
 import EmojiPeopleIcon from "@mui/icons-material/EmojiPeople"
 import EngineeringIcon from "@mui/icons-material/Engineering"
 import GroupsIcon from "@mui/icons-material/Groups"
@@ -13,6 +14,7 @@ export enum SideBarElements {
     Specialities = 3,
     Curators = 4,
     AdditionalQualifications = 5,
+    WorkPosts = 6,
 }
 
 export namespace SideBarElements {
@@ -36,6 +38,8 @@ export namespace SideBarElements {
                 return <EmojiPeopleIcon />
             case SideBarElements.AdditionalQualifications:
                 return <WorkIcon />
+            case SideBarElements.WorkPosts:
+                return <ApartmentIcon />
             default:
                 throw new NeverUnreachable(element)
         }
@@ -53,6 +57,8 @@ export namespace SideBarElements {
                 return "Кураторы"
             case SideBarElements.AdditionalQualifications:
                 return "Дополнительные квалификации"
+            case SideBarElements.WorkPosts:
+                return "Места работы"
             default:
                 throw new NeverUnreachable(element)
         }
@@ -70,6 +76,8 @@ export namespace SideBarElements {
                 return PageUrls.Curators
             case SideBarElements.AdditionalQualifications:
                 return PageUrls.AdditionalQualifications
+            case SideBarElements.WorkPosts:
+                return PageUrls.WorkPosts
             default:
                 throw new NeverUnreachable(element)
         }
