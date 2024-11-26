@@ -57,14 +57,6 @@ CREATE TABLE "pasports" (
   "isremoved" bool NOT NULL
 );
 
-CREATE TABLE "workposts" (
-  "id" bytea PRIMARY KEY,
-  "name" varchar NOT NULL,
-  "createddatetimeutc" timestamp NOT NULL,
-  "modifieddatetimeutc" timestamp,
-  "isremoved" bool NOT NULL
-);
-
 CREATE TABLE "workplacesinfo" (
   "id" bytea PRIMARY KEY,
   "prevworkplaces" bytea[] NOT NULL,
@@ -106,3 +98,25 @@ CREATE TABLE "curators" (
   "modifieddatetimeutc" timestamp,
   "isremoved" bool NOT NULL
 );
+
+
+-------------------------------
+
+CREATE TABLE "enterprises" (
+  "id" bytea PRIMARY KEY,
+  "name" varchar NOT NULL,
+  "legaladdress" varchar NULL,
+  "actualaddress" varchar NULL,
+  "address" varchar NULL,
+  "inn" varchar NULL,
+  "kpp" varchar NULL,
+  "orgn" varchar NULL,
+  "phone" varchar NULL,
+  "mail" varchar NULL,
+  
+  "createddatetimeutc" timestamp NOT NULL,
+  "modifieddatetimeutc" timestamp NULL,
+  "isremoved" bool NOT NULL
+);
+
+
