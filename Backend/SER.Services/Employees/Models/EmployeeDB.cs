@@ -1,12 +1,12 @@
 using SER.Tools.Types.IDs;
 
-namespace SER.Services.Curators.Models;
-public class CuratorDB
+namespace SER.Services.Employees.Models;
+public class EmployeeDB
 {
 	public ID Id { get; set; }
 	public String Name { get; set; }
-	public String? Surname { get; set; }
-	public String? Patronymic { get; set; }
+	public String? SecondName { get; set; }
+	public String? LastName { get; set; }
 
 	public DateTime CreatedDateTimeUtc { get; set; }
 	public DateTime? ModifiedDateTimeUtc { get; set; }

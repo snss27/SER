@@ -1,8 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using SER.Domain.Curators;
 using SER.Domain.Services;
 using SER.Domain.Specialities;
-using SER.Services.Curators;
 using SER.Tools.Types.IDs;
 using SER.Tools.Types.Results;
 

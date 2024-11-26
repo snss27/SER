@@ -1,4 +1,4 @@
-using SER.Domain.Curators;
+using SER.Domain.Employees;
 using SER.Domain.Groups.Enums;
 using SER.Domain.Specialities;
 using SER.Tools.Types.IDs;
@@ -11,5 +11,5 @@ public record GroupDto(
 	StructuralUnits StructuralUnit,
 	Speciality? Speciality,
 	Int32 EnrollmentYear,
-	Curator? Curator
+	Employee? Curator
 );

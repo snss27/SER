@@ -1,1 +1,0 @@
-select * from curators where id=@p_id and not isremoved

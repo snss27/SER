@@ -78,17 +78,6 @@ CREATE TABLE "workplaces" (
   "isremoved" bool NOT NULL
 );
 
-CREATE TABLE "curators" (
-  "id" bytea PRIMARY KEY,
-  "name" varchar NOT NULL,
-  "surname" varchar,
-  "patronymic" varchar,
-  "createddatetimeutc" timestamp NOT NULL,
-  "modifieddatetimeutc" timestamp,
-  "isremoved" bool NOT NULL
-);
-
-
 -------------------------------
 
 CREATE TABLE "enterprises" (
@@ -113,6 +102,17 @@ CREATE TABLE "additionalqualifications" (
   "name" varchar NOT NULL,
   "code" varchar NOT NULL,
   "studytime" varchar NULL,
+  
+  "createddatetimeutc" timestamp NOT NULL,
+  "modifieddatetimeutc" timestamp,
+  "isremoved" bool NOT NULL
+);
+
+CREATE TABLE "employees" (
+  "id" bytea PRIMARY KEY,
+  "name" varchar NOT NULL,
+  "secondname" varchar NULL,
+  "lastname" varchar NULL,
   
   "createddatetimeutc" timestamp NOT NULL,
   "modifieddatetimeutc" timestamp,

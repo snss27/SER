@@ -1,9 +1,8 @@
-using SER.Domain.Curators;
+using SER.Domain.Employees;
 using SER.Domain.Groups;
 using SER.Domain.Groups.Converters;
 using SER.Domain.Services;
 using SER.Domain.Specialities;
-using SER.Services.Curators.Models;
 using SER.Services.Groups.Repositories;
 using SER.Services.Specialities.Models;
 using SER.Tools.Types.IDs;
@@ -14,9 +13,9 @@ public class GroupsService : IGroupsService
 {
 	private readonly IGroupsRepository _groupsRepository;
 	private readonly ISpecialitiesService _specialitiesService;
-	private readonly ICuratorsService _curatorsService;
+	private readonly IEmployeesService _curatorsService;
 
-	public GroupsService(IGroupsRepository groupsRepository, ISpecialitiesService specialitiesService, ICuratorsService curatorsService)
+	public GroupsService(IGroupsRepository groupsRepository, ISpecialitiesService specialitiesService, IEmployeesService curatorsService)
 	{
 		_groupsRepository = groupsRepository;
 		_specialitiesService = specialitiesService;
@@ -52,7 +51,7 @@ public class GroupsService : IGroupsService
 		Group? group = await _groupsRepository.Get(id);
 		if (group is null) return null;
 
-		Curator? curator = group.CuratorId is null ? null : await _curatorsService.Get(group.CuratorId.Value);
+		Employee? curator = group.CuratorId is null ? null : await _curatorsService.Get(group.CuratorId.Value);
 		Speciality? speciality = group.SpecialityId is null ? null : await _specialitiesService.Get(group.SpecialityId.Value);
 
 		return group.ToGroupDto(speciality, curator);
@@ -71,7 +70,7 @@ public class GroupsService : IGroupsService
 
 		await Task.WhenAll(curatorsTask, specialitiesTask);
 
-		Curator[] curators = await curatorsTask;
+		Employee[] curators = await curatorsTask;
 		Speciality[] specialities = await specialitiesTask;
 
 		return groups.ToGroupDtos(specialities, curators);

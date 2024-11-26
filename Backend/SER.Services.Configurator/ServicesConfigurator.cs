@@ -2,8 +2,8 @@ using Microsoft.Extensions.DependencyInjection;
 using SER.Domain.Services;
 using SER.Services.AdditionalQualifications;
 using SER.Services.AdditionalQualifications.Repositories;
-using SER.Services.Curators;
-using SER.Services.Curators.Repositories;
+using SER.Services.Employees;
+using SER.Services.Employees.Repositories;
 using SER.Services.Enterprises;
 using SER.Services.Enterprises.Repositories;
 using SER.Services.Groups;
@@ -23,7 +23,7 @@ public static class ServicesConfigurator
         services.AddSingleton<IStudentsService, StudentsService>();
 		services.AddSingleton<ISpecialitiesService, SpecialitiesService>();
 		services.AddSingleton<IGroupsService, GroupsService>();
-		services.AddSingleton<ICuratorsService, CuratorsService>();
+		services.AddSingleton<IEmployeesService, EmployeesService>();
 		services.AddSingleton<IAdditionalQualificationsService, AdditionalQualificationsService>();
 		services.AddSingleton<IEnterprisesService, EnterprisesService>();
 
@@ -34,7 +34,7 @@ public static class ServicesConfigurator
         services.AddSingleton<IStudentsRepository, StudentsRepository>();
 		services.AddSingleton<ISpecialitiesRepository, SpecialitiesRepository>();
 		services.AddSingleton<IGroupsRepository, GroupsRepository>();
-		services.AddSingleton<ICuratorsRepository, CuratorsRepository>();
+		services.AddSingleton<IEmployeesRepository, EmployeesRepository>();
 		services.AddSingleton<IAdditionalQualificationsRepository, AdditionalQualificationsRepository>();
 		services.AddSingleton<IEnterprisesRepository, EnterprisesRepository>();
 

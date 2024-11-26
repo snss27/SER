@@ -1,8 +1,9 @@
-INSERT INTO curators(
+INSERT INTO employees(
 	id,
 	name,
-	surname,
-	patronymic,
+	secondname,
+	lastname,
+
 	createddatetimeutc,
 	modifieddatetimeutc,
 	isremoved
@@ -10,14 +11,15 @@ INSERT INTO curators(
 VALUES(
 	@p_id,
 	@p_name,
-	@p_surname,
-	@p_patronymic,
+	@p_secondname,
+	@p_lastname,
+
 	@p_currentdatetimeutc,
 	null,
 	false
 )
 ON CONFLICT (id) DO UPDATE SET
 	name = @p_name,
-	surname = @p_surname, 
-	patronymic = @p_patronymic,
+	secondname = @p_secondname, 
+	lastname = @p_lastname,
 	modifieddatetimeutc = @p_currentdatetimeutc
