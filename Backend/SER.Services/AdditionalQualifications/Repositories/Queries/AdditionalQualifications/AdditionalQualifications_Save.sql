@@ -2,8 +2,8 @@ INSERT INTO additionalqualifications(
 	id,
 	name,
 	code,
-	studyyears,
-	studymonths,
+	studytime,
+
 	createddatetimeutc,
 	modifieddatetimeutc,
 	isremoved
@@ -12,8 +12,8 @@ VALUES(
 	@p_id,
 	@p_name,
 	@p_code,
-	@p_studyyears,
-	@p_studymonths,
+	@p_studytime,
+
 	@p_currentdatetimeutc,
 	null,
 	false
@@ -21,6 +21,6 @@ VALUES(
 ON CONFLICT (id) DO UPDATE SET
 	name = @p_name,
 	code = @p_code,
-	studyyears = @p_studyyears,
-	studymonths = @p_studymonths,
+	studytime = @p_studytime,
+
 	modifieddatetimeutc = @p_currentdatetimeutc

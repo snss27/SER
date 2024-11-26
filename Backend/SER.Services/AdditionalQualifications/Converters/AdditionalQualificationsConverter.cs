@@ -6,7 +6,7 @@ internal static class AdditionalQualificationsConverter
 {
 	public static AdditionalQualification ToAdditionalQualification(this AdditionalQualificationDB db)
 	{
-		return new AdditionalQualification(db.Id, db.Name, db.Code, db.StudyYears, db.StudyMonths, db.CreatedDateTimeUtc, db.ModifiedDateTimeUtc);
+		return new AdditionalQualification(db.Id, db.Name, db.Code, db.StudyTime, db.CreatedDateTimeUtc, db.ModifiedDateTimeUtc);
 	}
 
 	public static AdditionalQualification[] ToAdditionalQualifications(this AdditionalQualificationDB[] dbs)

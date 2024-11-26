@@ -6,20 +6,19 @@ public class AdditionalQualification
 	public ID Id { get; }
 	public String Name { get; }
 	public String Code { get; }
-	public Int32? StudyYears { get; }
-	public Int32 StudyMonths { get; }
+	public String? StudyTime { get; }
 
 	public DateTime CreatedDateTimeUtc { get; }
 	public DateTime? ModifiedDateTimeUtc { get; }
 
-	public AdditionalQualification(ID id, String name, String code, Int32? studyYears, Int32 studyMonths, DateTime createdDateTimeUtc, DateTime? modifiedDateTimeUtc)
+	public AdditionalQualification(ID id, String name, String code, String? studyTime, DateTime createdDateTimeUtc, DateTime? modifiedDateTimeUtc)
 	{
 		Id = id;
 		Name = name;
-		StudyYears = studyYears;
-		StudyMonths = studyMonths;
+		Code = code;
+		StudyTime = studyTime;
+
 		CreatedDateTimeUtc = createdDateTimeUtc;
 		ModifiedDateTimeUtc = modifiedDateTimeUtc;
-		Code = code;
 	}
 }

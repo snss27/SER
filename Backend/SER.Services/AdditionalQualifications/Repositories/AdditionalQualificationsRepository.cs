@@ -23,8 +23,7 @@ public class AdditionalQualificationsRepository : BaseRepository, IAdditionalQua
 			query.Add(blank.Id);
 			query.Add(blank.Name);
 			query.Add(blank.Code);
-			query.Add(blank.StudyYears);
-			query.Add(blank.StudyMonths);
+			query.Add(blank.StudyTime);
 			query.Add(DateTime.UtcNow, "p_currentdatetimeutc");
 		}
 
