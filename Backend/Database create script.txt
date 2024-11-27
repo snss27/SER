@@ -36,17 +36,6 @@ CREATE TABLE "groups" (
   "isremoved" bool NOT NULL
 );
 
-CREATE TABLE "specialities" (
-  "id" bytea PRIMARY KEY,
-  "name" varchar NOT NULL,
-  "code" varchar NOT NULL,
-  "studyyears" int NOT NULL,
-  "studymonths" int NOT NULL,
-  "createddatetimeutc" timestamp NOT NULL,
-  "modifieddatetimeutc" timestamp,
-  "isremoved" bool NOT NULL
-);
-
 CREATE TABLE "pasports" (
   "id" bytea PRIMARY KEY,
   "number" varchar NOT NULL,
@@ -113,6 +102,18 @@ CREATE TABLE "employees" (
   "name" varchar NOT NULL,
   "secondname" varchar NULL,
   "lastname" varchar NULL,
+  
+  "createddatetimeutc" timestamp NOT NULL,
+  "modifieddatetimeutc" timestamp,
+  "isremoved" bool NOT NULL
+);
+
+CREATE TABLE "educationlevels" (
+  "id" bytea PRIMARY KEY,
+  "type" int NOT NULL,
+  "name" varchar NOT NULL,
+  "code" varchar NOT NULL,
+  "studytime" varchar NULL,
   
   "createddatetimeutc" timestamp NOT NULL,
   "modifieddatetimeutc" timestamp,

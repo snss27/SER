@@ -1,26 +1,28 @@
-INSERT INTO specialities(
+INSERT INTO educationlevels(
 	id,
+	type,
 	name,
 	code,
-	studyyears,
-	studymonths,
+	studytime,
+
 	createddatetimeutc,
 	modifieddatetimeutc,
 	isremoved
 )
 VALUES(
 	@p_id,
+	@p_type,
 	@p_name,
 	@p_code,
-	@p_studyyears,
-	@p_studymonths,
+	@p_studytime,
+
 	@p_currentdatetimeutc,
 	null,
 	false
 )
 ON CONFLICT (id) DO UPDATE SET
+	type = @p_type,
 	name = @p_name,
 	code = @p_code,
-	studyyears = @p_studyyears,
-	studymonths = @p_studymonths,
+	studytime = @p_studytime,
 	modifieddatetimeutc = @p_currentdatetimeutc

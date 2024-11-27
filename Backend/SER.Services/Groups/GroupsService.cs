@@ -1,10 +1,9 @@
+using SER.Domain.EducationLevels;
 using SER.Domain.Employees;
 using SER.Domain.Groups;
 using SER.Domain.Groups.Converters;
 using SER.Domain.Services;
-using SER.Domain.Specialities;
 using SER.Services.Groups.Repositories;
-using SER.Services.Specialities.Models;
 using SER.Tools.Types.IDs;
 using SER.Tools.Types.Results;
 
@@ -12,10 +11,10 @@ namespace SER.Services.Groups;
 public class GroupsService : IGroupsService
 {
 	private readonly IGroupsRepository _groupsRepository;
-	private readonly ISpecialitiesService _specialitiesService;
+	private readonly IEducationLevelsService _specialitiesService;
 	private readonly IEmployeesService _curatorsService;
 
-	public GroupsService(IGroupsRepository groupsRepository, ISpecialitiesService specialitiesService, IEmployeesService curatorsService)
+	public GroupsService(IGroupsRepository groupsRepository, IEducationLevelsService specialitiesService, IEmployeesService curatorsService)
 	{
 		_groupsRepository = groupsRepository;
 		_specialitiesService = specialitiesService;
@@ -52,7 +51,7 @@ public class GroupsService : IGroupsService
 		if (group is null) return null;
 
 		Employee? curator = group.CuratorId is null ? null : await _curatorsService.Get(group.CuratorId.Value);
-		Speciality? speciality = group.SpecialityId is null ? null : await _specialitiesService.Get(group.SpecialityId.Value);
+		EducationLevel? speciality = group.SpecialityId is null ? null : await _specialitiesService.Get(group.SpecialityId.Value);
 
 		return group.ToGroupDto(speciality, curator);
 	}
@@ -71,7 +70,7 @@ public class GroupsService : IGroupsService
 		await Task.WhenAll(curatorsTask, specialitiesTask);
 
 		Employee[] curators = await curatorsTask;
-		Speciality[] specialities = await specialitiesTask;
+		EducationLevel[] specialities = await specialitiesTask;
 
 		return groups.ToGroupDtos(specialities, curators);
 	}

@@ -1,8 +1,6 @@
-using System.Numerics;
 using SER.Domain.AdditionalQualifications;
 using SER.Domain.Services;
 using SER.Services.AdditionalQualifications.Repositories;
-using SER.Services.Specialities.Repositories;
 using SER.Tools.Types.IDs;
 using SER.Tools.Types.Results;
 

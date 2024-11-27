@@ -6,7 +6,6 @@ using SER.Tools.DataBase;
 using SER.Tools.Types.IDs;
 using SER.Tools.Types.Results;
 using SER.Services.AdditionalQualifications.Repositories.Queries;
-using SER.Services.Specialities.Models;
 using SER.Services.AdditionalQualifications.Models;
 using SER.Services.AdditionalQualifications.Converters;
 using static SER.Tools.Utils.NumberUtils;

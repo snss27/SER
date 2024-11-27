@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using SER.Domain.AdditionalQualifications;
 using SER.Domain.Services;
-using SER.Domain.Specialities;
 using SER.Tools.Types.IDs;
 using SER.Tools.Types.Results;
 
