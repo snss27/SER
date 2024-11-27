@@ -19,6 +19,9 @@ CREATE TABLE "students" (
   "armysubpoenafile" varchar,
   "armyservedate" date,
   "peculiarity" int,
+  "number" varchar NULL,
+  "series" varchar NULL,
+  "pasportfiles" varchar NOT NULL,
   "createddatetimeutc" timestamp NOT NULL,
   "modifieddatetimeutc" timestamp,
   "isremoved" bool NOT NULL
@@ -31,16 +34,6 @@ CREATE TABLE "groups" (
   "specialityid" bytea,
   "enrollmentyear" int NOT NULL,
   "curatorid" bytea,
-  "createddatetimeutc" timestamp NOT NULL,
-  "modifieddatetimeutc" timestamp,
-  "isremoved" bool NOT NULL
-);
-
-CREATE TABLE "pasports" (
-  "id" bytea PRIMARY KEY,
-  "number" varchar NOT NULL,
-  "series" varchar NOT NULL,
-  "files" varchar[] NOT NULL,
   "createddatetimeutc" timestamp NOT NULL,
   "modifieddatetimeutc" timestamp,
   "isremoved" bool NOT NULL
