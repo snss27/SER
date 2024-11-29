@@ -1,7 +1,6 @@
 "use client"
 
 import PageUrls from "@/constants/pageUrls"
-import CuratorsProvider from "@/domain/curators/curatorsProvider"
 import useDialog from "@/hooks/useDialog/useDialog"
 import useLazyLoad from "@/hooks/useLazyLoad"
 import useNotifications from "@/hooks/useNotifications"
@@ -19,36 +18,37 @@ import React from "react"
 import { IconType } from "../shared/buttons"
 import IconButton from "../shared/buttons/iconButtons"
 import ConfirmModal from "../shared/modals/confirmModal"
+import { EmployeesProvider } from "@/domain/employees/employeesProvider"
 
-const CuratorsTable: React.FC = () => {
+export const EmployeesTable: React.FC = () => {
     const navigator = useRouter()
     const { showError, showSuccess } = useNotifications()
     const {
-        values: curators,
+        values: employees,
         lastElementRef,
         updateValues,
-    } = useLazyLoad({ paginationFunction: CuratorsProvider.getPage })
+    } = useLazyLoad({ paginationFunction: EmployeesProvider.getPage })
     const confirmDialog = useDialog(ConfirmModal)
 
-    function handleEditButton(id: string) {
-        navigator.push(`${PageUrls.EditCurators}/${id}`)
+    async function handleEditButton(id: string) {
+        await navigator.push(`${PageUrls.EditEmployee}/${id}`)
     }
 
     async function handleRemoveButton(id: string) {
-        const curator = curators.find((curator) => curator.id === id) ?? null
-        if (!curator) return
+        const employee = employees.find((e) => e.id === id) ?? null
+        if (!employee) return
 
         const dialogResult = await confirmDialog.show({
-            title: `Вы уверены, что хотите удалить куратора "${curator.formattedFullName}"?`,
+            title: `Вы уверены, что хотите удалить сотрудника "${employee.displayName}"?`,
         })
         if (!dialogResult) return
 
-        const result = await CuratorsProvider.remove(id)
+        const result = await EmployeesProvider.remove(id)
         if (!result.isSuccess) return showError(result.getErrorsString)
 
         await updateValues()
 
-        return showSuccess("Куратор успешно удалён")
+        return showSuccess("Сотрудник успешно удалён")
     }
 
     return (
@@ -64,22 +64,20 @@ const CuratorsTable: React.FC = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {curators.map((curator, index) => (
+                        {employees.map((employee, index) => (
                             <TableRow
-                                key={curator.id}
+                                key={employee.id}
                                 sx={{ paddingX: 1 }}
-                                ref={index === curators.length - 1 ? lastElementRef : undefined}>
-                                <TableCell sx={{ width: "75%" }}>
-                                    {curator.formattedFullName}
-                                </TableCell>
+                                ref={index === employees.length - 1 ? lastElementRef : undefined}>
+                                <TableCell sx={{ width: "75%" }}>{employee.displayName}</TableCell>
                                 <TableCell align="right" sx={{ width: "25%" }}>
                                     <IconButton
                                         icon={IconType.Edit}
-                                        onClick={() => handleEditButton(curator.id)}
+                                        onClick={() => handleEditButton(employee.id)}
                                     />
                                     <IconButton
                                         icon={IconType.Delete}
-                                        onClick={() => handleRemoveButton(curator.id)}
+                                        onClick={() => handleRemoveButton(employee.id)}
                                     />
                                 </TableCell>
                             </TableRow>
@@ -90,5 +88,3 @@ const CuratorsTable: React.FC = () => {
         </TableContainer>
     )
 }
-
-export default CuratorsTable

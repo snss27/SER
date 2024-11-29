@@ -1,57 +1,56 @@
 "use client"
 
-import CuratorsProvider from "@/domain/curators/curatorsProvider"
-import { CuratorBlank } from "@/domain/curators/models/curatorBlank"
 import useNotifications from "@/hooks/useNotifications"
-import { FormTypes } from "@/tools/enums/formTypes"
 import { Box } from "@mui/material"
 import { useRouter } from "next/router"
 import React, { useReducer } from "react"
 import { IconPosition, IconType } from "../shared/buttons"
 import Button from "../shared/buttons/button"
 import TextInput from "../shared/inputs/textInput"
+import { EmployeeBlank } from "@/domain/employees/models/employeeBlank"
+import { EmployeesProvider } from "@/domain/employees/employeesProvider"
 
 interface Props {
-    initialBlank: CuratorBlank
+    initialBlank: EmployeeBlank
 }
 
-const EditCuratorForm: React.FC<Props> = ({ initialBlank }) => {
-    const formType = initialBlank.id === null ? FormTypes.Add : FormTypes.Edit
-
-    const [curatorBlank, dispatch] = useReducer(CuratorBlank.reducer, initialBlank)
+export const EditEmployeeForm: React.FC<Props> = ({ initialBlank }) => {
+    const [employeeBlank, dispatch] = useReducer(EmployeeBlank.reducer, initialBlank)
 
     const navigator = useRouter()
     const { showError, showSuccess } = useNotifications()
 
-    async function handleBackButton() {
+    function handleBackButton() {
         navigator.back()
     }
 
     async function handleSaveButton() {
-        const result = await CuratorsProvider.save(curatorBlank)
+        const result = await EmployeesProvider.save(employeeBlank)
         if (!result.isSuccess) return showError(result.getErrorsString)
 
-        showSuccess(`Куратор успешно ${FormTypes.getSuccessSaveText(formType)}`)
+        showSuccess(`Изменения успешно сохранены`)
         navigator.back()
     }
 
     return (
         <Box component="form" className="edit-form-container">
             <TextInput
-                value={curatorBlank.name}
+                value={employeeBlank.name}
                 label="Имя"
                 onChange={(name) => dispatch({ type: "CHANGE_NAME", payload: { name } })}
             />
             <TextInput
-                value={curatorBlank.surname}
+                value={employeeBlank.secondName}
                 label="Фамилия"
-                onChange={(surname) => dispatch({ type: "CHANGE_SURNAME", payload: { surname } })}
+                onChange={(secondName) =>
+                    dispatch({ type: "CHANGE_SECOND_NAME", payload: { secondName } })
+                }
             />
             <TextInput
-                value={curatorBlank.patronymic}
+                value={employeeBlank.lastName}
                 label="Отчество"
-                onChange={(patronymic) =>
-                    dispatch({ type: "CHANGE_PATRONYMIC", payload: { patronymic } })
+                onChange={(lastName) =>
+                    dispatch({ type: "CHANGE_LAST_NAME", payload: { lastName } })
                 }
             />
             <Box className="edit-form-footer">
@@ -70,5 +69,3 @@ const EditCuratorForm: React.FC<Props> = ({ initialBlank }) => {
         </Box>
     )
 }
-
-export default EditCuratorForm

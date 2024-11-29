@@ -1,12 +1,12 @@
-import CuratorsTable from "@/components/curators/curatorsTable"
 import { IconPosition, IconType } from "@/components/shared/buttons"
 import Button from "@/components/shared/buttons/button"
 import PageUrls from "@/constants/pageUrls"
 import { Box, Typography } from "@mui/material"
 import { useRouter } from "next/router"
 import React from "react"
+import { EmployeesTable } from "@/components/employees/employeesTable"
 
-const CuratorsPage: React.FC = () => {
+const EmployeesPage: React.FC = () => {
     const navigator = useRouter()
 
     return (
@@ -14,18 +14,18 @@ const CuratorsPage: React.FC = () => {
             <Box className="inner-container">
                 <Box className="header-container">
                     <Typography variant="h1" sx={{ flex: 1 }} textAlign="center">
-                        Кураторы
+                        Сотрудники
                     </Typography>
                     <Button
-                        text="Добавить куратора"
-                        onClick={() => navigator.push(PageUrls.AddCurators)}
+                        text="Добавить сотрудника"
+                        onClick={() => navigator.push(PageUrls.AddEmployee)}
                         icon={{ type: IconType.Add, position: IconPosition.Start }}
                     />
                 </Box>
-                <CuratorsTable />
+                <EmployeesTable />
             </Box>
         </Box>
     )
 }
 
-export default CuratorsPage
+export default EmployeesPage

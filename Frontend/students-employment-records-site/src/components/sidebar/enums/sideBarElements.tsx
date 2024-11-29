@@ -12,7 +12,7 @@ export enum SideBarElements {
     Students = 1,
     Groups = 2,
     Specialities = 3,
-    Curators = 4,
+    Employees = 4,
     AdditionalQualifications = 5,
     Enterprises = 6,
 }
@@ -34,7 +34,7 @@ export namespace SideBarElements {
                 return <GroupsIcon />
             case SideBarElements.Specialities:
                 return <EngineeringIcon />
-            case SideBarElements.Curators:
+            case SideBarElements.Employees:
                 return <EmojiPeopleIcon />
             case SideBarElements.AdditionalQualifications:
                 return <WorkIcon />
@@ -53,8 +53,8 @@ export namespace SideBarElements {
                 return "Группы"
             case SideBarElements.Specialities:
                 return "Специальности"
-            case SideBarElements.Curators:
-                return "Кураторы"
+            case SideBarElements.Employees:
+                return "Сотрудники"
             case SideBarElements.AdditionalQualifications:
                 return "Дополнительные квалификации"
             case SideBarElements.Enterprises:
@@ -72,8 +72,8 @@ export namespace SideBarElements {
                 return PageUrls.Groups
             case SideBarElements.Specialities:
                 return PageUrls.Specialities
-            case SideBarElements.Curators:
-                return PageUrls.Curators
+            case SideBarElements.Employees:
+                return PageUrls.Employees
             case SideBarElements.AdditionalQualifications:
                 return PageUrls.AdditionalQualifications
             case SideBarElements.Enterprises:

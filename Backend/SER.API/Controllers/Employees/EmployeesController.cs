@@ -5,42 +5,37 @@ using SER.Tools.Types.IDs;
 using SER.Tools.Types.Results;
 
 namespace SER.API.Controllers.Employees;
-public class EmployeesController : ControllerBase
+
+[Route("api/employees")]
+public class EmployeesController(IEmployeesService employeesService) : ControllerBase
 {
-	private readonly IEmployeesService _employeesService;
-
-	public EmployeesController(IEmployeesService employeesService)
-	{
-		_employeesService = employeesService;
-	}
-
-	[HttpPost("api/employees/save")]
+	[HttpPost("save")]
 	public async Task<Result> Save([FromBody] EmployeeBlank blank)
 	{
-		return await _employeesService.Save(blank);
+		return await employeesService.Save(blank);
 	}
 
-	[HttpPost("api/employees/remove")]
+	[HttpPost("remove")]
 	public async Task<Result> Remove([FromBody] ID id)
 	{
-		return await _employeesService.Remove(id);
+		return await employeesService.Remove(id);
 	}
 
-	[HttpGet("api/employees/get")]
+	[HttpGet("get")]
 	public async Task<Employee?> Get([FromQuery] ID id)
 	{
-		return await _employeesService.Get(id);
+		return await employeesService.Get(id);
 	}
 
-	[HttpGet("api/employees/get_page")]
+	[HttpGet("get_page")]
 	public async Task<Employee[]> GetPage([FromQuery] Int32 page, [FromQuery] Int32 pageSize)
 	{
-		return await _employeesService.GetPage(page, pageSize);
+		return await employeesService.GetPage(page, pageSize);
 	}
 
-	[HttpGet("api/employees/get_by_search_text")]
+	[HttpGet("get_by_search_text")]
 	public async Task<Employee[]> GetBySearchText([FromQuery] String searchText)
 	{
-		return await _employeesService.Get(searchText);
+		return await employeesService.Get(searchText);
 	}
 }

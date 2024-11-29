@@ -1,25 +1,21 @@
 using SER.Tools.Types.IDs;
 
 namespace SER.Domain.Employees;
-public class Employee
+
+public class Employee(
+	ID id,
+	String name,
+	String? secondName,
+	String? lastName,
+	DateTime createdDateTimeUtc,
+	DateTime? modifiedDateTimeUtc
+)
 {
-	public ID Id { get; }
-	public String Name { get; }
-	public String? SecondName { get; }
-	public String? LastName { get; }
+	public ID Id { get; } = id;
+	public String Name { get; } = name;
+	public String? SecondName { get; } = secondName;
+	public String? LastName { get; } = lastName;
 
-	public DateTime CreatedDateTimeUtc { get; }
-	public DateTime? ModifiedDateTimeUtc { get; }
-
-
-	public Employee(ID id, String name, String? secondName, String? lastName, DateTime createdDateTimeUtc, DateTime? modifiedDateTimeUtc)
-	{
-		Id = id;
-		Name = name;
-		SecondName = secondName;
-		LastName = lastName;
-
-		CreatedDateTimeUtc = createdDateTimeUtc;
-		ModifiedDateTimeUtc = modifiedDateTimeUtc;
-	}
+	public DateTime CreatedDateTimeUtc { get; } = createdDateTimeUtc;
+	public DateTime? ModifiedDateTimeUtc { get; } = modifiedDateTimeUtc;
 }

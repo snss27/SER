@@ -5,20 +5,26 @@ using SER.Tools.Types.IDs;
 using SER.Tools.Types.Results;
 
 namespace SER.Services.Employees;
+
 public class EmployeesService(IEmployeesRepository employeesRepository) : IEmployeesService
 {
 	public async Task<Result> Save(EmployeeBlank blank)
 	{
-		if (String.IsNullOrWhiteSpace(blank.Name)) return Result.Fail("Укажите имя работника");
+		if (String.IsNullOrWhiteSpace(blank.Name))
+		{
+			return Result.Fail("Укажите имя сотрудника");
+		}
 
 		blank.Id ??= ID.New();
 
 		return await employeesRepository.Save(blank);
 	}
+
 	public async Task<Result> Remove(ID id)
 	{
 		return await employeesRepository.Remove(id);
 	}
+
 	public async Task<Employee?> Get(ID id)
 	{
 		return await employeesRepository.Get(id);
