@@ -5,36 +5,30 @@ using SER.Tools.Types.IDs;
 using SER.Tools.Types.Results;
 
 namespace SER.API.Controllers.Enterprises;
-public class EnterprisesController : ControllerBase
+[Route("/api/enterprises")]
+public class EnterprisesController(IEnterprisesService enterprisesService) : ControllerBase
 {
-	private readonly IEnterprisesService _enterprisesService;
-
-	public EnterprisesController(IEnterprisesService enterprisesService)
-	{
-		_enterprisesService = enterprisesService;
-	}
-
-	[HttpPost("api/enterprises/save")]
+	[HttpPost("save")]
 	public async Task<Result> Save([FromBody] EnterpriseBlank blank)
 	{
-		return await _enterprisesService.Save(blank);
+		return await enterprisesService.Save(blank);
 	}
 
-	[HttpPost("api/enterprises/remove")]
+	[HttpPost("remove")]
 	public async Task<Result> Remove([FromBody] ID id)
 	{
-		return await _enterprisesService.Remove(id);
+		return await enterprisesService.Remove(id);
 	}
 
-	[HttpGet("api/enterprises/get")]
+	[HttpGet("get")]
 	public async Task<Enterprise?> Get([FromQuery] ID id)
 	{
-		return await _enterprisesService.Get(id);
+		return await enterprisesService.Get(id);
 	}
 
-	[HttpGet("api/enterprises/get_page")]
+	[HttpGet("get_page")]
 	public async Task<Enterprise[]> GetPage([FromQuery] Int32 page, [FromQuery] Int32 pageSize)
 	{
-		return await _enterprisesService.GetPage(page, pageSize);
+		return await enterprisesService.GetPage(page, pageSize);
 	}
 }

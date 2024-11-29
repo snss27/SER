@@ -6,7 +6,7 @@ interface Props {
     onChange: (value: string | null) => void
 }
 
-const GroupNumberInput = (props: Props) => {
+export const GroupNumberInput = (props: Props) => {
     const ref = useMask({
         mask: "_____",
         replacement: { _: /\d/ },
@@ -14,5 +14,3 @@ const GroupNumberInput = (props: Props) => {
 
     return <TextInput ref={ref} {...props} placeholder="00000" label="Номер группы" />
 }
-
-export default GroupNumberInput

@@ -7,7 +7,7 @@ interface Props {
     onChange: (value: string | null) => void
 }
 
-const PhoneNumberInput = (props: Props) => {
+export const PhoneNumberInput = (props: Props) => {
     const ref = useMask({
         mask: "+7 (___) ___-__-__",
         replacement: { _: /\d/ },
@@ -15,5 +15,3 @@ const PhoneNumberInput = (props: Props) => {
 
     return <TextInput ref={ref} {...props} placeholder="+7 (999) 999-99-99" />
 }
-
-export default PhoneNumberInput

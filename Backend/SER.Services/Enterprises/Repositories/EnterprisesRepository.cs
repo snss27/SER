@@ -11,10 +11,8 @@ using SER.Tools.Types.Results;
 using static SER.Tools.Utils.NumberUtils;
 
 namespace SER.Services.Enterprises.Repositories;
-public class EnterprisesRepository : BaseRepository, IEnterprisesRepository
+public class EnterprisesRepository(MainConnector connector) : BaseRepository(connector), IEnterprisesRepository
 {
-	public EnterprisesRepository(MainConnector connector) : base(connector) { }
-
 	public async Task<Result> Save(EnterpriseBlank blank)
 	{
 		Query query = _connector.CreateQuery(Sql.Enterprises_Save);

@@ -1,5 +1,4 @@
 import PageUrls from "@/constants/pageUrls"
-import WorkPostsProvider from "@/domain/workPosts/workPostsProvider"
 import useDialog from "@/hooks/useDialog/useDialog"
 import useLazyLoad from "@/hooks/useLazyLoad"
 import useNotifications from "@/hooks/useNotifications"
@@ -16,36 +15,38 @@ import { useRouter } from "next/router"
 import { IconType } from "../shared/buttons"
 import IconButton from "../shared/buttons/iconButtons"
 import ConfirmModal from "../shared/modals/confirmModal"
+import React from "react"
+import { EnterprisesProvider } from "@/domain/enterprises/enterprisesProvider"
 
-const WorkPostsTable: React.FC = () => {
+export const EnterprisesTable: React.FC = () => {
     const navigator = useRouter()
     const { showError, showSuccess } = useNotifications()
     const {
-        values: workPosts,
+        values: enterprises,
         lastElementRef,
         updateValues,
-    } = useLazyLoad({ paginationFunction: WorkPostsProvider.getPage })
+    } = useLazyLoad({ paginationFunction: EnterprisesProvider.getPage })
     const confirmDialog = useDialog(ConfirmModal)
 
-    function handleEditButton(id: string) {
-        navigator.push(`${PageUrls.EditWorkPosts}/${id}`)
+    async function handleEditButton(id: string) {
+        await navigator.push(`${PageUrls.EditEnterprise}/${id}`)
     }
 
     async function handleRemoveButton(id: string) {
-        const workPost = workPosts.find((workPost) => workPost.id === id) ?? null
-        if (!workPost) return
+        const enterprise = enterprises.find((e) => e.id === id) ?? null
+        if (!enterprise) return
 
         const dialogResult = await confirmDialog.show({
-            title: `Вы уверены, что хотите удалить место работы "${workPost.name}"?`,
+            title: `Вы уверены, что хотите удалить организацию "${enterprise.name}"?`,
         })
         if (!dialogResult) return
 
-        const result = await WorkPostsProvider.remove(id)
+        const result = await EnterprisesProvider.remove(id)
         if (!result.isSuccess) return showError(result.getErrorsString)
 
         await updateValues()
 
-        return showSuccess("Место работы успешно удалено")
+        return showSuccess("Организация успешно удалена")
     }
 
     return (
@@ -63,20 +64,20 @@ const WorkPostsTable: React.FC = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {workPosts.map((workPost, index) => (
+                        {enterprises.map((enterprise, index) => (
                             <TableRow
-                                key={workPost.id}
+                                key={enterprise.id}
                                 sx={{ paddingX: 1 }}
-                                ref={index === workPosts.length - 1 ? lastElementRef : undefined}>
-                                <TableCell sx={{ width: "75%" }}>{workPost.name}</TableCell>
+                                ref={index === enterprises.length - 1 ? lastElementRef : undefined}>
+                                <TableCell sx={{ width: "75%" }}>{enterprise.name}</TableCell>
                                 <TableCell align="right" sx={{ width: "25%" }}>
                                     <IconButton
                                         icon={IconType.Edit}
-                                        onClick={() => handleEditButton(workPost.id)}
+                                        onClick={() => handleEditButton(enterprise.id)}
                                     />
                                     <IconButton
                                         icon={IconType.Delete}
-                                        onClick={() => handleRemoveButton(workPost.id)}
+                                        onClick={() => handleRemoveButton(enterprise.id)}
                                     />
                                 </TableCell>
                             </TableRow>
@@ -87,5 +88,3 @@ const WorkPostsTable: React.FC = () => {
         </TableContainer>
     )
 }
-
-export default WorkPostsTable

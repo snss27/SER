@@ -1,5 +1,5 @@
 import { useMask } from "@react-input/mask"
-import TextInput from "../textInput"
+import TextInput from "@/components/shared/inputs/textInput"
 
 interface Props {
     value: string | null
@@ -7,11 +7,11 @@ interface Props {
     onChange: (value: string | null) => void
 }
 
-export const SnilsInput = (props: Props) => {
+export const InnInput = (props: Props) => {
     const ref = useMask({
-        mask: "___-___-___ __",
+        mask: "__________",
         replacement: { _: /\d/ },
     })
 
-    return <TextInput ref={ref} {...props} placeholder="000-000-000 00" />
+    return <TextInput ref={ref} {...props} placeholder="0000000000" />
 }

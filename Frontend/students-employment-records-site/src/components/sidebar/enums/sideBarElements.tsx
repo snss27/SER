@@ -14,7 +14,7 @@ export enum SideBarElements {
     Specialities = 3,
     Curators = 4,
     AdditionalQualifications = 5,
-    WorkPosts = 6,
+    Enterprises = 6,
 }
 
 export namespace SideBarElements {
@@ -38,7 +38,7 @@ export namespace SideBarElements {
                 return <EmojiPeopleIcon />
             case SideBarElements.AdditionalQualifications:
                 return <WorkIcon />
-            case SideBarElements.WorkPosts:
+            case SideBarElements.Enterprises:
                 return <ApartmentIcon />
             default:
                 throw new NeverUnreachable(element)
@@ -57,8 +57,8 @@ export namespace SideBarElements {
                 return "Кураторы"
             case SideBarElements.AdditionalQualifications:
                 return "Дополнительные квалификации"
-            case SideBarElements.WorkPosts:
-                return "Места работы"
+            case SideBarElements.Enterprises:
+                return "Организации"
             default:
                 throw new NeverUnreachable(element)
         }
@@ -76,8 +76,8 @@ export namespace SideBarElements {
                 return PageUrls.Curators
             case SideBarElements.AdditionalQualifications:
                 return PageUrls.AdditionalQualifications
-            case SideBarElements.WorkPosts:
-                return PageUrls.WorkPosts
+            case SideBarElements.Enterprises:
+                return PageUrls.Enterprises
             default:
                 throw new NeverUnreachable(element)
         }
