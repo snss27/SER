@@ -31,6 +31,7 @@ const theme = createTheme({
     },
 
     components: {
+        //@ts-ignore
         MuiDateCalendar: {
             styleOverrides: {
                 root: {

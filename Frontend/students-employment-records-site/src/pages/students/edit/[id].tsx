@@ -11,9 +11,9 @@ const EditStudentPage: React.FC = () => {
 
     useEffect(() => {
         async function loadStudent() {
-            const student = await StudentsProvider.get(id)
-
-            setStudentBlank(student.toBlank())
+            // const student = await StudentsProvider.get(id)
+            //
+            // setStudentBlank(student.toBlank())
         }
 
         loadStudent()

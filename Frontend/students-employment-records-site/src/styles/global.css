@@ -44,5 +44,5 @@
 .edit-form-footer {
     display: flex;
     justify-content: space-between;
-    gap: 10;
+    gap: 10px;
 }
