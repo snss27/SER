@@ -1,9 +1,9 @@
-import EditAdditionalQualificationForm from "@/components/additionalQualifications/editAdditionalQualificationForm"
-import AdditionalQualificationsProvider from "@/domain/additionalQualifications/additionalQualificationsProvider"
 import { AdditionalQualificationBlank } from "@/domain/additionalQualifications/models/additionalQualificationBlank"
 import { Box, Typography } from "@mui/material"
 import { useParams } from "next/navigation"
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
+import { AdditionalQualificationsProvider } from "@/domain/additionalQualifications/additionalQualificationsProvider"
+import { EditAdditionalQualificationForm } from "@/components/additionalQualifications/editAdditionalQualificationForm"
 
 const EditAdditionalQualificationsPage: React.FC = () => {
     const [additionalQualificationBlank, setAdditionalQualificationBlank] =

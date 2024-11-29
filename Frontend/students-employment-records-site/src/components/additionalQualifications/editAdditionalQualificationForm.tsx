@@ -1,19 +1,18 @@
-import AdditionalQualificationsProvider from "@/domain/additionalQualifications/additionalQualificationsProvider"
 import { AdditionalQualificationBlank } from "@/domain/additionalQualifications/models/additionalQualificationBlank"
 import useNotifications from "@/hooks/useNotifications"
 import { Box } from "@mui/material"
 import { useRouter } from "next/router"
-import { useReducer } from "react"
+import React, { useReducer } from "react"
 import { IconPosition, IconType } from "../shared/buttons"
 import Button from "../shared/buttons/button"
-import { NumberInput } from "../shared/inputs/numberInput"
 import TextInput from "../shared/inputs/textInput"
+import { AdditionalQualificationsProvider } from "@/domain/additionalQualifications/additionalQualificationsProvider"
 
 interface Props {
     initialBlank: AdditionalQualificationBlank
 }
 
-const EditAdditionalQualificationForm: React.FC<Props> = ({ initialBlank }) => {
+export const EditAdditionalQualificationForm: React.FC<Props> = ({ initialBlank }) => {
     const [additionalQualificationBlank, dispatch] = useReducer(
         AdditionalQualificationBlank.reducer,
         initialBlank
@@ -38,7 +37,7 @@ const EditAdditionalQualificationForm: React.FC<Props> = ({ initialBlank }) => {
         <Box component="form" className="edit-form-container">
             <TextInput
                 value={additionalQualificationBlank.name}
-                label="Название"
+                label="Наименование"
                 onChange={(name) => dispatch({ type: "CHANGE_NAME", payload: { name } })}
             />
             <TextInput
@@ -46,22 +45,11 @@ const EditAdditionalQualificationForm: React.FC<Props> = ({ initialBlank }) => {
                 label="Код"
                 onChange={(code) => dispatch({ type: "CHANGE_CODE", payload: { code } })}
             />
-            <NumberInput
-                value={additionalQualificationBlank.studyYears}
-                label="Лет обучения"
-                min={0}
-                max={10}
-                onChange={(studyYears) =>
-                    dispatch({ type: "CHANGE_STUDY_YEARS", payload: { studyYears } })
-                }
-            />
-            <NumberInput
-                value={additionalQualificationBlank.studyMonths}
-                label="Месяцев обучения"
-                min={0}
-                max={12}
-                onChange={(studyMonths) =>
-                    dispatch({ type: "CHANGE_STUDY_MONTHS", payload: { studyMonths } })
+            <TextInput
+                value={additionalQualificationBlank.studyTime}
+                label="Срок обучения"
+                onChange={(studyTime) =>
+                    dispatch({ type: "CHANGE_STUDY_TIME", payload: { studyTime } })
                 }
             />
             <Box className="edit-form-footer">
@@ -80,5 +68,3 @@ const EditAdditionalQualificationForm: React.FC<Props> = ({ initialBlank }) => {
         </Box>
     )
 }
-
-export default EditAdditionalQualificationForm

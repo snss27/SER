@@ -1,41 +1,25 @@
-import { conjugate } from "@/tools/conjugate"
 import { AdditionalQualificationBlank } from "./additionalQualificationBlank"
 
-class AdditionalQualification {
+export class AdditionalQualification {
     constructor(
         public readonly id: string,
         public readonly name: string,
         public readonly code: string,
-        public readonly studyYears: number | null,
-        public readonly studyMonths: number
+        public readonly studyTime: string | null
     ) {}
 
     public get displayName() {
-        console.log(this)
         return `${this.name} (${this.code})`
     }
 
-    public get studyPeriodString() {
-        return this.studyYearsString + " " + this.studyMonthsString
-    }
+    public get displayTime() {
+        if (this.studyTime === null || this.studyTime.trim() === "") return "Не указан"
 
-    private get studyYearsString() {
-        if (this.studyYears === null) return ""
-        return conjugate(this.studyYears, "год", "года", "лет")
-    }
-
-    private get studyMonthsString() {
-        return conjugate(this.studyMonths, "месяц", "месяца", "месяцев")
+        return this.studyTime
     }
 
     public static fromAny(any: any): AdditionalQualification {
-        return new AdditionalQualification(
-            any.id,
-            any.name,
-            any.code,
-            any.studyYears,
-            any.studyMonths
-        )
+        return new AdditionalQualification(any.id, any.name, any.code, any.studyTime)
     }
 
     public toBlank(): AdditionalQualificationBlank {
@@ -43,10 +27,7 @@ class AdditionalQualification {
             id: this.id,
             name: this.name,
             code: this.code,
-            studyYears: this.studyYears,
-            studyMonths: this.studyMonths,
+            studyTime: this.studyTime,
         }
     }
 }
-
-export default AdditionalQualification

@@ -56,7 +56,7 @@ export const EnterprisesTable: React.FC = () => {
                     <TableHead>
                         <TableRow sx={{ paddingX: 1 }}>
                             <TableCell sx={{ width: "75%", fontWeight: "bold" }}>
-                                Название
+                                Наименование
                             </TableCell>
                             <TableCell align="right" sx={{ width: "25%", fontWeight: "bold" }}>
                                 Действия

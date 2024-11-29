@@ -1,5 +1,4 @@
 import PageUrls from "@/constants/pageUrls"
-import AdditionalQualificationsProvider from "@/domain/additionalQualifications/additionalQualificationsProvider"
 import useDialog from "@/hooks/useDialog/useDialog"
 import useLazyLoad from "@/hooks/useLazyLoad"
 import useNotifications from "@/hooks/useNotifications"
@@ -16,8 +15,10 @@ import { useRouter } from "next/router"
 import { IconType } from "../shared/buttons"
 import IconButton from "../shared/buttons/iconButtons"
 import ConfirmModal from "../shared/modals/confirmModal"
+import React from "react"
+import { AdditionalQualificationsProvider } from "@/domain/additionalQualifications/additionalQualificationsProvider"
 
-const AdditionalQualificationsTable: React.FC = () => {
+export const AdditionalQualificationsTable: React.FC = () => {
     const navigator = useRouter()
     const { showError, showSuccess } = useNotifications()
     const {
@@ -27,13 +28,12 @@ const AdditionalQualificationsTable: React.FC = () => {
     } = useLazyLoad({ paginationFunction: AdditionalQualificationsProvider.getPage })
     const confirmDialog = useDialog(ConfirmModal)
 
-    function handleEditButton(id: string) {
-        navigator.push(`${PageUrls.EditAdditionalQualifications}/${id}`)
+    async function handleEditButton(id: string) {
+        await navigator.push(`${PageUrls.EditAdditionalQualification}/${id}`)
     }
 
     async function handleRemoveButton(id: string) {
-        const additionalQualification =
-            additionalQualifications.find((qualification) => qualification.id === id) ?? null
+        const additionalQualification = additionalQualifications.find((q) => q.id === id) ?? null
         if (!additionalQualification) return
 
         const dialogResult = await confirmDialog.show({
@@ -56,7 +56,7 @@ const AdditionalQualificationsTable: React.FC = () => {
                     <TableHead>
                         <TableRow sx={{ paddingX: 1 }}>
                             <TableCell sx={{ width: "35%", fontWeight: "bold" }}>
-                                Название
+                                Наименование
                             </TableCell>
                             <TableCell sx={{ width: "35%", fontWeight: "bold" }}>
                                 Срок обучения
@@ -80,7 +80,7 @@ const AdditionalQualificationsTable: React.FC = () => {
                                     {qualification.displayName}
                                 </TableCell>
                                 <TableCell sx={{ width: "35%" }}>
-                                    {qualification.studyPeriodString}
+                                    {qualification.displayTime}
                                 </TableCell>
                                 <TableCell align="right" sx={{ width: "25%" }}>
                                     <IconButton
@@ -100,5 +100,3 @@ const AdditionalQualificationsTable: React.FC = () => {
         </TableContainer>
     )
 }
-
-export default AdditionalQualificationsTable

@@ -2,8 +2,7 @@ export interface AdditionalQualificationBlank {
     id: string | null
     name: string | null
     code: string | null
-    studyYears: number | null
-    studyMonths: number | null
+    studyTime: string | null
 }
 
 export namespace AdditionalQualificationBlank {
@@ -12,8 +11,7 @@ export namespace AdditionalQualificationBlank {
             id: null,
             name: null,
             code: null,
-            studyYears: null,
-            studyMonths: null,
+            studyTime: null,
         }
     }
 
@@ -28,11 +26,8 @@ export namespace AdditionalQualificationBlank {
             case "CHANGE_CODE":
                 return { ...state, code: action.payload.code }
 
-            case "CHANGE_STUDY_YEARS":
-                return { ...state, studyYears: action.payload.studyYears }
-
-            case "CHANGE_STUDY_MONTHS":
-                return { ...state, studyMonths: action.payload.studyMonths }
+            case "CHANGE_STUDY_TIME":
+                return { ...state, studyTime: action.payload.studyTime }
 
             default:
                 return { ...state }
@@ -47,10 +42,6 @@ type Action =
       }
     | { type: "CHANGE_CODE"; payload: { code: string | null } }
     | {
-          type: "CHANGE_STUDY_YEARS"
-          payload: { studyYears: number | null }
-      }
-    | {
-          type: "CHANGE_STUDY_MONTHS"
-          payload: { studyMonths: number | null }
+          type: "CHANGE_STUDY_TIME"
+          payload: { studyTime: string | null }
       }

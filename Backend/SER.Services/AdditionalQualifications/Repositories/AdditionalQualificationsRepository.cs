@@ -1,20 +1,20 @@
 using SER.Configurator.Connectors;
 using SER.Domain.AdditionalQualifications;
 using SER.Services._base;
-using SER.Tools.DataBase.Query;
+using SER.Services.AdditionalQualifications.Converters;
+using SER.Services.AdditionalQualifications.Models;
+using SER.Services.AdditionalQualifications.Repositories.Queries;
 using SER.Tools.DataBase;
+using SER.Tools.DataBase.Query;
 using SER.Tools.Types.IDs;
 using SER.Tools.Types.Results;
-using SER.Services.AdditionalQualifications.Repositories.Queries;
-using SER.Services.AdditionalQualifications.Models;
-using SER.Services.AdditionalQualifications.Converters;
 using static SER.Tools.Utils.NumberUtils;
 
 namespace SER.Services.AdditionalQualifications.Repositories;
-public class AdditionalQualificationsRepository : BaseRepository, IAdditionalQualificationsRepository
-{
-	public AdditionalQualificationsRepository(MainConnector connector) : base(connector) {}
 
+public class AdditionalQualificationsRepository(MainConnector connector)
+	: BaseRepository(connector), IAdditionalQualificationsRepository
+{
 	public async Task<Result> Save(AdditionalQualificationBlank blank)
 	{
 		Query query = _connector.CreateQuery(Sql.AdditionalQualifications_Save);

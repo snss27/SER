@@ -1,9 +1,9 @@
 import { Result } from "@/tools/result"
 import HttpClient from "../httpClient"
-import AdditionalQualification from "./models/additionalQualification"
 import { AdditionalQualificationBlank } from "./models/additionalQualificationBlank"
+import { AdditionalQualification } from "@/domain/additionalQualifications/models/additionalQualification"
 
-class AdditionalQualificationsProvider {
+export class AdditionalQualificationsProvider {
     public static async save(blank: AdditionalQualificationBlank): Promise<Result> {
         const result = await HttpClient.postJsonAsync("/additional_qualifications/save", blank)
         return Result.fromAny(result)
@@ -30,5 +30,3 @@ class AdditionalQualificationsProvider {
         return (result as any[]).map(AdditionalQualification.fromAny)
     }
 }
-
-export default AdditionalQualificationsProvider

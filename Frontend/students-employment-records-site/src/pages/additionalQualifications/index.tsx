@@ -1,9 +1,10 @@
-import AdditionalQualificationsTable from "@/components/additionalQualifications/additionalQualificationTable"
 import { IconPosition, IconType } from "@/components/shared/buttons"
 import Button from "@/components/shared/buttons/button"
 import PageUrls from "@/constants/pageUrls"
 import { Box, Typography } from "@mui/material"
 import { useRouter } from "next/router"
+import React from "react"
+import { AdditionalQualificationsTable } from "@/components/additionalQualifications/additionalQualificationTable"
 
 const AdditionalQualificationsPage: React.FC = () => {
     const navigator = useRouter()
@@ -17,7 +18,7 @@ const AdditionalQualificationsPage: React.FC = () => {
                     </Typography>
                     <Button
                         text="Добавить квалификацию"
-                        onClick={() => navigator.push(PageUrls.AddAdditionalQualifications)}
+                        onClick={() => navigator.push(PageUrls.AddAdditionalQualification)}
                         icon={{ type: IconType.Add, position: IconPosition.Start }}
                     />
                 </Box>

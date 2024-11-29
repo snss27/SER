@@ -1,6 +1,7 @@
-import EditAdditionalQualificationForm from "@/components/additionalQualifications/editAdditionalQualificationForm"
+import { EditAdditionalQualificationForm } from "@/components/additionalQualifications/editAdditionalQualificationForm"
 import { AdditionalQualificationBlank } from "@/domain/additionalQualifications/models/additionalQualificationBlank"
 import { Box, Typography } from "@mui/material"
+import React from "react"
 
 const AddAdditionalQualificationsPage: React.FC = () => {
     return (
