@@ -1,21 +1,22 @@
-import { SpecialityBlank } from "@/domain/specialities/models/specialityBlank"
-import SpecialitiesProvider from "@/domain/specialities/specialitiesProvider"
 import useNotifications from "@/hooks/useNotifications"
 import { Box } from "@mui/material"
 import { useRouter } from "next/router"
 import { useReducer } from "react"
 import { IconPosition, IconType } from "../shared/buttons"
 import Button from "../shared/buttons/button"
-import { NumberInput } from "../shared/inputs/numberInput"
 import TextInput from "../shared/inputs/textInput"
+import { EducationLevelBlank } from "@/domain/educationLevels/models/educationLevelBlank"
+import { EducationLevelsProvider } from "@/domain/educationLevels/educationLevelsProvider"
+import Select from "@/components/shared/inputs/select"
+import { EducationLevelTypes } from "@/domain/educationLevels/enums/EducationLevelTypes"
 
 interface Props {
-    initialSpecialityBlank: SpecialityBlank
+    initialSpecialityBlank: EducationLevelBlank
 }
 
-const EditSpecialityForm = (props: Props) => {
-    const [specialityBlank, dispatch] = useReducer(
-        SpecialityBlank.reducer,
+export const EditEducationLevelForm = (props: Props) => {
+    const [educationLevelBlank, dispatch] = useReducer(
+        EducationLevelBlank.reducer,
         props.initialSpecialityBlank
     )
 
@@ -23,7 +24,7 @@ const EditSpecialityForm = (props: Props) => {
     const { showError, showSuccess } = useNotifications()
 
     async function handleSaveButton() {
-        const result = await SpecialitiesProvider.save(specialityBlank)
+        const result = await EducationLevelsProvider.save(educationLevelBlank)
         if (!result.isSuccess) return showError(result.getErrorsString)
 
         showSuccess("Изменения сохранены")
@@ -36,32 +37,28 @@ const EditSpecialityForm = (props: Props) => {
 
     return (
         <Box component="form" className="edit-form-container">
+            <Select
+                options={EducationLevelTypes.getAll()}
+                value={educationLevelBlank.type}
+                label="Тип уровня образования"
+                getOptionLabel={EducationLevelTypes.displayName}
+                onChange={(type) => dispatch({ type: "CHANGE_TYPE", payload: { type } })}
+            />
             <TextInput
-                value={specialityBlank.name}
-                label="Название"
+                value={educationLevelBlank.name}
+                label="Наименование"
                 onChange={(name) => dispatch({ type: "CHANGE_NAME", payload: { name } })}
             />
             <TextInput
-                value={specialityBlank.code}
+                value={educationLevelBlank.code}
                 label="Код"
                 onChange={(code) => dispatch({ type: "CHANGE_CODE", payload: { code } })}
             />
-            <NumberInput
-                value={specialityBlank.studyYears}
-                label="Лет обучения"
-                min={0}
-                max={10}
-                onChange={(studyYears) =>
-                    dispatch({ type: "CHANGE_STUDY_YEARS", payload: { studyYears } })
-                }
-            />
-            <NumberInput
-                value={specialityBlank.studyMonths}
-                label="Месяцев обучения"
-                min={0}
-                max={12}
-                onChange={(studyMonths) =>
-                    dispatch({ type: "CHANGE_STUDY_MONTHS", payload: { studyMonths } })
+            <TextInput
+                value={educationLevelBlank.studyTime}
+                label="Срок обучения"
+                onChange={(studyTime) =>
+                    dispatch({ type: "CHANGE_STUDY_TIME", payload: { studyTime } })
                 }
             />
             <Box className="edit-form-footer">
@@ -80,5 +77,3 @@ const EditSpecialityForm = (props: Props) => {
         </Box>
     )
 }
-
-export default EditSpecialityForm

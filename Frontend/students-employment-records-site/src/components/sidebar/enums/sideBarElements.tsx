@@ -11,7 +11,7 @@ import WorkIcon from "@mui/icons-material/Work"
 export enum SideBarElements {
     Students = 1,
     Groups = 2,
-    Specialities = 3,
+    EducationLevels = 3,
     Employees = 4,
     AdditionalQualifications = 5,
     Enterprises = 6,
@@ -32,7 +32,7 @@ export namespace SideBarElements {
                 return <SchoolIcon />
             case SideBarElements.Groups:
                 return <GroupsIcon />
-            case SideBarElements.Specialities:
+            case SideBarElements.EducationLevels:
                 return <EngineeringIcon />
             case SideBarElements.Employees:
                 return <EmojiPeopleIcon />
@@ -51,8 +51,8 @@ export namespace SideBarElements {
                 return "Студенты"
             case SideBarElements.Groups:
                 return "Группы"
-            case SideBarElements.Specialities:
-                return "Специальности"
+            case SideBarElements.EducationLevels:
+                return "Уровни образования"
             case SideBarElements.Employees:
                 return "Сотрудники"
             case SideBarElements.AdditionalQualifications:
@@ -70,8 +70,8 @@ export namespace SideBarElements {
                 return PageUrls.Students
             case SideBarElements.Groups:
                 return PageUrls.Groups
-            case SideBarElements.Specialities:
-                return PageUrls.Specialities
+            case SideBarElements.EducationLevels:
+                return PageUrls.EducationLevels
             case SideBarElements.Employees:
                 return PageUrls.Employees
             case SideBarElements.AdditionalQualifications:

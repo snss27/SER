@@ -11,10 +11,8 @@ using SER.Tools.Types.Results;
 using static SER.Tools.Utils.NumberUtils;
 
 namespace SER.Services.EducationLevels.Repositories;
-public class EducationLevelsRepository : BaseRepository, IEducationLevelsRepository
+public class EducationLevelsRepository(MainConnector connector) : BaseRepository(connector), IEducationLevelsRepository
 {
-	public EducationLevelsRepository(MainConnector connector) : base(connector) { }
-
 	public async Task<Result> Save(EducationLevelBlank blank)
 	{
 		Query query = _connector.CreateQuery(Sql.EducationLevels_Save);
