@@ -11,6 +11,7 @@ using SER.Tools.Types.Results;
 using static SER.Tools.Utils.NumberUtils;
 
 namespace SER.Services.Employees.Repositories;
+
 public class EmployeesRepository(MainConnector connector) : BaseRepository(connector), IEmployeesRepository
 {
 	public async Task<Result> Save(EmployeeBlank blank)
@@ -30,20 +31,7 @@ public class EmployeesRepository(MainConnector connector) : BaseRepository(conne
 
 		return Result.Success();
 	}
-	public async Task<Result> Remove(ID id)
-	{
-		Query query = _connector.CreateQuery(Sql.Employees_Remove);
-		{
-			query.Add(id);
-			query.Add(DateTime.UtcNow, "currentdatetimeutc");
-		}
 
-		await using IAsyncSeparatelySession session = await _connector.CreateAsyncSession();
-
-		await session.Execute(query);
-
-		return Result.Success();
-	}
 	public async Task<Employee?> Get(ID id)
 	{
 		Query query = _connector.CreateQuery(Sql.Employees_Get);
@@ -92,5 +80,34 @@ public class EmployeesRepository(MainConnector connector) : BaseRepository(conne
 		await using IAsyncSeparatelySession session = await _connector.CreateAsyncSession();
 
 		return (await session.GetArray<EmployeeDB>(query)).ToEmployees();
+	}
+
+	public async Task<Result> Remove(ID id)
+	{
+		Query query = _connector.CreateQuery(Sql.Employees_Remove);
+		{
+			query.Add(id);
+			query.Add(DateTime.UtcNow, "currentdatetimeutc");
+		}
+
+		await using IAsyncTransactionSession transaction = await _connector.CreateAsyncTransaction();
+
+		await Task.WhenAll(
+			transaction.Execute(query),
+			RemoveFromGroups(id, transaction)
+		);
+
+		return Result.Success();
+	}
+
+	private async Task RemoveFromGroups(ID curatorId, IAsyncTransactionSession transaction)
+	{
+		Query query = _connector.CreateQuery(Sql.Groups_RemoveCuratorById);
+		{
+			query.Add(curatorId);
+			query.Add(DateTime.UtcNow, "currentdatetimeutc");
+		}
+
+		await transaction.Execute(query);
 	}
 }

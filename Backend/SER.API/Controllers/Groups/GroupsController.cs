@@ -5,36 +5,31 @@ using SER.Tools.Types.IDs;
 using SER.Tools.Types.Results;
 
 namespace SER.API.Controllers.Groups;
-public class GroupsController : ControllerBase
+
+[Route("api/groups")]
+public class GroupsController(IGroupsService groupsService) : ControllerBase
 {
-	private readonly IGroupsService _groupsService;
-
-	public GroupsController(IGroupsService groupsService)
-	{
-		_groupsService = groupsService;
-	}
-
-	[HttpPost("api/groups/save")]
+	[HttpPost("save")]
 	public async Task<Result> Save([FromBody] GroupBlank blank)
 	{
-		return await _groupsService.Save(blank);
+		return await groupsService.Save(blank);
 	}
 
-	[HttpPost("api/groups/remove")]
+	[HttpPost("remove")]
 	public async Task<Result> Remove([FromBody] ID id)
 	{
-		return await _groupsService.Remove(id);
+		return await groupsService.Remove(id);
 	}
 
-	[HttpGet("api/groups/get")]
+	[HttpGet("get")]
 	public async Task<GroupDto?> Get([FromQuery] ID id)
 	{
-		return await _groupsService.Get(id);
+		return await groupsService.Get(id);
 	}
 
-	[HttpGet("api/groups/get_page")]
+	[HttpGet("get_page")]
 	public async Task<GroupDto[]> GetAll(Int32 page, Int32 pageSize)
 	{
-		return await _groupsService.GetPage(page, pageSize);
+		return await groupsService.GetPage(page, pageSize);
 	}
 }

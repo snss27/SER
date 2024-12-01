@@ -2,6 +2,7 @@ using SER.Domain.Groups;
 using SER.Services.Groups.Models;
 
 namespace SER.Services.Groups.Converters;
+
 internal static class GroupsConverter
 {
 	public static Group ToGroup(this GroupDB db)
@@ -10,7 +11,7 @@ internal static class GroupsConverter
 			db.Id,
 			db.Number,
 			db.StructuralUnit,
-			db.SpecialityId,
+			db.EducationLevelId,
 			db.EnrollmentYear,
 			db.CuratorId,
 			db.CreatedDateTimeUtc,

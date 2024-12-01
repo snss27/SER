@@ -2,28 +2,32 @@ INSERT INTO groups(
 	id,
 	number,
 	structuralunit,
-	specialityid,
+	educationlevelid,
 	enrollmentyear,
 	curatorid,
+
 	createddatetimeutc,
 	modifieddatetimeutc,
 	isremoved
 )
-VALUES(
-	@p_id,
+VALUES (
+    @p_id,
 	@p_number,
 	@p_structuralunit,
-	@p_specialityid,
+	@p_educationlevelid,
 	@p_enrollmentyear,
 	@p_curatorid,
+
 	@p_currentdatetimeutc,
 	null,
 	false
 )
-ON CONFLICT (id) DO UPDATE SET
+ON CONFLICT (id) DO
+UPDATE SET
 	number = @p_number,
-	structuralunit = @p_structuralunit, 
-	specialityid = @p_specialityid,
+	structuralunit = @p_structuralunit,
+	educationlevelid = @p_educationlevelid,
 	enrollmentyear = @p_enrollmentyear,
 	curatorid = @p_curatorid,
+
 	modifieddatetimeutc = @p_currentdatetimeutc

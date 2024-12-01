@@ -2,26 +2,25 @@ using SER.Domain.Groups.Enums;
 using SER.Tools.Types.IDs;
 
 namespace SER.Domain.Groups;
-public class Group
-{
-	public ID Id {  get;  }
-	public String Number { get;  }
-	public StructuralUnits StructuralUnit { get;  }
-	public ID? SpecialityId { get; }
-	public Int32 EnrollmentYear { get; }
-	public ID? CuratorId { get; }
-	public DateTime CreatedDateTimeUtc { get; }
-	public DateTime? ModifiedDateTimeUtc { get; }
 
-	public Group(ID id, String number, StructuralUnits structuralUnit, ID? specialityId, Int32 enrollmentYear, ID? curatorId, DateTime createdDateTimeUtc, DateTime? modifiedDateTimeUtc)
-	{
-		Id = id;
-		Number = number;
-		StructuralUnit = structuralUnit;
-		SpecialityId = specialityId;
-		EnrollmentYear = enrollmentYear;
-		CuratorId = curatorId;
-		CreatedDateTimeUtc = createdDateTimeUtc;
-		ModifiedDateTimeUtc = modifiedDateTimeUtc;
-	}
+public class Group(
+	ID id,
+	String number,
+	StructuralUnits structuralUnit,
+	ID? educationLevelId,
+	Int32 enrollmentYear,
+	ID? curatorId,
+	DateTime createdDateTimeUtc,
+	DateTime? modifiedDateTimeUtc
+)
+{
+	public ID Id { get; } = id;
+	public String Number { get; } = number;
+	public StructuralUnits StructuralUnit { get; } = structuralUnit;
+	public ID? EducationLevelId { get; } = educationLevelId;
+	public Int32 EnrollmentYear { get; } = enrollmentYear;
+	public ID? CuratorId { get; } = curatorId;
+
+	public DateTime CreatedDateTimeUtc { get; } = createdDateTimeUtc;
+	public DateTime? ModifiedDateTimeUtc { get; } = modifiedDateTimeUtc;
 }

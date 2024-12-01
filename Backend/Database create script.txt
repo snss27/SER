@@ -27,18 +27,6 @@ CREATE TABLE "students" (
   "isremoved" bool NOT NULL
 );
 
-CREATE TABLE "groups" (
-  "id" bytea PRIMARY KEY,
-  "number" varchar NOT NULL,
-  "structuralunit" int NOT NULL,
-  "specialityid" bytea,
-  "enrollmentyear" int NOT NULL,
-  "curatorid" bytea,
-  "createddatetimeutc" timestamp NOT NULL,
-  "modifieddatetimeutc" timestamp,
-  "isremoved" bool NOT NULL
-);
-
 CREATE TABLE "workplacesinfo" (
   "id" bytea PRIMARY KEY,
   "prevworkplaces" bytea[] NOT NULL,
@@ -112,5 +100,19 @@ CREATE TABLE "educationlevels" (
   "modifieddatetimeutc" timestamp,
   "isremoved" bool NOT NULL
 );
+
+CREATE TABLE "groups" (
+  "id" bytea PRIMARY KEY,
+  "number" varchar NOT NULL,
+  "structuralunit" int NOT NULL,
+  "educationlevelid" bytea,
+  "enrollmentyear" int NOT NULL,
+  "curatorid" bytea,
+
+  "createddatetimeutc" timestamp NOT NULL,
+  "modifieddatetimeutc" timestamp,
+  "isremoved" bool NOT NULL
+);
+
 
 

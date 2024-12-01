@@ -1,15 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<ItemGroup>
-		<None Remove="**\*.sql" />
-		<Content Remove="**\*.sql" />
-		<EmbeddedResource Include="**\*.sql" />
+		<None Remove="**\*.sql"/>
+		<Content Remove="**\*.sql"/>
+		<EmbeddedResource Include="**\*.sql"/>
 	</ItemGroup>
 
 	<ItemGroup>
-		<Compile Remove="ActCompletedWorksTemplates\**" />
-		<EmbeddedResource Remove="ActCompletedWorksTemplates\**" />
-		<None Remove="ActCompletedWorksTemplates\**" />
+		<Compile Remove="ActCompletedWorksTemplates\**"/>
+		<EmbeddedResource Remove="ActCompletedWorksTemplates\**"/>
+		<None Remove="ActCompletedWorksTemplates\**"/>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -27,14 +27,14 @@
 		</EmbeddedResource>
 	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="8.0.10" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="8.0.10"/>
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\SER.Configurator\SER.Configurator.csproj" />
-    <ProjectReference Include="..\SER.Domain\SER.Domain.csproj" />
-    <ProjectReference Include="..\SER.Tools\SER.Tools.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\SER.Configurator\SER.Configurator.csproj"/>
+		<ProjectReference Include="..\SER.Domain\SER.Domain.csproj"/>
+		<ProjectReference Include="..\SER.Tools\SER.Tools.csproj"/>
+	</ItemGroup>
 
 </Project>

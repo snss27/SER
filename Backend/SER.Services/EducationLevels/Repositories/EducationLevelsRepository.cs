@@ -11,6 +11,7 @@ using SER.Tools.Types.Results;
 using static SER.Tools.Utils.NumberUtils;
 
 namespace SER.Services.EducationLevels.Repositories;
+
 public class EducationLevelsRepository(MainConnector connector) : BaseRepository(connector), IEducationLevelsRepository
 {
 	public async Task<Result> Save(EducationLevelBlank blank)
@@ -22,21 +23,6 @@ public class EducationLevelsRepository(MainConnector connector) : BaseRepository
 			query.Add(blank.Name);
 			query.Add(blank.Code);
 			query.Add(blank.StudyTime);
-			query.Add(DateTime.UtcNow, "p_currentdatetimeutc");
-		}
-
-		await using IAsyncSeparatelySession session = await _connector.CreateAsyncSession();
-
-		await session.Execute(query);
-
-		return Result.Success();
-	}
-
-	public async Task<Result> Remove(ID id)
-	{
-		Query query = _connector.CreateQuery(Sql.EducationLevels_Remove);
-		{
-			query.Add(id);
 			query.Add(DateTime.UtcNow, "p_currentdatetimeutc");
 		}
 
@@ -95,5 +81,34 @@ public class EducationLevelsRepository(MainConnector connector) : BaseRepository
 		await using IAsyncSeparatelySession session = await _connector.CreateAsyncSession();
 
 		return (await session.GetArray<EducationLevelDB>(query)).ToEducationLevels();
+	}
+
+	public async Task<Result> Remove(ID id)
+	{
+		Query query = _connector.CreateQuery(Sql.EducationLevels_Remove);
+		{
+			query.Add(id);
+			query.Add(DateTime.UtcNow, "p_currentdatetimeutc");
+		}
+
+		await using IAsyncTransactionSession transaction = await _connector.CreateAsyncTransaction();
+
+		await Task.WhenAll(
+			transaction.Execute(query),
+			RemoveFromGroups(id, transaction)
+		);
+
+		return Result.Success();
+	}
+
+	private async Task RemoveFromGroups(ID educationLevelId, IAsyncTransactionSession transaction)
+	{
+		Query query = _connector.CreateQuery(Sql.Groups_RemoveEducationLevelsById);
+		{
+			query.Add(educationLevelId);
+			query.Add(DateTime.UtcNow, "p_currentdatetimeutc");
+		}
+
+		await transaction.Execute(query);
 	}
 }

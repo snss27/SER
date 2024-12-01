@@ -11,10 +11,9 @@ using SER.Tools.Types.Results;
 using static SER.Tools.Utils.NumberUtils;
 
 namespace SER.Services.Groups.Repositories;
-public class GroupsRepository : BaseRepository, IGroupsRepository
-{
-	public GroupsRepository(MainConnector connector) : base(connector) { }
 
+public class GroupsRepository(MainConnector connector) : BaseRepository(connector), IGroupsRepository
+{
 	public async Task<Result> Save(GroupBlank blank)
 	{
 		Query query = _connector.CreateQuery(Sql.Groups_Save);
@@ -22,9 +21,9 @@ public class GroupsRepository : BaseRepository, IGroupsRepository
 			query.Add(blank.Id);
 			query.Add(blank.Number);
 			query.Add(blank.StructuralUnit);
-			query.Add(blank.Speciality?.Id, "p_specialityid");
+			query.Add(blank.EducationLevelId);
 			query.Add(blank.EnrollmentYear);
-			query.Add(blank.Curator?.Id, "p_curatorid");
+			query.Add(blank.CuratorId);
 			query.Add(DateTime.UtcNow, "p_currentdatetimeutc");
 		}
 
