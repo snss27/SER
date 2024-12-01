@@ -5,15 +5,25 @@ using SER.Tools.Types.IDs;
 using SER.Tools.Types.Results;
 
 namespace SER.Services.EducationLevels;
+
 public class EducationLevelsService(IEducationLevelsRepository educationLevelsRepository) : IEducationLevelsService
 {
 	public async Task<Result> Save(EducationLevelBlank blank)
 	{
-		if (blank.Type is null) return Result.Fail("Укажите тип уровня образования");
+		if (blank.Type is null)
+		{
+			return Result.Fail("Укажите тип уровня образования");
+		}
 
-		if (String.IsNullOrWhiteSpace(blank.Name)) return Result.Fail("Укажите наименование уровня образования");
+		if (String.IsNullOrWhiteSpace(blank.Name))
+		{
+			return Result.Fail("Укажите наименование уровня образования");
+		}
 
-		if (String.IsNullOrWhiteSpace(blank.Code)) return Result.Fail("Укажите код уровня образования");
+		if (String.IsNullOrWhiteSpace(blank.Code))
+		{
+			return Result.Fail("Укажите код уровня образования");
+		}
 
 		blank.Id ??= ID.New();
 
@@ -25,13 +35,23 @@ public class EducationLevelsService(IEducationLevelsRepository educationLevelsRe
 		return await educationLevelsRepository.Remove(id);
 	}
 
-	public async Task<EducationLevel?> Get(ID id)
+	public async Task<EducationLevel?> Get(ID? id)
 	{
-		return await educationLevelsRepository.Get(id);
+		if (id is null)
+		{
+			return null;
+		}
+
+		return await educationLevelsRepository.Get(id.Value);
 	}
 
 	public async Task<EducationLevel[]> Get(ID[] ids)
 	{
+		if (ids.Length == 0)
+		{
+			return [];
+		}
+
 		return await educationLevelsRepository.Get(ids);
 	}
 

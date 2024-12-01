@@ -1,25 +1,25 @@
-import CuratorsProvider from "@/domain/curators/curatorsProvider"
 import { StructuralUnits } from "@/domain/groups/enums/structuralUnits"
-import GroupsProvider from "@/domain/groups/groupsProvider"
 import { GroupBlank } from "@/domain/groups/models/groupBlank"
-import SpecialitiesProvider from "@/domain/specialities/specialitiesProvider"
 import useNotifications from "@/hooks/useNotifications"
 import { Box } from "@mui/material"
 import { useRouter } from "next/router"
 import { useReducer } from "react"
 import { IconPosition, IconType } from "../shared/buttons"
 import Button from "../shared/buttons/button"
-import AsyncAutocomplete from "../shared/inputs/asyncAutocomplete"
-import GroupNumberInput from "../shared/inputs/maskedInputs/groupNumberInput"
 import Select from "../shared/inputs/select"
 import YearPicker from "../shared/inputs/yearPicker"
+import { GroupsProvider } from "@/domain/groups/groupsProvider"
+import { EducationLevelsProvider } from "@/domain/educationLevels/educationLevelsProvider"
+import { EmployeesProvider } from "@/domain/employees/employeesProvider"
+import { GroupNumberInput } from "@/components/shared/inputs/maskedInputs/groupNumberInput"
+import { AsyncAutocomplete } from "@/components/shared/inputs/asyncAutocomplete"
 
 interface Props {
-    initialGroupBlank: GroupBlank
+    initialBlank: GroupBlank
 }
 
-const EditGroupForm = (props: Props) => {
-    const [groupBlank, dispatch] = useReducer(GroupBlank.reducer, props.initialGroupBlank)
+export const EditGroupForm = (props: Props) => {
+    const [groupBlank, dispatch] = useReducer(GroupBlank.reducer, props.initialBlank)
 
     const navigator = useRouter()
     const { showError, showSuccess } = useNotifications()
@@ -34,14 +34,6 @@ const EditGroupForm = (props: Props) => {
 
         showSuccess("Изменения сохранены")
         navigator.back()
-    }
-
-    async function loadSpecialities(searchText: string) {
-        return await SpecialitiesProvider.getBySearchText(searchText)
-    }
-
-    async function loadCurators(searchText: string) {
-        return await CuratorsProvider.getBySearchText(searchText)
     }
 
     return (
@@ -68,15 +60,14 @@ const EditGroupForm = (props: Props) => {
                 }
             />
             <AsyncAutocomplete
-                value={groupBlank.speciality}
-                label="Специальность"
-                loadOptions={loadSpecialities}
-                onChange={(speciality) =>
-                    dispatch({ type: "CHANGE_SPECIALITY", payload: { speciality } })
+                value={groupBlank.educationLevelId}
+                label="Уровень образования"
+                onChange={(educationLevelId) =>
+                    dispatch({ type: "CHANGE_EDUCATION_LEVEL_ID", payload: { educationLevelId } })
                 }
-                getOptionLabel={(speciality) => speciality.name}
-                isOptionEqualToValue={(first, second) => first.id === second.id}
-                keyExtractor={(speciality) => speciality.id}
+                loadOption={EducationLevelsProvider.get}
+                loadOptions={EducationLevelsProvider.getBySearchText}
+                getOptionLabel={(educationLevel) => educationLevel.displayName}
             />
             <YearPicker
                 value={groupBlank.enrollmentYear}
@@ -89,13 +80,17 @@ const EditGroupForm = (props: Props) => {
                 }
             />
             <AsyncAutocomplete
-                value={groupBlank.curator}
+                value={groupBlank.curatorId}
                 label="Куратор"
-                loadOptions={loadCurators}
-                onChange={(curator) => dispatch({ type: "CHANGE_CURATOR", payload: { curator } })}
-                getOptionLabel={(curator) => curator.formattedFullName}
-                isOptionEqualToValue={(first, second) => first.id === second.id}
-                keyExtractor={(curator) => curator.id}
+                onChange={(curatorId) =>
+                    dispatch({
+                        type: "CHANGE_CURATOR_ID",
+                        payload: { curatorId },
+                    })
+                }
+                loadOptions={EmployeesProvider.getBySearchText}
+                loadOption={EmployeesProvider.get}
+                getOptionLabel={(curator) => curator.displayName}
             />
 
             <Box className="edit-form-footer">
@@ -114,5 +109,3 @@ const EditGroupForm = (props: Props) => {
         </Box>
     )
 }
-
-export default EditGroupForm

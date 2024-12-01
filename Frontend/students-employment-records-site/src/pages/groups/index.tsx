@@ -1,9 +1,10 @@
-import GroupsTable from "@/components/groups/groupsTable"
 import { IconPosition, IconType } from "@/components/shared/buttons"
 import Button from "@/components/shared/buttons/button"
 import PageUrls from "@/constants/pageUrls"
 import { Box, Typography } from "@mui/material"
 import { useRouter } from "next/navigation"
+import React from "react"
+import { GroupsTable } from "@/components/groups/groupsTable"
 
 const GroupsPage: React.FC = () => {
     const navigator = useRouter()
@@ -17,7 +18,7 @@ const GroupsPage: React.FC = () => {
                     </Typography>
                     <Button
                         text="Добавить группу"
-                        onClick={() => navigator.push(PageUrls.AddGroups)}
+                        onClick={() => navigator.push(PageUrls.AddGroup)}
                         icon={{ type: IconType.Add, position: IconPosition.Start }}
                     />
                 </Box>

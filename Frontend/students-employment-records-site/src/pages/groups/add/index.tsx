@@ -1,6 +1,7 @@
-import EditGroupForm from "@/components/groups/editGroupForm"
 import { GroupBlank } from "@/domain/groups/models/groupBlank"
 import { Box, Typography } from "@mui/material"
+import React from "react"
+import { EditGroupForm } from "@/components/groups/editGroupForm"
 
 const AddGroupPage = () => {
     return (
@@ -9,7 +10,7 @@ const AddGroupPage = () => {
                 <Typography variant="h1" textAlign="center">
                     Добавление группы
                 </Typography>
-                <EditGroupForm initialGroupBlank={GroupBlank.empty()} />
+                <EditGroupForm initialBlank={GroupBlank.empty()} />
             </Box>
         </Box>
     )

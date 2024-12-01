@@ -1,38 +1,37 @@
 import useDebounce from "@/hooks/useDebounce"
 import { Autocomplete, AutocompleteRenderInputParams, TextField } from "@mui/material"
 import { ClearIcon } from "@mui/x-date-pickers"
-import { useState } from "react"
+import React, { useEffect, useState } from "react"
 
-interface Props<T> {
+interface Props<T extends { id: string }> {
+    value: string | null
     label: string
-    value: T | null
     disabled?: boolean
     noOptionsText?: string
     placeholder?: string
-    onChange: (value: T | null) => void
+    onChange: (value: string | null) => void
     loadOptions: (searchString: string) => Promise<T[]>
+    loadOption: (id: string) => Promise<T>
     getOptionLabel: (value: T) => string
-    isOptionEqualToValue?: (option: T, value: T) => boolean
-    keyExtractor?: (option: T) => string | number
 }
 
-interface State<T> {
-    searchString: string
+interface State<T extends { id: string }> {
+    currentOption: T | null
     options: T[]
+    searchString: string
 }
 
 namespace State {
-    export function empty<T>(): State<T> {
+    export function empty<T extends { id: string }>(): State<T> {
         return {
-            searchString: "",
+            currentOption: null,
             options: [],
+            searchString: "",
         }
     }
 }
 
-//TODO Проверить работу
-
-const AsyncAutocomplete = <T,>(props: Props<T>) => {
+export const AsyncAutocomplete = <T extends { id: string }>(props: Props<T>) => {
     const [state, setState] = useState(State.empty<T>)
 
     useDebounce(() => loadOptions(), [state.searchString], 300, true)
@@ -46,10 +45,23 @@ const AsyncAutocomplete = <T,>(props: Props<T>) => {
         }
     }
 
-    function isOptionEqualToValue(option: T, value: T): boolean {
-        if (props.isOptionEqualToValue) return props.isOptionEqualToValue(option, value)
+    useEffect(() => {
+        async function loadValue() {
+            if (props.value === state.currentOption?.id) return
 
-        return option === value
+            if (props.value === null)
+                return setState((prevState) => ({ ...prevState, currentOption: null }))
+
+            const value = await props.loadOption(props.value)
+            setState((prevState) => ({ ...state, currentOption: value }))
+        }
+
+        loadValue()
+    }, [props.value])
+
+    async function onSelectOption(option: T | null) {
+        setState((prevState) => ({ ...state, currentOption: option }))
+        props.onChange(option?.id ?? null)
     }
 
     function onChangeSearch(value: string) {
@@ -71,30 +83,27 @@ const AsyncAutocomplete = <T,>(props: Props<T>) => {
     function getOptions() {
         const options = [...state.options]
 
-        if (
-            props.value !== null &&
-            options.find((o) => isOptionEqualToValue(o, props.value!)) === undefined
-        )
-            options.push(props.value)
+        const currentOption = state.currentOption
+        if (currentOption === null) return options
+
+        if (!options.some((o) => o.id === currentOption.id)) options.push(currentOption)
 
         return options
     }
 
     return (
         <Autocomplete
-            getOptionLabel={props.getOptionLabel}
-            onChange={(_, value) => props.onChange(value)}
-            disabled={props.disabled}
             options={getOptions()}
+            value={state.currentOption}
+            disabled={props.disabled}
             forcePopupIcon={false}
-            isOptionEqualToValue={isOptionEqualToValue}
-            renderInput={renderInput}
-            value={props.value}
-            clearIcon={<ClearIcon />}
-            getOptionKey={props.keyExtractor}
             noOptionsText={props.noOptionsText ?? "Ничего не найдено"}
+            onChange={(_, selectedOption) => onSelectOption(selectedOption)}
+            getOptionLabel={props.getOptionLabel}
+            renderInput={renderInput}
+            clearIcon={<ClearIcon />}
+            getOptionKey={(option) => option.id}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
         />
     )
 }
-
-export default AsyncAutocomplete

@@ -1,14 +1,12 @@
-import Curator from "@/domain/curators/models/curator"
-import Speciality from "@/domain/specialities/models/speciality"
 import { StructuralUnits } from "../enums/structuralUnits"
 
 export interface GroupBlank {
     id: string | null
     number: string | null
     structuralUnit: StructuralUnits | null
-    speciality: Speciality | null
+    educationLevelId: string | null
     enrollmentYear: number | null
-    curator: Curator | null
+    curatorId: string | null
 }
 
 export namespace GroupBlank {
@@ -17,9 +15,9 @@ export namespace GroupBlank {
             id: null,
             number: null,
             structuralUnit: null,
-            speciality: null,
+            educationLevelId: null,
             enrollmentYear: null,
-            curator: null,
+            curatorId: null,
         }
     }
 
@@ -31,14 +29,14 @@ export namespace GroupBlank {
             case "CHANGE_STRUCTURAL_UNIT":
                 return { ...state, structuralUnit: action.payload.structuralUnit }
 
-            case "CHANGE_SPECIALITY":
-                return { ...state, speciality: action.payload.speciality }
+            case "CHANGE_EDUCATION_LEVEL_ID":
+                return { ...state, educationLevelId: action.payload.educationLevelId }
 
             case "CHANGE_ENROLLMENT_YEAR":
                 return { ...state, enrollmentYear: action.payload.enrollmentYear }
 
-            case "CHANGE_CURATOR":
-                return { ...state, curator: action.payload.curator }
+            case "CHANGE_CURATOR_ID":
+                return { ...state, curatorId: action.payload.curatorId }
 
             default:
                 return { ...state }
@@ -56,14 +54,14 @@ type Action =
           payload: { structuralUnit: StructuralUnits | null }
       }
     | {
-          type: "CHANGE_SPECIALITY"
-          payload: { speciality: Speciality | null }
+          type: "CHANGE_EDUCATION_LEVEL_ID"
+          payload: { educationLevelId: string | null }
       }
     | {
           type: "CHANGE_ENROLLMENT_YEAR"
           payload: { enrollmentYear: number | null }
       }
     | {
-          type: "CHANGE_CURATOR"
-          payload: { curator: Curator | null }
+          type: "CHANGE_CURATOR_ID"
+          payload: { curatorId: string | null }
       }

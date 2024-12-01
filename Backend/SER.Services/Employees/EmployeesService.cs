@@ -25,13 +25,23 @@ public class EmployeesService(IEmployeesRepository employeesRepository) : IEmplo
 		return await employeesRepository.Remove(id);
 	}
 
-	public async Task<Employee?> Get(ID id)
+	public async Task<Employee?> Get(ID? id)
 	{
-		return await employeesRepository.Get(id);
+		if (id is null)
+		{
+			return null;
+		}
+
+		return await employeesRepository.Get(id.Value);
 	}
 
 	public async Task<Employee[]> Get(ID[] ids)
 	{
+		if (ids.Length == 0)
+		{
+			return [];
+		}
+
 		return await employeesRepository.Get(ids);
 	}
 

@@ -1,10 +1,9 @@
 import { Result } from "@/tools/result"
 import HttpClient from "../httpClient"
-import Group from "./models/group"
 import { GroupBlank } from "./models/groupBlank"
+import { Group } from "@/domain/groups/models/group"
 
-//TODO обработать null из get. (Все провайдеры)
-class GroupsProvider {
+export class GroupsProvider {
     public static async save(blank: GroupBlank): Promise<Result> {
         const result = await HttpClient.postJsonAsync("/groups/save", blank)
         return Result.fromAny(result)
@@ -25,5 +24,3 @@ class GroupsProvider {
         return (result as any[]).map(Group.fromAny)
     }
 }
-
-export default GroupsProvider

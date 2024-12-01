@@ -28,7 +28,7 @@ public static partial class Regexs
 	[GeneratedRegex(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]+$")]
 	private static partial Regex _mailRegex();
 
-	[GeneratedRegex(@"^\d{9}$")]
+	[GeneratedRegex(@"^\d{5}$")]
 	private static partial Regex _groupNumberRegex();
 
 	#endregion

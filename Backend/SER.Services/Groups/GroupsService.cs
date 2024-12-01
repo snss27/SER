@@ -57,8 +57,8 @@ public class GroupsService(
 			return null;
 		}
 
-		Task<Employee?> curatorTask = employeesService.Get(group.CuratorId.Value);
-		Task<EducationLevel?> educationLevelTask = educationLevelsService.Get(group.EducationLevelId.Value);
+		Task<Employee?> curatorTask = employeesService.Get(group.CuratorId);
+		Task<EducationLevel?> educationLevelTask = educationLevelsService.Get(group.EducationLevelId);
 
 		await Task.WhenAll(curatorTask, educationLevelTask);
 

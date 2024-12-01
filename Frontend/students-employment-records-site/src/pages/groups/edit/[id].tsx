@@ -1,9 +1,9 @@
-import EditGroupForm from "@/components/groups/editGroupForm"
-import GroupsProvider from "@/domain/groups/groupsProvider"
 import { GroupBlank } from "@/domain/groups/models/groupBlank"
 import { Box, Typography } from "@mui/material"
 import { useParams } from "next/navigation"
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
+import { GroupsProvider } from "@/domain/groups/groupsProvider"
+import { EditGroupForm } from "@/components/groups/editGroupForm"
 
 const EditGroupPage = () => {
     const [groupBlank, setGroupBlank] = useState<GroupBlank | null>(null)
@@ -28,7 +28,7 @@ const EditGroupPage = () => {
                 <Typography variant="h1" textAlign="center">
                     Редактирование группы
                 </Typography>
-                <EditGroupForm initialGroupBlank={groupBlank} />
+                <EditGroupForm initialBlank={groupBlank} />
             </Box>
         </Box>
     )
