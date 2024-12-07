@@ -11,7 +11,7 @@ internal static class GroupsConverter
 			db.Id,
 			db.Number,
 			db.StructuralUnit,
-			db.EducationLevelId,
+			db.SpecialityId,
 			db.EnrollmentYear,
 			db.CuratorId,
 			db.CreatedDateTimeUtc,

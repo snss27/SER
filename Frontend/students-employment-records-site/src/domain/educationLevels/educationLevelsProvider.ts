@@ -15,7 +15,9 @@ export class EducationLevelsProvider {
     }
 
     public static async get(id: string): Promise<EducationLevel> {
-        const result = await HttpClient.getJsonAsync("/education_levels/get", { id })
+        const result = await HttpClient.getJsonAsync("/education_levels/get", {
+            id,
+        })
         return EducationLevel.fromAny(result)
     }
 
@@ -27,10 +29,13 @@ export class EducationLevelsProvider {
         return (result as any[]).map(EducationLevel.fromAny)
     }
 
-    public static async getBySearchText(searchText: string): Promise<EducationLevel[]> {
-        const result = await HttpClient.getJsonAsync("/education_levels/get_by_search_text", {
-            searchText,
-        })
+    public static async getSpecialitiesBySearchText(searchText: string): Promise<EducationLevel[]> {
+        const result = await HttpClient.getJsonAsync(
+            "/education_levels/specialities/get_by_search_text",
+            {
+                searchText,
+            }
+        )
         return (result as any[]).map(EducationLevel.fromAny)
     }
 }

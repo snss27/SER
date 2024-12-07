@@ -1,0 +1,1 @@
+select * from educationlevels where id=@p_id and type=1 and not isremoved

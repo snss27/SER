@@ -7,7 +7,7 @@ public class Group(
 	ID id,
 	String number,
 	StructuralUnits structuralUnit,
-	ID? educationLevelId,
+	ID? specialityId,
 	Int32 enrollmentYear,
 	ID? curatorId,
 	DateTime createdDateTimeUtc,
@@ -17,7 +17,7 @@ public class Group(
 	public ID Id { get; } = id;
 	public String Number { get; } = number;
 	public StructuralUnits StructuralUnit { get; } = structuralUnit;
-	public ID? EducationLevelId { get; } = educationLevelId;
+	public ID? SpecialityId { get; } = specialityId;
 	public Int32 EnrollmentYear { get; } = enrollmentYear;
 	public ID? CuratorId { get; } = curatorId;
 

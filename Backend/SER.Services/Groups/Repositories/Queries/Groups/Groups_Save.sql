@@ -2,7 +2,7 @@ INSERT INTO groups(
 	id,
 	number,
 	structuralunit,
-	educationlevelid,
+	specialityid,
 	enrollmentyear,
 	curatorid,
 
@@ -14,7 +14,7 @@ VALUES (
     @p_id,
 	@p_number,
 	@p_structuralunit,
-	@p_educationlevelid,
+	@p_specialityid,
 	@p_enrollmentyear,
 	@p_curatorid,
 
@@ -26,7 +26,7 @@ ON CONFLICT (id) DO
 UPDATE SET
 	number = @p_number,
 	structuralunit = @p_structuralunit,
-	educationlevelid = @p_educationlevelid,
+	specialityid = @p_specialityid,
 	enrollmentyear = @p_enrollmentyear,
 	curatorid = @p_curatorid,
 

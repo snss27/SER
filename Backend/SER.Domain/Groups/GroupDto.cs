@@ -9,7 +9,7 @@ public record GroupDto(
 	ID Id,
 	String Number,
 	StructuralUnits StructuralUnit,
-	EducationLevel? EducationLevel,
+	EducationLevel? Speciality,
 	Int32 EnrollmentYear,
 	Employee? Curator
 );

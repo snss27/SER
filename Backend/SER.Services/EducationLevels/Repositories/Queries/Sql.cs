@@ -17,7 +17,14 @@ internal class Sql
 	public static String EducationLevels_Get => SqlFileProvider.GetQuery(folder: "EducationLevels");
 	public static String EducationLevels_GetByIds => SqlFileProvider.GetQuery(folder: "EducationLevels");
 	public static String EducationLevels_GetPage => SqlFileProvider.GetQuery(folder: "EducationLevels");
-	public static String EducationLevels_GetBySearchText => SqlFileProvider.GetQuery(folder: "EducationLevels");
+
+	#endregion
+
+	#region Specialities
+
+	public static String Specialities_Get => SqlFileProvider.GetQuery(folder: "Specialities");
+	public static String Specialities_GetByIds => SqlFileProvider.GetQuery(folder: "Specialities");
+	public static String Specialities_GetBySearchText => SqlFileProvider.GetQuery(folder: "Specialities");
 
 	#endregion
 }

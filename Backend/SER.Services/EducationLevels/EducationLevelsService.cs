@@ -8,6 +8,8 @@ namespace SER.Services.EducationLevels;
 
 public class EducationLevelsService(IEducationLevelsRepository educationLevelsRepository) : IEducationLevelsService
 {
+	#region EducationLevels
+
 	public async Task<Result> Save(EducationLevelBlank blank)
 	{
 		if (blank.Type is null)
@@ -35,14 +37,9 @@ public class EducationLevelsService(IEducationLevelsRepository educationLevelsRe
 		return await educationLevelsRepository.Remove(id);
 	}
 
-	public async Task<EducationLevel?> Get(ID? id)
+	public async Task<EducationLevel?> Get(ID id)
 	{
-		if (id is null)
-		{
-			return null;
-		}
-
-		return await educationLevelsRepository.Get(id.Value);
+		return await educationLevelsRepository.Get(id);
 	}
 
 	public async Task<EducationLevel[]> Get(ID[] ids)
@@ -60,8 +57,29 @@ public class EducationLevelsService(IEducationLevelsRepository educationLevelsRe
 		return await educationLevelsRepository.GetPage(page, pageSize);
 	}
 
-	public async Task<EducationLevel[]> Get(String searchText)
+	#endregion
+
+	#region Specialities
+
+	public async Task<EducationLevel?> GetSpeciality(ID? id)
 	{
-		return await educationLevelsRepository.Get(searchText);
+		if (id is null)
+		{
+			return null;
+		}
+
+		return await educationLevelsRepository.GetSpeciality(id.Value);
 	}
+
+	public async Task<EducationLevel[]> GetSpecialities(ID[] ids)
+	{
+		return await educationLevelsRepository.GetSpecialities(ids);
+	}
+
+	public async Task<EducationLevel[]> GetSpecialities(String searchText)
+	{
+		return await educationLevelsRepository.GetSpecialities(searchText);
+	}
+
+	#endregion
 }
