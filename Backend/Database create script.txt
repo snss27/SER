@@ -115,5 +115,15 @@ CREATE TABLE "groups" (
   "isremoved" bool NOT NULL
 );
 
+CREATE TABLE "clusters" (
+  "id" bytea PRIMARY KEY,
+  "name" varchar NOT NULL,
+  
+  "createddatetimeutc" timestamp NOT NULL,
+  "modifieddatetimeutc" timestamp NULL,
+  "isremoved" bool NOT NULL
+);
+
+
 
 
