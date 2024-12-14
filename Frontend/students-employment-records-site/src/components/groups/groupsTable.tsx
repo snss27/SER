@@ -60,7 +60,7 @@ export const GroupsTable: React.FC = () => {
                             <TableCell sx={{ fontWeight: "bold", width: "20%" }}>
                                 Структурное подразделение
                             </TableCell>
-                            <TableCell sx={{ fontWeight: "bold" }}>Специальность</TableCell>
+                            <TableCell sx={{ fontWeight: "bold" }}>Уровень образования</TableCell>
                             <TableCell sx={{ fontWeight: "bold" }}>Год поступления</TableCell>
                             <TableCell sx={{ fontWeight: "bold" }}>Куратор</TableCell>
                             <TableCell align="right" sx={{ fontWeight: "bold" }}>
@@ -78,7 +78,7 @@ export const GroupsTable: React.FC = () => {
                                 <TableCell>
                                     {StructuralUnits.getDisplayText(group.structuralUnit)}
                                 </TableCell>
-                                <TableCell>{group.speciality?.displayName ?? "—"}</TableCell>
+                                <TableCell>{group.educationLevel?.displayName ?? "—"}</TableCell>
                                 <TableCell>{group.enrollmentYear}</TableCell>
                                 <TableCell>{group.curator?.displayName ?? "—"}</TableCell>
                                 <TableCell align="right">

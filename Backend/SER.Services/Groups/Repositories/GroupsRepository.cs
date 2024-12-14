@@ -21,7 +21,7 @@ public class GroupsRepository(MainConnector connector) : BaseRepository(connecto
 			query.Add(blank.Id);
 			query.Add(blank.Number);
 			query.Add(blank.StructuralUnit);
-			query.Add(blank.SpecialityId);
+			query.Add(blank.EducationLevelId);
 			query.Add(blank.EnrollmentYear);
 			query.Add(blank.CuratorId);
 			query.Add(DateTime.UtcNow, "p_currentdatetimeutc");

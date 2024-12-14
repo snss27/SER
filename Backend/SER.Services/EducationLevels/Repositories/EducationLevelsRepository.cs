@@ -14,8 +14,6 @@ namespace SER.Services.EducationLevels.Repositories;
 
 public class EducationLevelsRepository(MainConnector connector) : BaseRepository(connector), IEducationLevelsRepository
 {
-	#region EducationLevels
-
 	public async Task<Result> Save(EducationLevelBlank blank)
 	{
 		Query query = _connector.CreateQuery(Sql.EducationLevels_Save);
@@ -73,6 +71,18 @@ public class EducationLevelsRepository(MainConnector connector) : BaseRepository
 		return (await session.GetArray<EducationLevelDB>(query)).ToEducationLevels();
 	}
 
+	public async Task<EducationLevel[]> Get(String searchText)
+	{
+		Query query = _connector.CreateQuery(Sql.EducationLevels_GetBySearchText);
+		{
+			query.Add(searchText);
+		}
+
+		await using IAsyncSeparatelySession session = await _connector.CreateAsyncSession();
+
+		return (await session.GetArray<EducationLevelDB>(query)).ToEducationLevels();
+	}
+
 	public async Task<Result> Remove(ID id)
 	{
 		Query query = _connector.CreateQuery(Sql.EducationLevels_Remove);
@@ -101,46 +111,4 @@ public class EducationLevelsRepository(MainConnector connector) : BaseRepository
 
 		await transaction.Execute(query);
 	}
-
-	#endregion
-
-	#region Specialities
-
-	public async Task<EducationLevel?> GetSpeciality(ID id)
-	{
-		Query query = _connector.CreateQuery(Sql.Specialities_Get);
-		{
-			query.Add(id);
-		}
-
-		await using IAsyncSeparatelySession session = await _connector.CreateAsyncSession();
-
-		return (await session.Get<EducationLevelDB>(query)).ToEducationLevel();
-	}
-
-	public async Task<EducationLevel[]> GetSpecialities(ID[] ids)
-	{
-		Query query = _connector.CreateQuery(Sql.Specialities_GetByIds);
-		{
-			query.Add(ids);
-		}
-
-		await using IAsyncSeparatelySession session = await _connector.CreateAsyncSession();
-
-		return (await session.GetArray<EducationLevelDB>(query)).ToEducationLevels();
-	}
-
-	public async Task<EducationLevel[]> GetSpecialities(String searchText)
-	{
-		Query query = _connector.CreateQuery(Sql.Specialities_GetBySearchText);
-		{
-			query.Add(searchText);
-		}
-
-		await using IAsyncSeparatelySession session = await _connector.CreateAsyncSession();
-
-		return (await session.GetArray<EducationLevelDB>(query)).ToEducationLevels();
-	}
-
-	#endregion
 }

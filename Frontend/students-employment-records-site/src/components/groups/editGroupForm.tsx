@@ -60,14 +60,14 @@ export const EditGroupForm = (props: Props) => {
                 }
             />
             <AsyncAutocomplete
-                value={groupBlank.specialityId}
-                label="Специальность"
-                onChange={(specialityId) =>
-                    dispatch({ type: "CHANGE_SPECIALITY_ID", payload: { specialityId } })
+                value={groupBlank.educationLevelId}
+                label="Уровень образования"
+                onChange={(educationLevelId) =>
+                    dispatch({ type: "CHANGE_EDUCATION_LEVEL_ID", payload: { educationLevelId } })
                 }
                 loadOption={EducationLevelsProvider.get}
-                loadOptions={EducationLevelsProvider.getSpecialitiesBySearchText}
-                getOptionLabel={(speciality) => speciality.displayName}
+                loadOptions={EducationLevelsProvider.getBySearchText}
+                getOptionLabel={(educationLevel) => educationLevel.displayName}
             />
             <YearPicker
                 value={groupBlank.enrollmentYear}

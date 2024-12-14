@@ -9,18 +9,6 @@ namespace SER.API.Controllers.EducationLevels;
 [Route("api/education_levels")]
 public class EducationLevelsController(IEducationLevelsService educationLevelsService) : ControllerBase
 {
-	#region Specialities
-
-	[HttpGet("specialities/get_by_search_text")]
-	public async Task<EducationLevel[]> GetSpecialitiesBySearchText([FromQuery] String searchText)
-	{
-		return await educationLevelsService.GetSpecialities(searchText);
-	}
-
-	#endregion
-
-	#region EducationLevels
-
 	[HttpPost("save")]
 	public async Task<Result> Save([FromBody] EducationLevelBlank blank)
 	{
@@ -45,5 +33,9 @@ public class EducationLevelsController(IEducationLevelsService educationLevelsSe
 		return await educationLevelsService.GetPage(page, pageSize);
 	}
 
-	#endregion
+	[HttpGet("get_by_search_text")]
+	public async Task<EducationLevel[]> GetBySearchText([FromQuery] String searchText)
+	{
+		return await educationLevelsService.Get(searchText);
+	}
 }

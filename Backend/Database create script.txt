@@ -105,7 +105,7 @@ CREATE TABLE "groups" (
   "id" bytea PRIMARY KEY,
   "number" varchar NOT NULL,
   "structuralunit" int NOT NULL,
-  "specialityid" bytea,
+  "educationlevelid" bytea,
   "enrollmentyear" int NOT NULL,
   "curatorid" bytea,
 

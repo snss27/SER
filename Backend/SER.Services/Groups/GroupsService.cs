@@ -48,6 +48,7 @@ public class GroupsService(
 		return await groupsRepository.Remove(id);
 	}
 
+
 	public async Task<GroupDto?> Get(ID id)
 	{
 		Group? group = await groupsRepository.Get(id);
@@ -57,14 +58,14 @@ public class GroupsService(
 		}
 
 		Task<Employee?> curatorTask = employeesService.Get(group.CuratorId);
-		Task<EducationLevel?> specialityTask = educationLevelsService.GetSpeciality(group.SpecialityId);
+		Task<EducationLevel?> educationLevelTask = educationLevelsService.Get(group.EducationLevelId);
 
-		await Task.WhenAll(curatorTask, specialityTask);
+		await Task.WhenAll(curatorTask, educationLevelTask);
 
 		Employee? curator = await curatorTask;
-		EducationLevel? speciality = await specialityTask;
+		EducationLevel? educationLevel = await educationLevelTask;
 
-		return group.ToGroupDto(speciality, curator);
+		return group.ToGroupDto(educationLevel, curator);
 	}
 
 	public async Task<GroupDto[]> GetPage(Int32 page, Int32 pageSize)
@@ -73,18 +74,18 @@ public class GroupsService(
 
 		ID[] curatorIds = groups.Where(group => group.CuratorId is not null).Select(group => group.CuratorId.Value)
 			.ToArray();
-		ID[] specialityIds = groups.Where(group => group.SpecialityId is not null)
-			.Select(group => group.SpecialityId.Value).ToArray();
+		ID[] educationLevelIds = groups.Where(group => group.EducationLevelId is not null)
+			.Select(group => group.EducationLevelId.Value).ToArray();
 
 		//REFACTORING написать обёртку? Тут есть неплохой (вроде) вариант https://dev.to/serhii_korol_ab7776c50dba/the-elegant-way-to-await-multiple-tasks-in-net-11pl
 		Task<Employee[]> curatorsTask = employeesService.Get(curatorIds);
-		Task<EducationLevel[]> specialitiesTask = educationLevelsService.GetSpecialities(specialityIds);
+		Task<EducationLevel[]> educationLevelsTask = educationLevelsService.Get(educationLevelIds);
 
-		await Task.WhenAll(curatorsTask, specialitiesTask);
+		await Task.WhenAll(curatorsTask, educationLevelsTask);
 
 		Employee[] curators = await curatorsTask;
-		EducationLevel[] specialities = await specialitiesTask;
+		EducationLevel[] educationLevels = await educationLevelsTask;
 
-		return groups.ToGroupDtos(specialities, curators);
+		return groups.ToGroupDtos(educationLevels, curators);
 	}
 }
