@@ -27,6 +27,7 @@ public class EnterprisesRepository(MainConnector connector) : BaseRepository(con
 			query.Add(blank.ORGN);
 			query.Add(blank.Phone);
 			query.Add(blank.Mail);
+			query.Add(blank.IsOPK);
 			query.Add(DateTime.UtcNow, "p_currentdatetimeutc");
 		}
 

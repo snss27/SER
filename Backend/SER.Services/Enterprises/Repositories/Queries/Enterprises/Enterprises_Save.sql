@@ -9,6 +9,7 @@ INSERT INTO enterprises(
 	orgn,
 	phone,
 	mail,
+	isopk,
 
 	createddatetimeutc,
 	modifieddatetimeutc,
@@ -25,6 +26,7 @@ VALUES(
 	@p_orgn,
 	@p_phone,
 	@p_mail,
+	@p_isopk,
 
 	@p_currentdatetimeutc,
 	null,
@@ -40,5 +42,6 @@ ON CONFLICT (id) DO UPDATE SET
 	orgn = @p_orgn,
 	phone = @p_phone,
 	mail = @p_mail,
+	isopk = @p_isopk,
 
 	modifieddatetimeutc = @p_currentdatetimeutc

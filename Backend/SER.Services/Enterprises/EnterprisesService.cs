@@ -42,6 +42,8 @@ public class EnterprisesService(IEnterprisesRepository enterprisesRepository) : 
 			return Result.Fail("Неверно указана электронная почта (скорее всего не полностью)");
 		}
 
+		if(blank.IsOPK is null) throw new ArgumentNullException(nameof(blank.IsOPK));
+
 		blank.Id ??= ID.New();
 
 		return await enterprisesRepository.Save(blank);

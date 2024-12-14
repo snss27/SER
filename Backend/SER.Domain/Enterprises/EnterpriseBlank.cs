@@ -13,4 +13,5 @@ public class EnterpriseBlank
 	public String? ORGN { get; set; }
 	public String? Phone {  get; set; }
 	public String? Mail { get; set; }
+	public Boolean? IsOPK { get; set; }
 }

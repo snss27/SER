@@ -13,6 +13,7 @@ internal class EnterpriseDB
 	public String? ORGN { get; set; }
 	public String? Phone { get; set; }
 	public String? Mail { get; set; }
+	public Boolean IsOPK { get; set; }
 
 	public DateTime CreatedDateTimeUtc { get; set; }
 	public DateTime? ModifiedDateTimeUtc { get; set; }

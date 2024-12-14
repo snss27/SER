@@ -61,6 +61,7 @@ CREATE TABLE "enterprises" (
   "orgn" varchar NULL,
   "phone" varchar NULL,
   "mail" varchar NULL,
+  "isopk" boolean NOT NULL,
   
   "createddatetimeutc" timestamp NOT NULL,
   "modifieddatetimeutc" timestamp NULL,

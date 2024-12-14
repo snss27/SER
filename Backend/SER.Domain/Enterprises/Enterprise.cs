@@ -13,6 +13,7 @@ public class Enterprise(
 	String? orgn,
 	String? phone,
 	String? mail,
+	Boolean isOPK,
 	DateTime createdDateTimeUtc,
 	DateTime? modifiedDateTimeUtc
 )
@@ -27,6 +28,7 @@ public class Enterprise(
 	public String? ORGN { get; set; } = orgn;
 	public String? Phone { get; set; } = phone;
 	public String? Mail { get; set; } = mail;
+	public Boolean IsOPK { get; set; } = isOPK;
 
 	public DateTime CreatedDateTimeUtc { get; } = createdDateTimeUtc;
 	public DateTime? ModifiedDateTimeUtc { get; } = modifiedDateTimeUtc;

@@ -1,17 +1,18 @@
+import { KppInput } from "@/components/shared/inputs/maskedInputs/kppInput"
+import { MailInput } from "@/components/shared/inputs/maskedInputs/mailInput"
+import { OrgnInput } from "@/components/shared/inputs/maskedInputs/orgnInput"
+import { PhoneNumberInput } from "@/components/shared/inputs/maskedInputs/phoneNumberInput"
+import { EnterprisesProvider } from "@/domain/enterprises/enterprisesProvider"
+import { EnterpriseBlank } from "@/domain/enterprises/models/enterpriseBlank"
 import useNotifications from "@/hooks/useNotifications"
 import { Box } from "@mui/material"
 import { useRouter } from "next/router"
 import { useReducer } from "react"
 import { IconPosition, IconType } from "../shared/buttons"
 import Button from "../shared/buttons/button"
-import TextInput from "../shared/inputs/textInput"
-import { EnterpriseBlank } from "@/domain/enterprises/models/enterpriseBlank"
-import { EnterprisesProvider } from "@/domain/enterprises/enterprisesProvider"
+import CheckBox from "../shared/buttons/checkBox"
 import { InnInput } from "../shared/inputs/maskedInputs/innInput"
-import { KppInput } from "@/components/shared/inputs/maskedInputs/kppInput"
-import { OrgnInput } from "@/components/shared/inputs/maskedInputs/orgnInput"
-import { PhoneNumberInput } from "@/components/shared/inputs/maskedInputs/phoneNumberInput"
-import { MailInput } from "@/components/shared/inputs/maskedInputs/mailInput"
+import TextInput from "../shared/inputs/textInput"
 
 interface Props {
     initialBlank: EnterpriseBlank
@@ -85,6 +86,11 @@ export const EditEnterpriseForm = (props: Props) => {
                 value={enterpriseBlank.mail}
                 label="Эл. почта"
                 onChange={(mail) => dispatch({ type: "CHANGE_MAIL", payload: { mail } })}
+            />
+            <CheckBox
+                value={enterpriseBlank.isOPK}
+                label="Входит в ОПК"
+                onChange={(isOPK) => dispatch({ type: "CHANGE_IS_OPK", payload: { isOPK } })}
             />
             <Box className="edit-form-footer">
                 <Button

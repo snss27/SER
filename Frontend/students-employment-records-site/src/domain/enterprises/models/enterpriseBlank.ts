@@ -9,6 +9,7 @@ export interface EnterpriseBlank {
     ORGN: string | null
     phone: string | null
     mail: string | null
+    isOPK: boolean
 }
 
 export namespace EnterpriseBlank {
@@ -24,6 +25,7 @@ export namespace EnterpriseBlank {
             ORGN: null,
             phone: null,
             mail: null,
+            isOPK: false,
         }
     }
 
@@ -55,6 +57,9 @@ export namespace EnterpriseBlank {
 
             case "CHANGE_MAIL":
                 return { ...state, mail: action.payload.mail }
+
+            case "CHANGE_IS_OPK":
+                return { ...state, isOPK: action.payload.isOPK }
 
             default:
                 return { ...state }
@@ -98,4 +103,8 @@ type Action =
     | {
           type: "CHANGE_MAIL"
           payload: { mail: string | null }
+      }
+    | {
+          type: "CHANGE_IS_OPK"
+          payload: { isOPK: boolean }
       }

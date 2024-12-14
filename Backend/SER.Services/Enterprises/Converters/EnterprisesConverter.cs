@@ -17,6 +17,7 @@ internal static class EnterprisesConverter
 			db.ORGN,
 			db.Phone,
 			db.Mail,
+			db.IsOPK,
 
 			db.CreatedDateTimeUtc,
 			db.ModifiedDateTimeUtc
