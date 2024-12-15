@@ -1,9 +1,9 @@
+import { EditAdditionalQualificationForm } from "@/components/additionalQualifications/editAdditionalQualificationForm"
+import { AdditionalQualificationsProvider } from "@/domain/additionalQualifications/additionalQualificationsProvider"
 import { AdditionalQualificationBlank } from "@/domain/additionalQualifications/models/additionalQualificationBlank"
 import { Box, Typography } from "@mui/material"
 import { useParams } from "next/navigation"
 import React, { useEffect, useState } from "react"
-import { AdditionalQualificationsProvider } from "@/domain/additionalQualifications/additionalQualificationsProvider"
-import { EditAdditionalQualificationForm } from "@/components/additionalQualifications/editAdditionalQualificationForm"
 
 const EditAdditionalQualificationsPage: React.FC = () => {
     const [additionalQualificationBlank, setAdditionalQualificationBlank] =
@@ -12,13 +12,13 @@ const EditAdditionalQualificationsPage: React.FC = () => {
     const { id } = useParams<{ id: string }>()
 
     useEffect(() => {
-        async function loadAdditionalQualifications() {
+        async function loadAdditionalQualification() {
             const additionalQualification = await AdditionalQualificationsProvider.get(id)
 
             setAdditionalQualificationBlank(additionalQualification.toBlank())
         }
 
-        loadAdditionalQualifications()
+        loadAdditionalQualification()
     }, [])
 
     if (additionalQualificationBlank === null) return null

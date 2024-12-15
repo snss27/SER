@@ -5,6 +5,7 @@ import ApartmentIcon from "@mui/icons-material/Apartment"
 import EmojiPeopleIcon from "@mui/icons-material/EmojiPeople"
 import EngineeringIcon from "@mui/icons-material/Engineering"
 import GroupsIcon from "@mui/icons-material/Groups"
+import SchemaIcon from "@mui/icons-material/Schema"
 import SchoolIcon from "@mui/icons-material/School"
 import WorkIcon from "@mui/icons-material/Work"
 
@@ -15,6 +16,7 @@ export enum SideBarElements {
     Employees = 4,
     AdditionalQualifications = 5,
     Enterprises = 6,
+    Clusters = 7,
 }
 
 export namespace SideBarElements {
@@ -40,6 +42,8 @@ export namespace SideBarElements {
                 return <WorkIcon />
             case SideBarElements.Enterprises:
                 return <ApartmentIcon />
+            case SideBarElements.Clusters:
+                return <SchemaIcon />
             default:
                 throw new NeverUnreachable(element)
         }
@@ -59,6 +63,8 @@ export namespace SideBarElements {
                 return "Дополнительные квалификации"
             case SideBarElements.Enterprises:
                 return "Организации"
+            case SideBarElements.Clusters:
+                return "Кластеры"
             default:
                 throw new NeverUnreachable(element)
         }
@@ -78,6 +84,8 @@ export namespace SideBarElements {
                 return PageUrls.AdditionalQualifications
             case SideBarElements.Enterprises:
                 return PageUrls.Enterprises
+            case SideBarElements.Clusters:
+                return PageUrls.Clusters
             default:
                 throw new NeverUnreachable(element)
         }

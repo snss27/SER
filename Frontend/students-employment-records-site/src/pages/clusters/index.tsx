@@ -1,12 +1,11 @@
-import { AdditionalQualificationsTable } from "@/components/additionalQualifications/additionalQualificationsTable"
+import { ClustersTable } from "@/components/clusters/clustersTable"
 import { IconPosition, IconType } from "@/components/shared/buttons"
 import Button from "@/components/shared/buttons/button"
 import PageUrls from "@/constants/pageUrls"
 import { Box, Typography } from "@mui/material"
 import { useRouter } from "next/router"
-import React from "react"
 
-const AdditionalQualificationsPage: React.FC = () => {
+const ClustersPage: React.FC = () => {
     const navigator = useRouter()
 
     return (
@@ -14,18 +13,18 @@ const AdditionalQualificationsPage: React.FC = () => {
             <Box className="inner-container">
                 <Box className="header-container">
                     <Typography variant="h1" sx={{ flex: 1 }} textAlign="center">
-                        Дополнительные квалификации
+                        Кластеры
                     </Typography>
                     <Button
-                        text="Добавить квалификацию"
-                        onClick={() => navigator.push(PageUrls.AddAdditionalQualification)}
+                        text="Добавить кластер"
+                        onClick={() => navigator.push(PageUrls.AddCluster)}
                         icon={{ type: IconType.Add, position: IconPosition.Start }}
                     />
                 </Box>
-                <AdditionalQualificationsTable />
+                <ClustersTable />
             </Box>
         </Box>
     )
 }
 
-export default AdditionalQualificationsPage
+export default ClustersPage
