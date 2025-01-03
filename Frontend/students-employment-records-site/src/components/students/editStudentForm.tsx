@@ -2,17 +2,17 @@ import { ArmyStatuses } from "@/domain/students/enums/armyStatuses"
 import { Genders } from "@/domain/students/enums/genders"
 import { Peculiarities } from "@/domain/students/enums/peculiarities"
 import { StudentBlank } from "@/domain/students/models/studentBlank"
+import { StudentsProvider } from "@/domain/students/studentsProvider"
 import useNotifications from "@/hooks/useNotifications"
 import { Box } from "@mui/material"
 import { useRouter } from "next/router"
-import { useReducer } from "react"
+import React, { useReducer } from "react"
 import { IconPosition, IconType } from "../shared/buttons"
 import Button from "../shared/buttons/button"
 import CheckBox from "../shared/buttons/checkBox"
-import AsyncAutocomplete from "../shared/inputs/asyncAutocomplete"
 import DatePicker from "../shared/inputs/datePicker"
-import PhoneNumberInput from "../shared/inputs/maskedInputs/phoneNumberInput"
-import SnilsInput from "../shared/inputs/maskedInputs/snilsInput"
+import { PhoneNumberInput } from "../shared/inputs/maskedInputs/phoneNumberInput"
+import { SnilsInput } from "../shared/inputs/maskedInputs/snilsInput"
 import Select from "../shared/inputs/select"
 import TextInput from "../shared/inputs/textInput"
 
@@ -20,14 +20,15 @@ interface Props {
     initialStudentBlank: StudentBlank
 }
 
-const EditStudentForm: React.FC<Props> = ({ initialStudentBlank }) => {
+export const EditStudentForm: React.FC<Props> = ({ initialStudentBlank }) => {
     const [studentBlank, dispatch] = useReducer(StudentBlank.reducer, initialStudentBlank)
+
     const navigator = useRouter()
     const { showError, showSuccess } = useNotifications()
 
     async function handleSaveButton() {
-        // const result = await StudentsProvider.save(studentBlank)
-        // if (!result.isSuccess) return showError(result.getErrorsString)
+        const result = await StudentsProvider.save(studentBlank)
+        if (!result.isSuccess) return showError(result.getErrorsString)
 
         showSuccess("Изменения сохранены")
         navigator.back()
@@ -46,15 +47,17 @@ const EditStudentForm: React.FC<Props> = ({ initialStudentBlank }) => {
             />
 
             <TextInput
-                value={studentBlank.surname}
-                onChange={(surname) => dispatch({ type: "CHANGE_SURNAME", payload: { surname } })}
+                value={studentBlank.secondName}
+                onChange={(secondName) =>
+                    dispatch({ type: "CHANGE_SECOND_NAME", payload: { secondName } })
+                }
                 label="Фамилия"
             />
 
             <TextInput
-                value={studentBlank.patronymic}
-                onChange={(patronymic) =>
-                    dispatch({ type: "CHANGE_PATRONYMIC", payload: { patronymic } })
+                value={studentBlank.lastName}
+                onChange={(lastName) =>
+                    dispatch({ type: "CHANGE_LAST_NAME", payload: { lastName } })
                 }
                 label="Отчество"
             />
@@ -94,36 +97,29 @@ const EditStudentForm: React.FC<Props> = ({ initialStudentBlank }) => {
                 }
             />
 
-            <CheckBox
-                value={studentBlank.isOnPaidStudy}
-                label="Платное обучение?"
-                onChange={() => dispatch({ type: "TOGGLE_IS_ON_PAID_STUDY" })}
-            />
-
             <SnilsInput
                 value={studentBlank.snils}
                 label="Снилс"
                 onChange={(snils) => dispatch({ type: "CHANGE_SNILS", payload: { snils } })}
             />
 
-            {/* TODO Сделать логику, когда будут готовы группы */}
-            <AsyncAutocomplete
-                value={12}
-                getOptionLabel={(v) => v.toString()}
-                label="Группа"
-                loadOptions={async () => [12]}
-                onChange={() => {}}
+            <CheckBox
+                value={studentBlank.isOnPaidStudy}
+                label="Обучение на платной основе?"
+                onChange={(isOnPaidStudy) =>
+                    dispatch({ type: "CHANGE_IS_ON_PAID_STUDY", payload: { isOnPaidStudy } })
+                }
             />
 
-            {/* TODO Надо думать, что с паспортом? Возможно тут это и не ID, а просто данные? */}
+            {/* TODO Группы (нужны запросы) */}
+
+            {/* TODO Паспорт (серия, номер, дата выдачи, кем выдан) */}
 
             {/* TODO Сделать логику, когда будет готова информация о месте работы. Возможно тут это и не ID, а просто данные? Ну в любом случае другая страница (или модалка) */}
 
-            {/* Тут дополнительные квалификации. MultiAutoSelect, когда будут готовы квалификации */}
-
             <CheckBox
                 value={studentBlank.isTargetAgreement}
-                label="Целевой договор?"
+                label="Целевое обучение?"
                 onChange={() => dispatch({ type: "TOGGLE_IS_TARGET_AGREEMENT" })}
             />
 
@@ -169,5 +165,3 @@ const EditStudentForm: React.FC<Props> = ({ initialStudentBlank }) => {
         </Box>
     )
 }
-
-export default EditStudentForm

@@ -1,8 +1,8 @@
 CREATE TABLE "students" (
   "id" bytea PRIMARY KEY,
   "name" varchar NOT NULL,
-  "surname" varchar,
-  "patronymic" varchar,
+  "secondname" varchar,
+  "lastname" varchar,
   "gender" int,
   "birthDate" date,
   "phonenumber" varchar,
@@ -10,8 +10,11 @@ CREATE TABLE "students" (
   "isonpaidstudy" bool,
   "snils" varchar,
   "groupid" bytea NOT NULL,
-  "passportid" bytea,
-  "workplacesinfoid" bytea,
+  "pasportnumber" varchar NULL,
+  "pasportseries" varchar NULL,
+  "pasportfiles" varchar NOT NULL,
+  "prevworkplaces" bytea[] NOT NULL,
+  "currentworkplace" bytea,
   "additionalqualifications" bytea[] NOT NULL,
   "istargetagreement" bool,
   "targetagreementfile" varchar,
@@ -19,18 +22,6 @@ CREATE TABLE "students" (
   "armysubpoenafile" varchar,
   "armyservedate" date,
   "peculiarity" int,
-  "number" varchar NULL,
-  "series" varchar NULL,
-  "pasportfiles" varchar NOT NULL,
-  "createddatetimeutc" timestamp NOT NULL,
-  "modifieddatetimeutc" timestamp,
-  "isremoved" bool NOT NULL
-);
-
-CREATE TABLE "workplacesinfo" (
-  "id" bytea PRIMARY KEY,
-  "prevworkplaces" bytea[] NOT NULL,
-  "curentworkplace" bytea,
   "createddatetimeutc" timestamp NOT NULL,
   "modifieddatetimeutc" timestamp,
   "isremoved" bool NOT NULL

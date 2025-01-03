@@ -1,4 +1,3 @@
-import EditStudentForm from "@/components/students/editStudentForm"
 import { StudentBlank } from "@/domain/students/models/studentBlank"
 import { Box, Typography } from "@mui/material"
 import { useParams } from "next/navigation"

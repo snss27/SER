@@ -5,8 +5,8 @@ import { Peculiarities } from "../enums/peculiarities"
 export interface StudentBlank {
     id: string | null
     name: string | null
-    surname: string | null
-    patronymic: string | null
+    secondName: string | null
+    lastName: string | null
     gender: Genders | null
     birthDate: Date | null
     phoneNumber: string | null
@@ -30,8 +30,8 @@ export namespace StudentBlank {
         return {
             id: null,
             name: null,
-            surname: null,
-            patronymic: null,
+            secondName: null,
+            lastName: null,
             gender: null,
             birthDate: null,
             phoneNumber: null,
@@ -58,11 +58,11 @@ export namespace StudentBlank {
             case "CHANGE_NAME":
                 return { ...state, name: action.payload.name }
 
-            case "CHANGE_SURNAME":
-                return { ...state, surname: action.payload.surname }
+            case "CHANGE_SECOND_NAME":
+                return { ...state, secondName: action.payload.secondName }
 
-            case "CHANGE_PATRONYMIC":
-                return { ...state, patronymic: action.payload.patronymic }
+            case "CHANGE_LAST_NAME":
+                return { ...state, lastName: action.payload.lastName }
 
             case "CHANGE_GENDER":
                 return { ...state, gender: action.payload.gender }
@@ -79,8 +79,8 @@ export namespace StudentBlank {
                     representativePhoneNumber: action.payload.representativePhoneNumber,
                 }
 
-            case "TOGGLE_IS_ON_PAID_STUDY":
-                return { ...state, isOnPaidStudy: !state.isOnPaidStudy }
+            case "CHANGE_IS_ON_PAID_STUDY":
+                return { ...state, isOnPaidStudy: action.payload.isOnPaidStudy }
 
             case "CHANGE_SNILS":
                 return { ...state, snils: action.payload.snils }
@@ -130,12 +130,12 @@ type Action =
           payload: { name: string }
       }
     | {
-          type: "CHANGE_SURNAME"
-          payload: { surname: string }
+          type: "CHANGE_SECOND_NAME"
+          payload: { secondName: string }
       }
     | {
-          type: "CHANGE_PATRONYMIC"
-          payload: { patronymic: string }
+          type: "CHANGE_LAST_NAME"
+          payload: { lastName: string }
       }
     | {
           type: "CHANGE_GENDER"
@@ -154,7 +154,8 @@ type Action =
           payload: { representativePhoneNumber: string | null }
       }
     | {
-          type: "TOGGLE_IS_ON_PAID_STUDY"
+          type: "CHANGE_IS_ON_PAID_STUDY"
+          payload: { isOnPaidStudy: boolean }
       }
     | {
           type: "CHANGE_SNILS"
