@@ -10,6 +10,9 @@ public class Group(
 	ID? educationLevelId,
 	Int32 enrollmentYear,
 	ID? curatorId,
+	Boolean hasCluster,
+	ID? clusterId,
+
 	DateTime createdDateTimeUtc,
 	DateTime? modifiedDateTimeUtc
 )
@@ -20,6 +23,8 @@ public class Group(
 	public ID? EducationLevelId { get; } = educationLevelId;
 	public Int32 EnrollmentYear { get; } = enrollmentYear;
 	public ID? CuratorId { get; } = curatorId;
+	public Boolean HasCluster { get; } = hasCluster;
+	public ID? ClusterId { get; } = clusterId;
 
 	public DateTime CreatedDateTimeUtc { get; } = createdDateTimeUtc;
 	public DateTime? ModifiedDateTimeUtc { get; } = modifiedDateTimeUtc;

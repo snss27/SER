@@ -7,6 +7,8 @@ export interface GroupBlank {
     educationLevelId: string | null
     enrollmentYear: number | null
     curatorId: string | null
+    hasCluster: boolean
+    clusterId: string | null
 }
 
 export namespace GroupBlank {
@@ -18,6 +20,8 @@ export namespace GroupBlank {
             educationLevelId: null,
             enrollmentYear: null,
             curatorId: null,
+            hasCluster: false,
+            clusterId: null,
         }
     }
 
@@ -37,6 +41,12 @@ export namespace GroupBlank {
 
             case "CHANGE_CURATOR_ID":
                 return { ...state, curatorId: action.payload.curatorId }
+
+            case "CHANGE_HAS_CLUSTER":
+                return { ...state, hasCluster: action.payload.hasCluster }
+
+            case "CHANGE_CLUSTER_ID":
+                return { ...state, clusterId: action.payload.clusterId }
 
             default:
                 return { ...state }
@@ -64,4 +74,12 @@ type Action =
     | {
           type: "CHANGE_CURATOR_ID"
           payload: { curatorId: string | null }
+      }
+    | {
+          type: "CHANGE_HAS_CLUSTER"
+          payload: { hasCluster: boolean }
+      }
+    | {
+          type: "CHANGE_CLUSTER_ID"
+          payload: { clusterId: string | null }
       }

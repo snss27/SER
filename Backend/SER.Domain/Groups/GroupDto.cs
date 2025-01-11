@@ -1,3 +1,4 @@
+using SER.Domain.Clusters;
 using SER.Domain.EducationLevels;
 using SER.Domain.Employees;
 using SER.Domain.Groups.Enums;
@@ -11,5 +12,7 @@ public record GroupDto(
 	StructuralUnits StructuralUnit,
 	EducationLevel? EducationLevel,
 	Int32 EnrollmentYear,
-	Employee? Curator
+	Employee? Curator,
+	Boolean HasCluster,
+	Cluster? Cluster
 );

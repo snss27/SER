@@ -99,7 +99,9 @@ CREATE TABLE "groups" (
   "structuralunit" int NOT NULL,
   "educationlevelid" bytea,
   "enrollmentyear" int NOT NULL,
-  "curatorid" bytea,
+  "curatorid" bytea NULL,
+  "hascluster" boolean NOT NULL,
+  "clusterid" bytea NULL,
 
   "createddatetimeutc" timestamp NOT NULL,
   "modifieddatetimeutc" timestamp,

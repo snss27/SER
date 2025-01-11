@@ -21,13 +21,33 @@ public class ClustersService(IClustersRepository clustersRepository) : IClusters
 		return await clustersRepository.Remove(id);
 	}
 
-	public async Task<Cluster?> Get(ID id)
+	public async Task<Cluster?> Get(ID? id)
 	{
-		return await clustersRepository.Get(id);
+		if (id is null)
+		{
+			return null;
+		}
+
+		return await clustersRepository.Get(id.Value);
+	}
+
+	public async Task<Cluster[]> Get(ID[] ids)
+	{
+		if (ids.Length == 0)
+		{
+			return [];
+		}
+
+		return await clustersRepository.Get(ids);
 	}
 
 	public async Task<Cluster[]> GetPage(Int32 page, Int32 pageSize)
 	{
 		return await clustersRepository.GetPage(page, pageSize);
+	}
+
+	public async Task<Cluster[]> Get(String searchText)
+	{
+		return await clustersRepository.Get(searchText);
 	}
 }

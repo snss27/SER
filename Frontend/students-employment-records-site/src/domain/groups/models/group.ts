@@ -1,3 +1,4 @@
+import { Cluster } from "@/domain/clusters/models/cluster"
 import { StructuralUnits } from "../enums/structuralUnits"
 import { GroupBlank } from "./groupBlank"
 import { EducationLevel } from "@/domain/educationLevels/models/educationLevel"
@@ -10,20 +11,28 @@ export class Group {
         public readonly structuralUnit: StructuralUnits,
         public readonly educationLevel: EducationLevel | null,
         public readonly enrollmentYear: number,
-        public readonly curator: Employee | null
+        public readonly curator: Employee | null,
+        public readonly hasCluster: boolean,
+        public readonly cluster: Cluster | null
     ) {}
 
     public static fromAny(any: any): Group {
         const educationLevel =
             any.educationLevel === null ? null : EducationLevel.fromAny(any.educationLevel)
+
         const curator = any.curator === null ? null : Employee.fromAny(any.curator)
+
+        const cluster = any.cluster === null ? null : Cluster.fromAny(any.cluster)
+
         return new Group(
             any.id,
             any.number,
             any.structuralUnit,
             educationLevel,
             any.enrollmentYear,
-            curator
+            curator,
+            any.hasCluster,
+            cluster
         )
     }
 
@@ -35,6 +44,8 @@ export class Group {
             educationLevelId: this.educationLevel?.id ?? null,
             enrollmentYear: this.enrollmentYear,
             curatorId: this.curator?.id ?? null,
+            hasCluster: this.hasCluster,
+            clusterId: this.cluster?.id ?? null,
         }
     }
 }

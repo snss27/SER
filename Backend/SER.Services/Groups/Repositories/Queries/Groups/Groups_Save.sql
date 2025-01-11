@@ -5,6 +5,8 @@ INSERT INTO groups(
 	educationlevelid,
 	enrollmentyear,
 	curatorid,
+	hascluster,
+	clusterid,
 
 	createddatetimeutc,
 	modifieddatetimeutc,
@@ -17,6 +19,8 @@ VALUES (
 	@p_educationlevelid,
 	@p_enrollmentyear,
 	@p_curatorid,
+	@p_hascluster,
+	@p_clusterid,
 
 	@p_currentdatetimeutc,
 	null,
@@ -29,5 +33,7 @@ UPDATE SET
 	educationlevelid = @p_educationlevelid,
 	enrollmentyear = @p_enrollmentyear,
 	curatorid = @p_curatorid,
+	hascluster = @p_hascluster,
+	clusterid = @p_clusterid,
 
 	modifieddatetimeutc = @p_currentdatetimeutc

@@ -1,3 +1,4 @@
+using SER.Domain.Clusters;
 using SER.Domain.EducationLevels;
 using SER.Domain.Employees;
 using SER.Domain.Groups;
@@ -13,7 +14,8 @@ namespace SER.Services.Groups;
 public class GroupsService(
 	IGroupsRepository groupsRepository,
 	IEducationLevelsService educationLevelsService,
-	IEmployeesService employeesService
+	IEmployeesService employeesService,
+	IClustersService clustersService
 ) : IGroupsService
 {
 	public async Task<Result> Save(GroupBlank blank)
@@ -38,6 +40,16 @@ public class GroupsService(
 			return Result.Fail("Выберите год поступления");
 		}
 
+		if (blank.HasCluster && blank.ClusterId is null)
+		{
+			return Result.Fail("Выберите кластер группы");
+		}
+
+		if (!blank.HasCluster)
+		{
+			blank.ClusterId = null;
+		}
+
 		blank.Id ??= ID.New();
 
 		return await groupsRepository.Save(blank);
@@ -59,13 +71,15 @@ public class GroupsService(
 
 		Task<Employee?> curatorTask = employeesService.Get(group.CuratorId);
 		Task<EducationLevel?> educationLevelTask = educationLevelsService.Get(group.EducationLevelId);
+		Task<Cluster?> clusterTask = clustersService.Get(group.ClusterId);
 
-		await Task.WhenAll(curatorTask, educationLevelTask);
+		await Task.WhenAll(curatorTask, educationLevelTask, clusterTask);
 
 		Employee? curator = await curatorTask;
 		EducationLevel? educationLevel = await educationLevelTask;
+		Cluster? cluster = await clusterTask;
 
-		return group.ToGroupDto(educationLevel, curator);
+		return group.ToGroupDto(educationLevel, curator, cluster);
 	}
 
 	public async Task<GroupDto[]> GetPage(Int32 page, Int32 pageSize)
@@ -76,16 +90,20 @@ public class GroupsService(
 			.ToArray();
 		ID[] educationLevelIds = groups.Where(group => group.EducationLevelId is not null)
 			.Select(group => group.EducationLevelId.Value).ToArray();
+		ID[] clusterIds = groups.Where(group => group.ClusterId is not null).Select(group => group.ClusterId.Value)
+			.ToArray();
 
 		//REFACTORING написать обёртку? Тут есть неплохой (вроде) вариант https://dev.to/serhii_korol_ab7776c50dba/the-elegant-way-to-await-multiple-tasks-in-net-11pl
 		Task<Employee[]> curatorsTask = employeesService.Get(curatorIds);
 		Task<EducationLevel[]> educationLevelsTask = educationLevelsService.Get(educationLevelIds);
+		Task<Cluster[]> clustersTask = clustersService.Get(clusterIds);
 
-		await Task.WhenAll(curatorsTask, educationLevelsTask);
+		await Task.WhenAll(curatorsTask, educationLevelsTask, clustersTask);
 
 		Employee[] curators = await curatorsTask;
 		EducationLevel[] educationLevels = await educationLevelsTask;
+		Cluster[] clusters = await clustersTask;
 
-		return groups.ToGroupDtos(educationLevels, curators);
+		return groups.ToGroupDtos(educationLevels, curators, clusters);
 	}
 }

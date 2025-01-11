@@ -26,4 +26,11 @@ export class ClustersProvider {
         })
         return (result as any[]).map(Cluster.fromAny)
     }
+
+    public static async getBySearchText(searchText: string): Promise<Cluster[]> {
+        const result = await HttpClient.getJsonAsync("/clusters/get_by_search_text", {
+            searchText,
+        })
+        return (result as any[]).map(Cluster.fromAny)
+    }
 }

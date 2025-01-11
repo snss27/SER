@@ -8,5 +8,7 @@ public interface IClustersRepository
 	public Task<Result> Save(ClusterBlank blank);
 	public Task<Result> Remove(ID id);
 	public Task<Cluster?> Get(ID id);
+	public Task<Cluster[]> Get(ID[] ids);
 	public Task<Cluster[]> GetPage(Int32 page, Int32 pageSize);
+	public Task<Cluster[]> Get(String searchText);
 }

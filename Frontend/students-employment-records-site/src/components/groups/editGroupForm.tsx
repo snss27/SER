@@ -1,7 +1,7 @@
 import { StructuralUnits } from "@/domain/groups/enums/structuralUnits"
 import { GroupBlank } from "@/domain/groups/models/groupBlank"
 import useNotifications from "@/hooks/useNotifications"
-import { Box } from "@mui/material"
+import { Box, Collapse } from "@mui/material"
 import { useRouter } from "next/router"
 import { useReducer } from "react"
 import { IconPosition, IconType } from "../shared/buttons"
@@ -13,6 +13,8 @@ import { EducationLevelsProvider } from "@/domain/educationLevels/educationLevel
 import { EmployeesProvider } from "@/domain/employees/employeesProvider"
 import { GroupNumberInput } from "@/components/shared/inputs/maskedInputs/groupNumberInput"
 import { AsyncAutocomplete } from "@/components/shared/inputs/asyncAutocomplete"
+import CheckBox from "../shared/buttons/checkBox"
+import { ClustersProvider } from "@/domain/clusters/clustersProvider"
 
 interface Props {
     initialBlank: GroupBlank
@@ -92,6 +94,29 @@ export const EditGroupForm = (props: Props) => {
                 loadOption={EmployeesProvider.get}
                 getOptionLabel={(curator) => curator.displayName}
             />
+
+            <Box>
+                <CheckBox
+                    value={groupBlank.hasCluster}
+                    label="Принадлежит к кластеру?"
+                    onChange={(hasCluster) =>
+                        dispatch({ type: "CHANGE_HAS_CLUSTER", payload: { hasCluster } })
+                    }
+                />
+
+                <Collapse in={groupBlank.hasCluster}>
+                    <AsyncAutocomplete
+                        value={groupBlank.clusterId}
+                        label="Кластер"
+                        onChange={(clusterId) =>
+                            dispatch({ type: "CHANGE_CLUSTER_ID", payload: { clusterId } })
+                        }
+                        loadOptions={ClustersProvider.getBySearchText}
+                        loadOption={ClustersProvider.get}
+                        getOptionLabel={(cluster) => cluster.name}
+                    />
+                </Collapse>
+            </Box>
 
             <Box className="edit-form-footer">
                 <Button

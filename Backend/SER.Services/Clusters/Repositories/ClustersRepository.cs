@@ -37,9 +37,13 @@ public class ClustersRepository(MainConnector connector) : BaseRepository(connec
 			query.Add(DateTime.UtcNow, "p_currentdatetimeutc");
 		}
 
-		await using IAsyncSeparatelySession session = await _connector.CreateAsyncSession();
+		await using IAsyncTransactionSession transaction = await _connector.CreateAsyncTransaction();
 
-		await session.Execute(query);
+		await Task.WhenAll(
+			transaction.Execute(query),
+			RemoveFromGroups(id, transaction)
+		);
+
 		return Result.Success();
 	}
 
@@ -55,6 +59,18 @@ public class ClustersRepository(MainConnector connector) : BaseRepository(connec
 		return (await session.Get<ClusterDB?>(query))?.ToCluster();
 	}
 
+	public async Task<Cluster[]> Get(ID[] ids)
+	{
+		Query query = _connector.CreateQuery(Sql.Clusters_GetByIds);
+		{
+			query.Add(ids);
+		}
+
+		await using IAsyncSeparatelySession session = await _connector.CreateAsyncSession();
+
+		return (await session.GetArray<ClusterDB>(query)).ToClusters();
+	}
+
 	public async Task<Cluster[]> GetPage(Int32 page, Int32 pageSize)
 	{
 		Query query = _connector.CreateQuery(Sql.Clusters_GetPage);
@@ -67,5 +83,28 @@ public class ClustersRepository(MainConnector connector) : BaseRepository(connec
 		await using IAsyncSeparatelySession session = await _connector.CreateAsyncSession();
 
 		return (await session.GetArray<ClusterDB>(query)).ToClusters();
+	}
+
+	public async Task<Cluster[]> Get(String searchText)
+	{
+		Query query = _connector.CreateQuery(Sql.Clusters_GetBySearchText);
+		{
+			query.Add(searchText);
+		}
+
+		await using IAsyncSeparatelySession session = await _connector.CreateAsyncSession();
+
+		return (await session.GetArray<ClusterDB>(query)).ToClusters();
+	}
+
+	private async Task RemoveFromGroups(ID clusterId, IAsyncTransactionSession transaction)
+	{
+		Query query = _connector.CreateQuery(Sql.Groups_RemoveClusterById);
+		{
+			query.Add(clusterId);
+			query.Add(DateTime.UtcNow, "currentdatetimeutc");
+		}
+
+		await transaction.Execute(query);
 	}
 }

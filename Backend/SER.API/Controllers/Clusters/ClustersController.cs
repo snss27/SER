@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using SER.Domain.Clusters;
+using SER.Domain.Employees;
 using SER.Domain.Services;
+using SER.Services.Employees;
 using SER.Tools.Types.IDs;
 using SER.Tools.Types.Results;
 
@@ -31,5 +33,11 @@ public class ClustersController(IClustersService clustersService) : ControllerBa
 	public async Task<Cluster[]> GetPage([FromQuery] Int32 page, [FromQuery] Int32 pageSize)
 	{
 		return await clustersService.GetPage(page, pageSize);
+	}
+
+	[HttpGet("get_by_search_text")]
+	public async Task<Cluster[]> GetBySearchText([FromQuery] String searchText)
+	{
+		return await clustersService.Get(searchText);
 	}
 }

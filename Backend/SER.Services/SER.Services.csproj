@@ -37,4 +37,8 @@
 		<ProjectReference Include="..\SER.Tools\SER.Tools.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Clusters\Repositories\Queries\Groups\" />
+	</ItemGroup>
+
 </Project>
