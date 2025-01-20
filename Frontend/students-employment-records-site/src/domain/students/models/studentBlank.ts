@@ -1,4 +1,3 @@
-import { ArmyStatuses } from "../enums/armyStatuses"
 import { Genders } from "../enums/genders"
 import { Peculiarities } from "../enums/peculiarities"
 
@@ -19,9 +18,9 @@ export interface StudentBlank {
     additionalQualificationIds: string[]
     isTargetAgreement: boolean
     targetAgreementFile: string | null
-    armyStatus: ArmyStatuses | null
+    mustServeInArmy: boolean
     armySubpoenaFile: string | null
-    armyServeDate: Date | null
+    armyCallDate: Date | null
     peculiarity: Peculiarities | null
 }
 
@@ -44,14 +43,12 @@ export namespace StudentBlank {
             additionalQualificationIds: [],
             isTargetAgreement: false,
             targetAgreementFile: null,
-            armyStatus: null,
+            mustServeInArmy: false,
             armySubpoenaFile: null,
-            armyServeDate: null,
+            armyCallDate: null,
             peculiarity: null,
         }
     }
-
-    //TODO Проверить используются ли все Action-ы?
 
     export function reducer(state: StudentBlank, action: Action): StudentBlank {
         switch (action.type) {
@@ -106,14 +103,14 @@ export namespace StudentBlank {
             case "CHANGE_TARGET_AGREEMENT_FILE":
                 return { ...state, targetAgreementFile: action.payload.targetAgreementFile }
 
-            case "CHANGE_ARMY_STATUS":
-                return { ...state, armyStatus: action.payload.armyStatus }
+            case "CHANGE_MUST_SERVE_IN_ARMY":
+                return { ...state, mustServeInArmy: action.payload.mustServeInArmy }
 
             case "CHANGE_ARMY_SUBPOENA_FILE":
                 return { ...state, armySubpoenaFile: action.payload.armySubpoenaFile }
 
-            case "CHANGE_ARMY_SERVE_DATE":
-                return { ...state, armyServeDate: action.payload.armyServeDate }
+            case "CHANGE_ARMY_CALL_DATE":
+                return { ...state, armyCallDate: action.payload.armyCallDate }
 
             case "CHANGE_PECULIARITY":
                 return { ...state, peculiarity: action.payload.peculiarity }
@@ -185,16 +182,16 @@ type Action =
           payload: { targetAgreementFile: string | null }
       }
     | {
-          type: "CHANGE_ARMY_STATUS"
-          payload: { armyStatus: ArmyStatuses | null }
+          type: "CHANGE_MUST_SERVE_IN_ARMY"
+          payload: { mustServeInArmy: boolean }
       }
     | {
           type: "CHANGE_ARMY_SUBPOENA_FILE"
           payload: { armySubpoenaFile: string | null }
       }
     | {
-          type: "CHANGE_ARMY_SERVE_DATE"
-          payload: { armyServeDate: Date | null }
+          type: "CHANGE_ARMY_CALL_DATE"
+          payload: { armyCallDate: Date | null }
       }
     | {
           type: "CHANGE_PECULIARITY"
