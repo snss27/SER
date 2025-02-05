@@ -10,7 +10,9 @@ public static partial class Regexs
 	public static Regex PhoneRegex => _phoneRegex();
 	public static Regex MailRegex => _mailRegex();
 	public static Regex GroupNumberRegex => _groupNumberRegex();
-
+	public static Regex PassportSeriesRegex => _groupNumberRegex();
+	public static Regex PassportNumberRegex => _groupNumberRegex();
+	public static Regex SnilsRegex => _groupNumberRegex();
 	#region Register
 
 	[GeneratedRegex(@"^\d{10}$")]

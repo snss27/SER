@@ -1,5 +1,5 @@
 export const enumToArrayNumber = <T>(enumObj: any): T[] => {
-    let enumValues: T[] = []
+    const enumValues: T[] = []
 
     for (const n in enumObj) {
         if (typeof enumObj[n] === "number") {

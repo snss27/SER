@@ -72,7 +72,7 @@ export class HttpClient {
 
         const parameters = []
 
-        for (var key of Object.keys(obj)) {
+        for (const key of Object.keys(obj)) {
             const value = obj[key]
             if (value == null) continue
 
@@ -80,7 +80,7 @@ export class HttpClient {
                 const values = value as any[]
                 if (values.length === 0) continue
 
-                for (var v of values)
+                for (const v of values)
                     parameters.push(`${encodeURIComponent(key)}=${encodeURIComponent(v)}`)
             } else if (value instanceof Date) {
                 parameters.push(

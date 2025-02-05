@@ -23,6 +23,12 @@ export interface StudentBlank {
     armySubpoenaFile: string | null
     armyServeDate: Date | null
     peculiarity: Peculiarities | null
+    passportSeries: string | null
+    passportNumber: string | null
+    mail: string | null
+    inn: string | null
+    isForeignCitizen: boolean
+    address: string | null
 }
 
 export namespace StudentBlank {
@@ -48,6 +54,12 @@ export namespace StudentBlank {
             armySubpoenaFile: null,
             armyServeDate: null,
             peculiarity: null,
+            passportSeries: null,
+            passportNumber: null,
+            mail: null,
+            inn: null,
+            isForeignCitizen: false,
+            address: null
         }
     }
 
@@ -99,6 +111,36 @@ export namespace StudentBlank {
                     ...state,
                     additionalQualificationIds: action.payload.additionalQualificationIds,
                 }
+            case "CHANGE_PASSPORTNUMBER":
+                return {
+                    ...state,
+                    passportNumber: action.payload.passportNumber,
+                }
+            case "CHANGE_PASSPORTSERIES":
+                return {
+                     ...state,
+                     passportSeries: action.payload.passportSeries,
+                    }
+            case "CHANGE_ADDRESS":
+                return {
+                    ...state,
+                    address: action.payload.address,
+                }
+            case "CHANGE_MAIL":
+                return {
+                    ...state,
+                    mail: action.payload.mail,
+                }
+            case "CHANGE_INN":
+                return {
+                    ...state,
+                    inn: action.payload.inn,
+                    }
+            case "CHANGE_IS_FOREIGN_CITIZEN":
+                return {
+                     ...state,
+                    isForeignCitizen: action.payload.isForeignCitizen,
+                    }
 
             case "TOGGLE_IS_TARGET_AGREEMENT":
                 return { ...state, isTargetAgreement: !state.isTargetAgreement }
@@ -200,3 +242,27 @@ type Action =
           type: "CHANGE_PECULIARITY"
           payload: { peculiarity: Peculiarities | null }
       }
+    | {
+        type: "CHANGE_ADDRESS"
+        payload: { address: string | null }
+    }
+    | {
+        type: "CHANGE_PASSPORTNUMBER"
+        payload: { passportNumber: string | null }
+    }
+    | {
+        type: "CHANGE_PASSPORTSERIES"
+        payload: { passportSeries: string | null }
+    }
+    | {
+        type: "CHANGE_MAIL"
+        payload: { mail: string | null }
+    }
+    | {
+        type: "CHANGE_INN"
+        payload: { inn: string | null }
+    }
+    | {
+        type: "CHANGE_IS_FOREIGN_CITIZEN"
+        payload: { isForeignCitizen: boolean }
+    }

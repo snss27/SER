@@ -13,6 +13,8 @@ import Button from "../shared/buttons/button"
 import CheckBox from "../shared/buttons/checkBox"
 import { InnInput } from "../shared/inputs/maskedInputs/innInput"
 import TextInput from "../shared/inputs/textInput"
+import { PassportSeriesInput } from "../shared/inputs/maskedInputs/passportSeries"
+import { PassportNumberInput } from "../shared/inputs/maskedInputs/passportnumberInput"
 
 interface Props {
     initialBlank: EnterpriseBlank
@@ -81,6 +83,16 @@ export const EditEnterpriseForm = (props: Props) => {
                 value={enterpriseBlank.phone}
                 label="Телефон"
                 onChange={(phone) => dispatch({ type: "CHANGE_PHONE", payload: { phone } })}
+            />
+            <PassportSeriesInput
+                value={enterpriseBlank.mail}
+                label="Эл. почта"
+                onChange={(mail) => dispatch({ type: "CHANGE_MAIL", payload: { mail } })}
+            />
+            <PassportNumberInput
+                value={enterpriseBlank.mail}
+                label="Эл. почта"
+                onChange={(mail) => dispatch({ type: "CHANGE_MAIL", payload: { mail } })}
             />
             <MailInput
                 value={enterpriseBlank.mail}

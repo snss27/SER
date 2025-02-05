@@ -6,7 +6,10 @@ internal class Sql
 {
     #region Students
 
-    public static String FlatStudents_Save => SqlFileProvider.GetQuery(folder: "Students");
+    public static String Students_Save => SqlFileProvider.GetQuery(folder: "Students");
+	public static String Students_Remove => SqlFileProvider.GetQuery(folder: "Students");
+	public static String Students_Get => SqlFileProvider.GetQuery(folder: "Students");
+	public static String Students_GetPage => SqlFileProvider.GetQuery(folder: "Students");
 
-    #endregion
+	#endregion
 }

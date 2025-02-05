@@ -15,6 +15,11 @@ import { PhoneNumberInput } from "../shared/inputs/maskedInputs/phoneNumberInput
 import { SnilsInput } from "../shared/inputs/maskedInputs/snilsInput"
 import Select from "../shared/inputs/select"
 import TextInput from "../shared/inputs/textInput"
+import { MailInput } from "../shared/inputs/maskedInputs/mailInput"
+import { InnInput } from "../shared/inputs/maskedInputs/innInput"
+import { PassportSeriesInput } from "../shared/inputs/maskedInputs/passportSeries"
+import { PassportNumberInput } from "../shared/inputs/maskedInputs/passportnumberInput"
+import { AddressInput } from "../shared/inputs/maskedInputs/addressInput"
 
 interface Props {
     initialStudentBlank: StudentBlank
@@ -96,6 +101,51 @@ export const EditStudentForm: React.FC<Props> = ({ initialStudentBlank }) => {
                     })
                 }
             />
+
+            {/*  */}
+
+            <PassportSeriesInput
+                value={studentBlank.passportSeries}
+                label="Серия паспорта"
+                onChange={(passportSeries) => dispatch({ type: "CHANGE_PASSPORTSERIES", payload: { passportSeries } })}
+            />
+
+            <PassportNumberInput
+                value={studentBlank.passportNumber}
+                label="Номер паспорта"
+                onChange={(passportNumber) => dispatch({ type: "CHANGE_PASSPORTNUMBER", payload: { passportNumber } })}
+            />
+
+            <AddressInput
+                value={studentBlank.address}
+                onChange={(address) =>
+                    dispatch({ type: "CHANGE_ADDRESS", payload: { address } })
+                }
+                label="Место жительства"
+            />
+
+            <MailInput
+                value={studentBlank.mail}
+                label="Эл. почта"
+                onChange={(mail) => dispatch({ type: "CHANGE_MAIL", payload: { mail } })}
+            />
+
+            <InnInput
+                value={studentBlank.inn}
+                label="ИНН"
+                onChange={(inn) => dispatch({ type: "CHANGE_INN", payload: { inn } })}
+            />
+
+            <CheckBox
+                value={studentBlank.isForeignCitizen}
+                label="Иностранный гражданин"
+                onChange={(isForeignCitizen) =>
+                    dispatch({ type: "CHANGE_IS_FOREIGN_CITIZEN", payload: { isForeignCitizen } })
+                }
+            />
+
+              {/*  */}
+
 
             <SnilsInput
                 value={studentBlank.snils}

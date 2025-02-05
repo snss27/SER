@@ -1,4 +1,6 @@
+import { EditStudentForm } from "@/components/students/editStudentForm"
 import { StudentBlank } from "@/domain/students/models/studentBlank"
+import { StudentsProvider } from "@/domain/students/studentsProvider"
 import { Box, Typography } from "@mui/material"
 import { useParams } from "next/navigation"
 import { useEffect, useState } from "react"
@@ -10,9 +12,9 @@ const EditStudentPage: React.FC = () => {
 
     useEffect(() => {
         async function loadStudent() {
-            // const student = await StudentsProvider.get(id)
-            //
-            // setStudentBlank(student.toBlank())
+            const student = await StudentsProvider.get(id)
+            
+            setStudentBlank(student.toBlank())
         }
 
         loadStudent()
