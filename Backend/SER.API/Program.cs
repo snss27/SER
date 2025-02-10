@@ -52,6 +52,7 @@ application
     .UseHttpsRedirection()
 	.UseCors()
 	.UseRouting()
+	.UseStaticFiles()
     .UseEndpoints(endpoints =>
     {
         endpoints.MapControllers();

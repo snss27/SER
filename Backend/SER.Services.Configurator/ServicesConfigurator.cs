@@ -29,6 +29,7 @@ public static class ServicesConfigurator
 		services.AddSingleton<IAdditionalQualificationsService, AdditionalQualificationsService>();
 		services.AddSingleton<IEnterprisesService, EnterprisesService>();
 		services.AddSingleton<IClustersService, ClustersService>();
+		services.AddSingleton<IFilesService, IFilesService>();
 
         #endregion
 

@@ -1,10 +1,9 @@
-import { ArmyStatuses } from "@/domain/students/enums/armyStatuses"
 import { Genders } from "@/domain/students/enums/genders"
 import { Peculiarities } from "@/domain/students/enums/peculiarities"
 import { StudentBlank } from "@/domain/students/models/studentBlank"
 import { StudentsProvider } from "@/domain/students/studentsProvider"
 import useNotifications from "@/hooks/useNotifications"
-import { Box } from "@mui/material"
+import { Box, Collapse } from "@mui/material"
 import { useRouter } from "next/router"
 import React, { useReducer } from "react"
 import { IconPosition, IconType } from "../shared/buttons"
@@ -175,24 +174,35 @@ export const EditStudentForm: React.FC<Props> = ({ initialStudentBlank }) => {
 
             {/* Если studentBlank.isTargetAgreement, тогда давать возможность прикрепить файл. */}
 
-            <Select
-                options={ArmyStatuses.getAll()}
-                value={studentBlank.armyStatus}
-                label="Армейский статус"
-                getOptionLabel={ArmyStatuses.getDisplayText}
-                onChange={(armyStatus) =>
-                    dispatch({ type: "CHANGE_ARMY_STATUS", payload: { armyStatus } })
-                }
-            />
+            <Box>
+                <CheckBox
+                    value={studentBlank.mustServeInArmy}
+                    label="Подлежит призыву?"
+                    onChange={(mustServeInArmy) =>
+                        dispatch({
+                            type: "CHANGE_MUST_SERVE_IN_ARMY",
+                            payload: { mustServeInArmy },
+                        })
+                    }
+                />
 
-            {/* Если армейский статус - годен, тогда давать возможность прикрепить файл повестки */}
+                {/* Если подлежит, тогда давать возможность прикрепить файл повестки */}
 
-            {/* Если армейский статус - годен, тогда давать возможность выбрать дату призыва */}
+                <Collapse in={studentBlank.mustServeInArmy}>
+                    <DatePicker
+                        value={studentBlank.armyCallDate}
+                        label="Дата призыва"
+                        onChange={(armyCallDate) =>
+                            dispatch({ type: "CHANGE_ARMY_CALL_DATE", payload: { armyCallDate } })
+                        }
+                    />
+                </Collapse>
+            </Box>
 
             <Select
                 options={Peculiarities.getAll()}
                 value={studentBlank.peculiarity}
-                label="Особенность"
+                label="Социальные статусы"
                 getOptionLabel={Peculiarities.getDisplayText}
                 onChange={(peculiarity) =>
                     dispatch({ type: "CHANGE_PECULIARITY", payload: { peculiarity } })
