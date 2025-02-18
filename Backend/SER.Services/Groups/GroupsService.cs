@@ -106,4 +106,41 @@ public class GroupsService(
 
 		return groups.ToGroupDtos(educationLevels, curators, clusters);
 	}
+
+	public async Task<GroupDto[]> GetAll()
+	{
+		Group[] groups = await groupsRepository.GetAll();
+
+		ID[] curatorIds = groups
+			.Where(group => group.CuratorId is not null)
+			.Select(group => group.CuratorId.Value)
+			.Distinct()
+			.ToArray();
+
+		ID[] educationLevelIds = groups
+			.Where(group => group.EducationLevelId is not null)
+			.Select(group => group.EducationLevelId.Value)
+			.Distinct()
+			.ToArray();
+
+		ID[] clusterIds = groups
+			.Where(group => group.ClusterId is not null)
+			.Select(group => group.ClusterId.Value)
+			.Distinct()
+			.ToArray();
+
+		//REFACTORING аналогично https://dev.to/serhii_korol_ab7776c50dba/the-elegant-way-to-await-multiple-tasks-in-net-11pl
+
+		Task<Employee[]> curatorsTask = employeesService.Get(curatorIds);
+		Task<EducationLevel[]> educationLevelsTask = educationLevelsService.Get(educationLevelIds);
+		Task<Cluster[]> clustersTask = clustersService.Get(clusterIds);
+
+		await Task.WhenAll(curatorsTask, educationLevelsTask, clustersTask);
+
+		Employee[] curators = await curatorsTask;
+		EducationLevel[] educationLevels = await educationLevelsTask;
+		Cluster[] clusters = await clustersTask;
+
+		return groups.ToGroupDtos(educationLevels, curators, clusters);
+	}
 }

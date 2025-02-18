@@ -9,4 +9,5 @@ public interface IGroupsService
 	public Task<Result> Remove(ID id);
 	public Task<GroupDto?> Get(ID id);
 	public Task<GroupDto[]> GetPage(Int32 page, Int32 pageSize);
+	public Task<GroupDto[]> GetAll();
 }

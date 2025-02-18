@@ -28,8 +28,14 @@ public class GroupsController(IGroupsService groupsService) : ControllerBase
 	}
 
 	[HttpGet("get_page")]
-	public async Task<GroupDto[]> GetAll(Int32 page, Int32 pageSize)
+	public async Task<GroupDto[]> GetPage(Int32 page, Int32 pageSize)
 	{
 		return await groupsService.GetPage(page, pageSize);
+	}
+
+	[HttpGet("get_all")]
+	public async Task<GroupDto[]> GetAll()
+	{
+		return await groupsService.GetAll();
 	}
 }

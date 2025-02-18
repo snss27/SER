@@ -15,10 +15,13 @@ export interface StudentBlank {
     snils: string | null
     groupId: string | null
     passportId: string | null
+    passportIssued: string | null
     workplaceInfoId: string | null
     additionalQualificationIds: string[]
     isTargetAgreement: boolean
     targetAgreementFile: string | null
+    targetAgreementDate: string | null // 
+    targetAgreementEnterpriseId: string | null // 
     armyStatus: ArmyStatuses | null
     armySubpoenaFile: string | null
     armyServeDate: Date | null
@@ -46,10 +49,13 @@ export namespace StudentBlank {
             snils: null,
             groupId: null,
             passportId: null,
+            passportIssued: null, // 
             workplaceInfoId: null,
             additionalQualificationIds: [],
             isTargetAgreement: false,
             targetAgreementFile: null,
+            targetAgreementDate: null, // 
+            targetAgreementEnterpriseId: null, // 
             armyStatus: null,
             armySubpoenaFile: null,
             armyServeDate: null,
@@ -58,108 +64,121 @@ export namespace StudentBlank {
             passportNumber: null,
             mail: null,
             inn: null,
-            isForeignCitizen: false,
+            isForeignCitizen: false, // 
             address: null
         }
     }
-
-    //TODO Проверить используются ли все Action-ы?
 
     export function reducer(state: StudentBlank, action: Action): StudentBlank {
         switch (action.type) {
             case "CHANGE_NAME":
                 return { ...state, name: action.payload.name }
-
+    
             case "CHANGE_SECOND_NAME":
                 return { ...state, secondName: action.payload.secondName }
-
+    
             case "CHANGE_LAST_NAME":
                 return { ...state, lastName: action.payload.lastName }
-
+    
             case "CHANGE_GENDER":
                 return { ...state, gender: action.payload.gender }
-
+    
             case "CHANGE_BIRTH_DATE":
                 return { ...state, birthDate: action.payload.birthDate }
-
+    
             case "CHANGE_PHONE_NUMBER":
                 return { ...state, phoneNumber: action.payload.phoneNumber }
-
+    
             case "CHANGE_REPRESENTATIVE_PHONE_NUMBER":
                 return {
                     ...state,
                     representativePhoneNumber: action.payload.representativePhoneNumber,
                 }
-
+    
             case "CHANGE_IS_ON_PAID_STUDY":
                 return { ...state, isOnPaidStudy: action.payload.isOnPaidStudy }
-
+    
             case "CHANGE_SNILS":
                 return { ...state, snils: action.payload.snils }
-
+    
             case "CHANGE_GROUP":
                 return { ...state, groupId: action.payload.groupId }
-
+    
             case "CHANGE_PASSPORT":
                 return { ...state, passportId: action.payload.passportId }
-
+    
+            case "CHANGE_PASSPORT_ISSUED":
+                return { ...state, passportIssued: action.payload.passportIssued }
+    
             case "CHANGE_WORKPLACE_INFO":
                 return { ...state, workplaceInfoId: action.payload.workplaceInfoId }
-
+    
             case "CHANGE_ADDITIONAL_QUALIFICATIONS":
                 return {
                     ...state,
                     additionalQualificationIds: action.payload.additionalQualificationIds,
                 }
+    
             case "CHANGE_PASSPORTNUMBER":
                 return {
                     ...state,
                     passportNumber: action.payload.passportNumber,
                 }
+    
             case "CHANGE_PASSPORTSERIES":
                 return {
-                     ...state,
-                     passportSeries: action.payload.passportSeries,
-                    }
+                    ...state,
+                    passportSeries: action.payload.passportSeries,
+                }
+    
             case "CHANGE_ADDRESS":
                 return {
                     ...state,
                     address: action.payload.address,
                 }
+    
             case "CHANGE_MAIL":
                 return {
                     ...state,
                     mail: action.payload.mail,
                 }
+    
             case "CHANGE_INN":
                 return {
                     ...state,
                     inn: action.payload.inn,
-                    }
+                }
+    
             case "CHANGE_IS_FOREIGN_CITIZEN":
                 return {
-                     ...state,
+                    ...state,
                     isForeignCitizen: action.payload.isForeignCitizen,
-                    }
-
+                }
+    
             case "TOGGLE_IS_TARGET_AGREEMENT":
                 return { ...state, isTargetAgreement: !state.isTargetAgreement }
-
+    
             case "CHANGE_TARGET_AGREEMENT_FILE":
                 return { ...state, targetAgreementFile: action.payload.targetAgreementFile }
-
+    
+            case "CHANGE_TARGET_AGREEMENT_DATE":
+                return { ...state, targetAgreementDate: action.payload.targetAgreementDate }
+    
+            case "CHANGE_TARGET_AGREEMENT_ENTERPRISE_ID":
+                return { ...state, targetAgreementEnterpriseId: action.payload.targetAgreementEnterpriseId }
+    
             case "CHANGE_ARMY_STATUS":
                 return { ...state, armyStatus: action.payload.armyStatus }
-
+    
             case "CHANGE_ARMY_SUBPOENA_FILE":
                 return { ...state, armySubpoenaFile: action.payload.armySubpoenaFile }
-
+    
             case "CHANGE_ARMY_SERVE_DATE":
                 return { ...state, armyServeDate: action.payload.armyServeDate }
-
+    
             case "CHANGE_PECULIARITY":
                 return { ...state, peculiarity: action.payload.peculiarity }
-
+    
             default:
                 return state
         }
@@ -227,6 +246,14 @@ type Action =
           payload: { targetAgreementFile: string | null }
       }
     | {
+          type: "CHANGE_TARGET_AGREEMENT_DATE" // 
+          payload: { targetAgreementDate: string | null }
+      }
+    | {
+          type: "CHANGE_TARGET_AGREEMENT_ENTERPRISE_ID" // 
+          payload: { targetAgreementEnterpriseId: string | null }
+      }
+    | {
           type: "CHANGE_ARMY_STATUS"
           payload: { armyStatus: ArmyStatuses | null }
       }
@@ -265,4 +292,8 @@ type Action =
     | {
         type: "CHANGE_IS_FOREIGN_CITIZEN"
         payload: { isForeignCitizen: boolean }
+    }
+    | {
+        type: "CHANGE_PASSPORT_ISSUED"
+        payload: { passportIssued: string | null }
     }

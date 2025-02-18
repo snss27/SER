@@ -6,7 +6,7 @@ import { StudentsProvider } from "@/domain/students/studentsProvider"
 import useNotifications from "@/hooks/useNotifications"
 import { Box } from "@mui/material"
 import { useRouter } from "next/router"
-import React, { useReducer } from "react"
+import React, { useEffect, useReducer, useState } from "react"
 import { IconPosition, IconType } from "../shared/buttons"
 import Button from "../shared/buttons/button"
 import CheckBox from "../shared/buttons/checkBox"
@@ -20,6 +20,11 @@ import { InnInput } from "../shared/inputs/maskedInputs/innInput"
 import { PassportSeriesInput } from "../shared/inputs/maskedInputs/passportSeries"
 import { PassportNumberInput } from "../shared/inputs/maskedInputs/passportnumberInput"
 import { AddressInput } from "../shared/inputs/maskedInputs/addressInput"
+import { PassportIssuedInput } from "../shared/inputs/passportIssuedInput"
+import { GroupSelect } from "../shared/inputs/groupSelect"
+import { Group } from "@/domain/groups/models/group"
+import { GroupsProvider } from "@/domain/groups/groupsProvider"
+import { AsyncAutocomplete } from "../shared/inputs/asyncAutocomplete"
 
 interface Props {
     initialStudentBlank: StudentBlank
@@ -27,9 +32,20 @@ interface Props {
 
 export const EditStudentForm: React.FC<Props> = ({ initialStudentBlank }) => {
     const [studentBlank, dispatch] = useReducer(StudentBlank.reducer, initialStudentBlank)
+    const [groups, setGroups] = useState<Group[]>([]); 
+    const [selectedGroup, setGroup] = useState<Group | null>(null);
 
     const navigator = useRouter()
     const { showError, showSuccess } = useNotifications()
+
+    useEffect(() => {
+        const loadGroups = async () => {
+            const groups = await GroupsProvider.getAll();
+            setGroups(groups);
+        };
+    
+        loadGroups();
+    }, []); 
 
     async function handleSaveButton() {
         const result = await StudentsProvider.save(studentBlank)
@@ -102,8 +118,6 @@ export const EditStudentForm: React.FC<Props> = ({ initialStudentBlank }) => {
                 }
             />
 
-            {/*  */}
-
             <PassportSeriesInput
                 value={studentBlank.passportSeries}
                 label="Серия паспорта"
@@ -114,6 +128,12 @@ export const EditStudentForm: React.FC<Props> = ({ initialStudentBlank }) => {
                 value={studentBlank.passportNumber}
                 label="Номер паспорта"
                 onChange={(passportNumber) => dispatch({ type: "CHANGE_PASSPORTNUMBER", payload: { passportNumber } })}
+            />
+
+            <PassportIssuedInput
+                value={studentBlank.passportIssued}
+                label="Кем выдан паспорт"
+                onChange={(passportIssued) => dispatch({ type: "CHANGE_PASSPORT_ISSUED", payload: { passportIssued } })}
             />
 
             <AddressInput
@@ -144,9 +164,6 @@ export const EditStudentForm: React.FC<Props> = ({ initialStudentBlank }) => {
                 }
             />
 
-              {/*  */}
-
-
             <SnilsInput
                 value={studentBlank.snils}
                 label="Снилс"
@@ -161,11 +178,22 @@ export const EditStudentForm: React.FC<Props> = ({ initialStudentBlank }) => {
                 }
             />
 
-            {/* TODO Группы (нужны запросы) */}
+           {/* <AsyncAutocomplete
+                           value={studentBlank.groupId}
+                           label="Уровень образования"
+                           onChange={(groupId) =>
+                               dispatch({ type: "CHANGE_GROUP", payload: { groupId } })
+                           }
+                           loadOption={}
+                           loadOptions={EducationLevelsProvider.getBySearchText}
+                           getOptionLabel={(educationLevel) => educationLevel.displayName}
+                       /> */}
 
-            {/* TODO Паспорт (серия, номер, дата выдачи, кем выдан) */}
-
-            {/* TODO Сделать логику, когда будет готова информация о месте работы. Возможно тут это и не ID, а просто данные? Ну в любом случае другая страница (или модалка) */}
+            <TextInput
+                value={studentBlank.workplaceInfoId}
+                label="Место работы"
+                onChange={(workplaceInfoId) => dispatch({ type: "CHANGE_WORKPLACE_INFO", payload: { workplaceInfoId } })}
+            />
 
             <CheckBox
                 value={studentBlank.isTargetAgreement}
@@ -173,7 +201,17 @@ export const EditStudentForm: React.FC<Props> = ({ initialStudentBlank }) => {
                 onChange={() => dispatch({ type: "TOGGLE_IS_TARGET_AGREEMENT" })}
             />
 
-            {/* Если studentBlank.isTargetAgreement, тогда давать возможность прикрепить файл. */}
+            {/* {studentBlank.isTargetAgreement && (
+                <>
+                    <MuiFileInput></MuiFileInput>
+
+                    <DatePicker
+                        value={studentBlank.targetAgreementDate}
+                        label="Дата целевого соглашения"
+                        onChange={(targetAgreementDate) => dispatch({ type: "CHANGE_TARGET_AGREEMENT_DATE", payload: { targetAgreementDate } })}
+                    />
+                </>
+            )} */}
 
             <Select
                 options={ArmyStatuses.getAll()}
@@ -185,9 +223,21 @@ export const EditStudentForm: React.FC<Props> = ({ initialStudentBlank }) => {
                 }
             />
 
-            {/* Если армейский статус - годен, тогда давать возможность прикрепить файл повестки */}
+            {/* {studentBlank.armyStatus === ArmyStatuses.Fit && (
+                <>
+                    <FileUploadInput
+                        value={studentBlank.armySubpoenaFile}
+                        label="Файл повестки"
+                        onChange={(armySubpoenaFile) => dispatch({ type: "CHANGE_ARMY_SUBPOENA_FILE", payload: { armySubpoenaFile } })}
+                    />
 
-            {/* Если армейский статус - годен, тогда давать возможность выбрать дату призыва */}
+                    <DatePicker
+                        value={studentBlank.armyServeDate}
+                        label="Дата призыва"
+                        onChange={(armyServeDate) => dispatch({ type: "CHANGE_ARMY_SERVE_DATE", payload: { armyServeDate } })}
+                    />
+                </>
+            )} */}
 
             <Select
                 options={Peculiarities.getAll()}
@@ -215,3 +265,4 @@ export const EditStudentForm: React.FC<Props> = ({ initialStudentBlank }) => {
         </Box>
     )
 }
+

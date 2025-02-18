@@ -19,10 +19,14 @@ internal static class FlatStudentsConverter
 			snils: studentDb.Snils,
 			groupId: studentDb.GroupId,
 			passportId: studentDb.PassportId,
+			passportIssued: studentDb.PassportIssued, // 
 			workPlacesInfoId: studentDb.WorkPlacesInfoId,
 			additionalQualifications: studentDb.AdditionalQualifications,
 			isTargetAgreement: studentDb.IsTargetAgreement,
 			targetAgreementFile: studentDb.TargetAgreementFile,
+			targetAgreementDate: studentDb.TargetAgreementDate, // 
+			targetAgreementEnterpriseId: studentDb.TargetAgreementEnterpriseId, // 
+			armyStatus: studentDb.ArmyStatus, // 
 			isSubjectToArmyDraft: studentDb.IsSubjectToArmyDraft,
 			armySubpoenaFile: studentDb.ArmySubpoenaFile,
 			armyServeDate: studentDb.ArmyServeDate,

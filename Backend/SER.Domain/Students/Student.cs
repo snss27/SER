@@ -16,10 +16,14 @@ public class Student(
 	String? snils,
 	ID? groupId,
 	ID? passportId,
+	String? passportIssued, // 
 	ID? workPlacesInfoId,
 	ID[] additionalQualifications,
 	Boolean isTargetAgreement,
 	String? targetAgreementFile,
+	String? targetAgreementDate, // 
+	ID? targetAgreementEnterpriseId, // 
+	ArmyStatus? armyStatus, // 
 	Boolean isSubjectToArmyDraft,
 	String? armySubpoenaFile,
 	DateTime? armyServeDate,
@@ -46,10 +50,14 @@ public class Student(
 	public String? Snils { get; } = snils;
 	public ID? GroupId { get; } = groupId;
 	public ID? PassportId { get; } = passportId;
+	public String? PassportIssued { get; } = passportIssued; // 
 	public ID? WorkPlacesInfoId { get; } = workPlacesInfoId;
 	public ID[] AdditionalQualifications { get; } = additionalQualifications;
 	public Boolean IsTargetAgreement { get; } = isTargetAgreement;
 	public String? TargetAgreementFile { get; } = targetAgreementFile;
+	public String? TargetAgreementDate { get; } = targetAgreementDate; // 
+	public ID? TargetAgreementEnterpriseId { get; } = targetAgreementEnterpriseId; // 
+	public ArmyStatus? ArmyStatus { get; } = armyStatus; // 
 	public Boolean IsSubjectToArmyDraft { get; } = isSubjectToArmyDraft;
 	public String? ArmySubpoenaFile { get; } = armySubpoenaFile;
 	public DateTime? ArmyServeDate { get; } = armyServeDate;
