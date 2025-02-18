@@ -1,6 +1,5 @@
 using SER.Domain.Students.Enums;
 using SER.Tools.Types.IDs;
-using System;
 
 namespace SER.Domain.Students;
 
@@ -18,10 +17,14 @@ public class StudentDB
 	public String? Snils { get; set; }
 	public ID? GroupId { get; set; }
 	public ID? PassportId { get; set; }
+	public String? PassportIssued { get; set; } // 
 	public ID? WorkPlacesInfoId { get; set; }
 	public ID[] AdditionalQualifications { get; set; }
 	public Boolean IsTargetAgreement { get; set; }
 	public String? TargetAgreementFile { get; set; }
+	public String? TargetAgreementDate { get; set; } // 
+	public ID? TargetAgreementEnterpriseId { get; set; } // 
+	public ArmyStatus? ArmyStatus { get; set; } // 
 	public Boolean IsSubjectToArmyDraft { get; set; }
 	public String? ArmySubpoenaFile { get; set; }
 	public DateTime? ArmyServeDate { get; set; }

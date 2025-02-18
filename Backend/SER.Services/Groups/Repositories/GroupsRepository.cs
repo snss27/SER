@@ -76,4 +76,13 @@ public class GroupsRepository(MainConnector connector) : BaseRepository(connecto
 
 		return (await session.GetArray<GroupDB>(query)).ToGroups();
 	}
+
+	public async Task<Group[]> GetAll()
+	{
+		Query query = _connector.CreateQuery(Sql.Groups_GetAll);
+
+		await using IAsyncSeparatelySession session = await _connector.CreateAsyncSession();
+
+		return (await session.GetArray<GroupDB>(query)).ToGroups();
+	}
 }

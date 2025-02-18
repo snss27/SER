@@ -23,4 +23,9 @@ export class GroupsProvider {
         const result = await HttpClient.getJsonAsync("/groups/get_page", { page, pageSize })
         return (result as any[]).map(Group.fromAny)
     }
+
+    public static async getAll(): Promise<Group[]> {
+        const result = await HttpClient.getJsonAsync("/groups/get_all")
+        return (result as any[]).map(Group.fromAny)
+    }
 }

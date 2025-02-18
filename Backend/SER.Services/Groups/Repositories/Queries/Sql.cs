@@ -8,4 +8,5 @@ internal class Sql
 	public static String Groups_Remove => SqlFileProvider.GetQuery(folder: "Groups");
 	public static String Groups_Get => SqlFileProvider.GetQuery(folder: "Groups");
 	public static String Groups_GetPage => SqlFileProvider.GetQuery(folder: "Groups");
+	public static String Groups_GetAll => SqlFileProvider.GetQuery(folder: "Groups");
 }

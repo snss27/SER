@@ -84,16 +84,6 @@ export const EditEnterpriseForm = (props: Props) => {
                 label="Телефон"
                 onChange={(phone) => dispatch({ type: "CHANGE_PHONE", payload: { phone } })}
             />
-            <PassportSeriesInput
-                value={enterpriseBlank.mail}
-                label="Эл. почта"
-                onChange={(mail) => dispatch({ type: "CHANGE_MAIL", payload: { mail } })}
-            />
-            <PassportNumberInput
-                value={enterpriseBlank.mail}
-                label="Эл. почта"
-                onChange={(mail) => dispatch({ type: "CHANGE_MAIL", payload: { mail } })}
-            />
             <MailInput
                 value={enterpriseBlank.mail}
                 label="Эл. почта"

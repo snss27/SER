@@ -9,4 +9,5 @@ public interface IGroupsRepository
 	public Task<Result> Remove(ID id);
 	public Task<Group?> Get(ID id);
 	public Task<Group[]> GetPage(Int32 page, Int32 pageSize);
+	public Task<Group[]> GetAll();
 }
