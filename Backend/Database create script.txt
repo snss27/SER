@@ -1,27 +1,37 @@
 CREATE TABLE "students" (
   "id" bytea PRIMARY KEY,
   "name" varchar NOT NULL,
-  "secondname" varchar,
-  "lastname" varchar,
-  "gender" int,
-  "birthDate" date,
-  "phonenumber" varchar,
-  "representativephonenumber" varchar,
-  "isonpaidstudy" bool,
-  "snils" varchar,
-  "groupid" bytea NOT NULL,
+  "secondname" varchar NOT NULL,
+  "lastname" varchar NULL,
+  "gender" int NOT NULL,
+  "birthDate" date NULL,
+  "phonenumber" varchar NULL,
+  "representativephonenumber" varchar NULL,
+  "isonpaidstudy" bool NOT NULL,
+  "snils" varchar NULL,
+  "groupid" bytea NULL,
   "pasportnumber" varchar NULL,
   "pasportseries" varchar NULL,
-  "pasportfiles" varchar NOT NULL,
+  "pasportissued" varchar NULL,
+  "pasportfiles" varchar[] NOT NULL,
   "prevworkplaces" bytea[] NOT NULL,
-  "currentworkplace" bytea,
+  "currentworkplace" bytea NULL,
   "additionalqualifications" bytea[] NOT NULL,
-  "istargetagreement" bool,
-  "targetagreementfile" varchar,
-  "issubjecttodraft" bool,
-  "armysubpoenafile" varchar,
-  "armyservedate" date,
-  "peculiarity" int,
+  "istargetagreement" bool NOT NULL,
+  "targetagreementfile" varchar NULL,
+  "targetagreementdate" date NULL,
+  "targetagreemententerpriseid" bytea NULL,
+  "mustserveinarmy" bool NOT NULL,
+  "armysubpoenafile" varchar NULL,
+  "armyservedate" date NULL,
+  "socialstatuses" int[] NOT NULL,
+  "status" int NOT NULL,
+  "address" varchar NULL,
+  "isforeigncitizen" boolean NOT NULL,
+  "inn" varchar NULL,
+  "mail" varchar NULL,
+  "otherfiles" varchar[] NOT NULL,
+
   "createddatetimeutc" timestamp NOT NULL,
   "modifieddatetimeutc" timestamp,
   "isremoved" bool NOT NULL
@@ -29,7 +39,7 @@ CREATE TABLE "students" (
 
 CREATE TABLE "workplaces" (
   "id" bytea PRIMARY KEY,
-  "name" varchar NOT NULL,
+  "enterpriseid" varchar NOT NULL,
   "post" varchar,
   "workbookextractfile" varchar,
   "startdate" date NOT NULL,
@@ -38,8 +48,6 @@ CREATE TABLE "workplaces" (
   "modifieddatetimeutc" timestamp,
   "isremoved" bool NOT NULL
 );
-
--------------------------------
 
 CREATE TABLE "enterprises" (
   "id" bytea PRIMARY KEY,
@@ -116,7 +124,3 @@ CREATE TABLE "clusters" (
   "modifieddatetimeutc" timestamp NULL,
   "isremoved" bool NOT NULL
 );
-
-
-
-

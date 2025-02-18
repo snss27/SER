@@ -5,20 +5,21 @@ import { StudentsProvider } from "@/domain/students/studentsProvider"
 import useNotifications from "@/hooks/useNotifications"
 import { Box, Collapse } from "@mui/material"
 import { useRouter } from "next/router"
-import React, { useReducer } from "react"
+import React, { useReducer, useState } from "react"
 import { IconPosition, IconType } from "../shared/buttons"
 import Button from "../shared/buttons/button"
 import CheckBox from "../shared/buttons/checkBox"
 import DatePicker from "../shared/inputs/datePicker"
+import { FilesInput } from "../shared/inputs/filesInput"
+import { AddressInput } from "../shared/inputs/maskedInputs/addressInput"
+import { InnInput } from "../shared/inputs/maskedInputs/innInput"
+import { MailInput } from "../shared/inputs/maskedInputs/mailInput"
+import { PassportSeriesInput } from "../shared/inputs/maskedInputs/passportSeries"
+import { PassportNumberInput } from "../shared/inputs/maskedInputs/passportnumberInput"
 import { PhoneNumberInput } from "../shared/inputs/maskedInputs/phoneNumberInput"
 import { SnilsInput } from "../shared/inputs/maskedInputs/snilsInput"
 import Select from "../shared/inputs/select"
 import TextInput from "../shared/inputs/textInput"
-import { MailInput } from "../shared/inputs/maskedInputs/mailInput"
-import { InnInput } from "../shared/inputs/maskedInputs/innInput"
-import { PassportSeriesInput } from "../shared/inputs/maskedInputs/passportSeries"
-import { PassportNumberInput } from "../shared/inputs/maskedInputs/passportnumberInput"
-import { AddressInput } from "../shared/inputs/maskedInputs/addressInput"
 
 interface Props {
     initialStudentBlank: StudentBlank
@@ -42,8 +43,18 @@ export const EditStudentForm: React.FC<Props> = ({ initialStudentBlank }) => {
         navigator.back()
     }
 
+    const [urls, setUrls] = useState<string[]>([])
+    const [files, setFiles] = useState<File[]>([])
+
     return (
         <Box component="form" className="edit-form-container">
+            <FilesInput
+                existingUrls={urls}
+                newFiles={files}
+                onFilesChange={setFiles}
+                onUrlsChange={setUrls}
+            />
+
             <TextInput
                 value={studentBlank.name}
                 onChange={(name) => dispatch({ type: "CHANGE_NAME", payload: { name } })}
@@ -106,20 +117,22 @@ export const EditStudentForm: React.FC<Props> = ({ initialStudentBlank }) => {
             <PassportSeriesInput
                 value={studentBlank.passportSeries}
                 label="Серия паспорта"
-                onChange={(passportSeries) => dispatch({ type: "CHANGE_PASSPORTSERIES", payload: { passportSeries } })}
+                onChange={(passportSeries) =>
+                    dispatch({ type: "CHANGE_PASSPORTSERIES", payload: { passportSeries } })
+                }
             />
 
             <PassportNumberInput
                 value={studentBlank.passportNumber}
                 label="Номер паспорта"
-                onChange={(passportNumber) => dispatch({ type: "CHANGE_PASSPORTNUMBER", payload: { passportNumber } })}
+                onChange={(passportNumber) =>
+                    dispatch({ type: "CHANGE_PASSPORTNUMBER", payload: { passportNumber } })
+                }
             />
 
             <AddressInput
                 value={studentBlank.address}
-                onChange={(address) =>
-                    dispatch({ type: "CHANGE_ADDRESS", payload: { address } })
-                }
+                onChange={(address) => dispatch({ type: "CHANGE_ADDRESS", payload: { address } })}
                 label="Место жительства"
             />
 
@@ -143,8 +156,7 @@ export const EditStudentForm: React.FC<Props> = ({ initialStudentBlank }) => {
                 }
             />
 
-              {/*  */}
-
+            {/*  */}
 
             <SnilsInput
                 value={studentBlank.snils}

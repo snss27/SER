@@ -1,15 +1,22 @@
 import { IconButton as MIconButton, SxProps, Theme } from "@mui/material"
+import { MouseEvent } from "react"
 import { getIconComponent, IconType } from "."
 
 interface Props {
     icon: IconType
-    onClick: () => void
+    size?: "small" | "medium" | "large"
+    disabled?: boolean
     sx?: SxProps<Theme>
+    onClick?: (e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => void
 }
 
 const IconButton = (props: Props) => {
     return (
-        <MIconButton onClick={props.onClick} sx={props.sx}>
+        <MIconButton
+            onClick={(e) => (props.onClick ? props.onClick(e) : {})}
+            size={props.size ?? "medium"}
+            disabled={props.disabled}
+            sx={props.sx}>
             {getIconComponent(props.icon)}
         </MIconButton>
     )

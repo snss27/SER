@@ -10,6 +10,7 @@ using SER.Services.Employees;
 using SER.Services.Employees.Repositories;
 using SER.Services.Enterprises;
 using SER.Services.Enterprises.Repositories;
+using SER.Services.Files;
 using SER.Services.Groups;
 using SER.Services.Groups.Repositories;
 using SER.Services.Students;
@@ -29,7 +30,7 @@ public static class ServicesConfigurator
 		services.AddSingleton<IAdditionalQualificationsService, AdditionalQualificationsService>();
 		services.AddSingleton<IEnterprisesService, EnterprisesService>();
 		services.AddSingleton<IClustersService, ClustersService>();
-		services.AddSingleton<IFilesService, IFilesService>();
+		services.AddSingleton<IFilesService, FilesService>();
 
         #endregion
 

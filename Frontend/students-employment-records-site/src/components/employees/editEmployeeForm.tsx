@@ -1,5 +1,7 @@
 "use client"
 
+import { EmployeesProvider } from "@/domain/employees/employeesProvider"
+import { EmployeeBlank } from "@/domain/employees/models/employeeBlank"
 import useNotifications from "@/hooks/useNotifications"
 import { Box } from "@mui/material"
 import { useRouter } from "next/router"
@@ -7,8 +9,6 @@ import React, { useReducer } from "react"
 import { IconPosition, IconType } from "../shared/buttons"
 import Button from "../shared/buttons/button"
 import TextInput from "../shared/inputs/textInput"
-import { EmployeeBlank } from "@/domain/employees/models/employeeBlank"
-import { EmployeesProvider } from "@/domain/employees/employeesProvider"
 
 interface Props {
     initialBlank: EmployeeBlank
