@@ -1,7 +1,7 @@
+import { AdditionalQualification } from "@/domain/additionalQualifications/models/additionalQualification"
 import { Result } from "@/tools/result"
 import HttpClient from "../httpClient"
 import { AdditionalQualificationBlank } from "./models/additionalQualificationBlank"
-import { AdditionalQualification } from "@/domain/additionalQualifications/models/additionalQualification"
 
 export class AdditionalQualificationsProvider {
     public static async save(blank: AdditionalQualificationBlank): Promise<Result> {
@@ -27,6 +27,16 @@ export class AdditionalQualificationsProvider {
             page,
             pageSize,
         })
+        return (result as any[]).map(AdditionalQualification.fromAny)
+    }
+
+    public static async getBySearchText(searchText: string): Promise<AdditionalQualification[]> {
+        const result = await HttpClient.getJsonAsync(
+            "/additional_qualifications/get_by_search_text",
+            {
+                searchText,
+            }
+        )
         return (result as any[]).map(AdditionalQualification.fromAny)
     }
 }

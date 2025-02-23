@@ -1,7 +1,7 @@
+import { Group } from "@/domain/groups/models/group"
 import { Result } from "@/tools/result"
 import HttpClient from "../httpClient"
 import { GroupBlank } from "./models/groupBlank"
-import { Group } from "@/domain/groups/models/group"
 
 export class GroupsProvider {
     public static async save(blank: GroupBlank): Promise<Result> {
@@ -24,8 +24,10 @@ export class GroupsProvider {
         return (result as any[]).map(Group.fromAny)
     }
 
-    public static async getAll(): Promise<Group[]> {
-        const result = await HttpClient.getJsonAsync("/groups/get_all")
+    public static async getBySearchText(searchText: string): Promise<Group[]> {
+        const result = await HttpClient.getJsonAsync("/groups/get_by_search_text", {
+            searchText,
+        })
         return (result as any[]).map(Group.fromAny)
     }
 }

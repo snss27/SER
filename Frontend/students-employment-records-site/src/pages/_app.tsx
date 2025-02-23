@@ -16,26 +16,38 @@ import "../styles/global.css"
 
 const App = ({ Component, pageProps }: AppProps) => {
     return (
-        <Box>
+        <Box sx={{ display: "flex", minHeight: "100vh" }}>
             <Head>
-                <title>Система управление трудоустройством студентов</title>
+                <title>Система управления трудоустройством студентов</title>
+                <meta name="viewport" content="initial-scale=1, width=device-width" />
             </Head>
             <ThemeProvider theme={theme}>
                 <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={ru}>
-                    <SnackbarProvider>
+                    <SnackbarProvider maxSnack={3}>
                         <DialogProvider>
                             <CssBaseline />
                             <Sidebar />
                             <Box
                                 component="main"
                                 sx={{
-                                    width: "calc(100% - 220px)",
+                                    flexGrow: 1,
+                                    p: 3,
                                     ml: "220px",
-                                    height: "100vh",
-                                    padding: 3,
-                                    overflow: "auto",
+                                    width: { xs: "100%", sm: "calc(100% - 220px)" },
+                                    minHeight: "100vh",
+                                    display: "flex",
+                                    flexDirection: "column",
                                 }}>
-                                <Component {...pageProps} />
+                                <Box
+                                    sx={{
+                                        flex: 1,
+                                        overflowY: "auto",
+                                        "-webkit-overflow-scrolling": "touch",
+                                        pr: 2,
+                                        mb: 2,
+                                    }}>
+                                    <Component {...pageProps} />
+                                </Box>
                             </Box>
                         </DialogProvider>
                     </SnackbarProvider>

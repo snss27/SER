@@ -1,25 +1,33 @@
-import { Genders } from "@/domain/students/enums/genders"
-import { Peculiarities } from "@/domain/students/enums/peculiarities"
+import { AdditionalQualificationsProvider } from "@/domain/additionalQualifications/additionalQualificationsProvider"
+import { EnterprisesProvider } from "@/domain/enterprises/enterprisesProvider"
+import { GroupsProvider } from "@/domain/groups/groupsProvider"
+import { Gender } from "@/domain/students/enums/gender"
+import { SocialStatus } from "@/domain/students/enums/socialStatus"
+import { StudentStatus } from "@/domain/students/enums/studentStatus"
 import { StudentBlank } from "@/domain/students/models/studentBlank"
 import { StudentsProvider } from "@/domain/students/studentsProvider"
 import useNotifications from "@/hooks/useNotifications"
-import { Box, Collapse } from "@mui/material"
+import { Box, Collapse, Stack } from "@mui/material"
 import { useRouter } from "next/router"
-import React, { useReducer, useState } from "react"
+import React, { useReducer } from "react"
 import { IconPosition, IconType } from "../shared/buttons"
 import Button from "../shared/buttons/button"
 import CheckBox from "../shared/buttons/checkBox"
+import { AsyncAutocomplete } from "../shared/inputs/asyncAutocomplete"
 import DatePicker from "../shared/inputs/datePicker"
 import { FilesInput } from "../shared/inputs/filesInput"
 import { AddressInput } from "../shared/inputs/maskedInputs/addressInput"
 import { InnInput } from "../shared/inputs/maskedInputs/innInput"
 import { MailInput } from "../shared/inputs/maskedInputs/mailInput"
-import { PassportSeriesInput } from "../shared/inputs/maskedInputs/passportSeries"
-import { PassportNumberInput } from "../shared/inputs/maskedInputs/passportnumberInput"
+import { PassportNumberInput } from "../shared/inputs/maskedInputs/passportNumberInput"
+import { PassportSeriesInput } from "../shared/inputs/maskedInputs/passportSeriesInput"
 import { PhoneNumberInput } from "../shared/inputs/maskedInputs/phoneNumberInput"
 import { SnilsInput } from "../shared/inputs/maskedInputs/snilsInput"
+import { MultiAsyncAutocomplete } from "../shared/inputs/multiAsyncAutocomplete"
+import { MultiSelect } from "../shared/inputs/multiSelect"
 import Select from "../shared/inputs/select"
 import TextInput from "../shared/inputs/textInput"
+import { EditStudentWorkplaces } from "./editStudentWorkPlaces"
 
 interface Props {
     initialStudentBlank: StudentBlank
@@ -43,18 +51,8 @@ export const EditStudentForm: React.FC<Props> = ({ initialStudentBlank }) => {
         navigator.back()
     }
 
-    const [urls, setUrls] = useState<string[]>([])
-    const [files, setFiles] = useState<File[]>([])
-
     return (
         <Box component="form" className="edit-form-container">
-            <FilesInput
-                existingUrls={urls}
-                newFiles={files}
-                onFilesChange={setFiles}
-                onUrlsChange={setUrls}
-            />
-
             <TextInput
                 value={studentBlank.name}
                 onChange={(name) => dispatch({ type: "CHANGE_NAME", payload: { name } })}
@@ -78,19 +76,19 @@ export const EditStudentForm: React.FC<Props> = ({ initialStudentBlank }) => {
             />
 
             <Select
-                options={Genders.getAll()}
-                value={studentBlank.gender}
-                label="Пол"
-                getOptionLabel={Genders.getDisplayText}
-                onChange={(gender) => dispatch({ type: "CHANGE_GENDER", payload: { gender } })}
+                options={StudentStatus.getAll()}
+                value={studentBlank.status}
+                label="Статус"
+                getOptionLabel={StudentStatus.getDisplayText}
+                onChange={(status) => dispatch({ type: "CHANGE_STATUS", payload: { status } })}
             />
 
-            <DatePicker
-                value={studentBlank.birthDate}
-                label="Дата рождения"
-                onChange={(birthDate) =>
-                    dispatch({ type: "CHANGE_BIRTH_DATE", payload: { birthDate } })
-                }
+            <Select
+                options={Gender.getAll()}
+                value={studentBlank.gender}
+                label="Пол"
+                getOptionLabel={Gender.getDisplayText}
+                onChange={(gender) => dispatch({ type: "CHANGE_GENDER", payload: { gender } })}
             />
 
             <PhoneNumberInput
@@ -112,21 +110,27 @@ export const EditStudentForm: React.FC<Props> = ({ initialStudentBlank }) => {
                 }
             />
 
-            {/*  */}
-
-            <PassportSeriesInput
-                value={studentBlank.passportSeries}
-                label="Серия паспорта"
-                onChange={(passportSeries) =>
-                    dispatch({ type: "CHANGE_PASSPORTSERIES", payload: { passportSeries } })
+            <DatePicker
+                value={studentBlank.birthDate}
+                label="Дата рождения"
+                onChange={(birthDate) =>
+                    dispatch({ type: "CHANGE_BIRTH_DATE", payload: { birthDate } })
                 }
             />
 
-            <PassportNumberInput
-                value={studentBlank.passportNumber}
-                label="Номер паспорта"
-                onChange={(passportNumber) =>
-                    dispatch({ type: "CHANGE_PASSPORTNUMBER", payload: { passportNumber } })
+            <SnilsInput
+                value={studentBlank.snils}
+                label="Снилс"
+                onChange={(snils) => dispatch({ type: "CHANGE_SNILS", payload: { snils } })}
+            />
+
+            <MultiSelect
+                options={SocialStatus.getAll()}
+                value={studentBlank.socialStatuses}
+                label="Социальные статусы"
+                getOptionLabel={SocialStatus.getDisplayText}
+                onChange={(socialStatuses) =>
+                    dispatch({ type: "CHANGE_SOCIAL_STATUSES", payload: { socialStatuses } })
                 }
             />
 
@@ -148,20 +152,21 @@ export const EditStudentForm: React.FC<Props> = ({ initialStudentBlank }) => {
                 onChange={(inn) => dispatch({ type: "CHANGE_INN", payload: { inn } })}
             />
 
+            <AsyncAutocomplete
+                value={studentBlank.groupId}
+                label="Группа"
+                getOptionLabel={(group) => group.number}
+                onChange={(groupId) => dispatch({ type: "CHANGE_GROUP_ID", payload: { groupId } })}
+                loadOptions={GroupsProvider.getBySearchText}
+                loadOption={GroupsProvider.get}
+            />
+
             <CheckBox
                 value={studentBlank.isForeignCitizen}
                 label="Иностранный гражданин"
                 onChange={(isForeignCitizen) =>
                     dispatch({ type: "CHANGE_IS_FOREIGN_CITIZEN", payload: { isForeignCitizen } })
                 }
-            />
-
-            {/*  */}
-
-            <SnilsInput
-                value={studentBlank.snils}
-                label="Снилс"
-                onChange={(snils) => dispatch({ type: "CHANGE_SNILS", payload: { snils } })}
             />
 
             <CheckBox
@@ -172,19 +177,148 @@ export const EditStudentForm: React.FC<Props> = ({ initialStudentBlank }) => {
                 }
             />
 
-            {/* TODO Группы (нужны запросы) */}
-
-            {/* TODO Паспорт (серия, номер, дата выдачи, кем выдан) */}
-
-            {/* TODO Сделать логику, когда будет готова информация о месте работы. Возможно тут это и не ID, а просто данные? Ну в любом случае другая страница (или модалка) */}
-
-            <CheckBox
-                value={studentBlank.isTargetAgreement}
-                label="Целевое обучение?"
-                onChange={() => dispatch({ type: "TOGGLE_IS_TARGET_AGREEMENT" })}
+            <PassportSeriesInput
+                value={studentBlank.passportSeries}
+                label="Серия паспорта"
+                onChange={(passportSeries) =>
+                    dispatch({ type: "CHANGE_PASSPORT_SERIES", payload: { passportSeries } })
+                }
             />
 
-            {/* Если studentBlank.isTargetAgreement, тогда давать возможность прикрепить файл. */}
+            <PassportNumberInput
+                value={studentBlank.passportNumber}
+                label="Номер паспорта"
+                onChange={(passportNumber) =>
+                    dispatch({ type: "CHANGE_PASSPORT_NUMBER", payload: { passportNumber } })
+                }
+            />
+
+            <TextInput
+                value={studentBlank.passportIssuedBy}
+                label="Кем выдан"
+                onChange={(passportIssuedBy) =>
+                    dispatch({ type: "CHANGE_PASSPORT_ISSUED_BY", payload: { passportIssuedBy } })
+                }
+            />
+
+            <DatePicker
+                value={studentBlank.passportIssuedDate}
+                label="Дата выдачи паспорта"
+                onChange={(passportIssuedDate) =>
+                    dispatch({
+                        type: "CHANGE_PASSPORT_ISSUED_DATE",
+                        payload: { passportIssuedDate },
+                    })
+                }
+            />
+
+            <FilesInput
+                label="Файлы паспорта"
+                maxFilesCount={studentBlank.passportFiles.maxFiles}
+                urls={studentBlank.passportFiles.fileUrls}
+                files={studentBlank.passportFiles.files}
+                onFilesChange={(files) =>
+                    dispatch({
+                        type: "CHANGE_PASSPORT_FILES",
+                        payload: {
+                            passportFiles: studentBlank.passportFiles.withChangedFiles(files),
+                        },
+                    })
+                }
+                onUrlsChange={(urls) =>
+                    dispatch({
+                        type: "CHANGE_PASSPORT_FILES",
+                        payload: {
+                            passportFiles: studentBlank.passportFiles.withChangedUrls(urls),
+                        },
+                    })
+                }
+            />
+
+            <EditStudentWorkplaces studentBlank={studentBlank} dispatch={dispatch} />
+
+            <MultiAsyncAutocomplete
+                values={studentBlank.additionalQualificationIds}
+                label="Дополнительные квалификации"
+                loadOption={AdditionalQualificationsProvider.get}
+                loadOptions={AdditionalQualificationsProvider.getBySearchText}
+                getOptionLabel={(qualification) => qualification.displayName}
+                onChange={(additionalQualificationIds) =>
+                    dispatch({
+                        type: "CHANGE_ADDITIONAL_QUALIFICATION_IDS",
+                        payload: { additionalQualificationIds },
+                    })
+                }
+            />
+
+            <Box>
+                <CheckBox
+                    value={studentBlank.isTargetAgreement}
+                    label="Целевое обучение?"
+                    onChange={(isTargetAgreement) =>
+                        dispatch({
+                            type: "CHANGE_IS_TARGET_AGREEMENT",
+                            payload: { isTargetAgreement },
+                        })
+                    }
+                />
+
+                <Collapse in={studentBlank.isTargetAgreement}>
+                    <Stack direction="column" gap={2}>
+                        <DatePicker
+                            value={studentBlank.targetAgreementDate}
+                            label="Дата заключение договора"
+                            onChange={(armyCallDate) =>
+                                dispatch({
+                                    type: "CHANGE_ARMY_CALL_DATE",
+                                    payload: { armyCallDate },
+                                })
+                            }
+                        />
+
+                        <AsyncAutocomplete
+                            value={studentBlank.targetAgreementEnterpriseId}
+                            label="Предприятие, с которым заключён договор"
+                            loadOptions={EnterprisesProvider.getBySearchText}
+                            loadOption={EnterprisesProvider.get}
+                            getOptionLabel={(enterprise) => enterprise.name}
+                            onChange={(targetAgreementEnterpriseId) =>
+                                dispatch({
+                                    type: "CHANGE_TARGET_AGREEMENT_ENTERPRISE_ID",
+                                    payload: { targetAgreementEnterpriseId },
+                                })
+                            }
+                        />
+
+                        <FilesInput
+                            label="Файлы целевого обучения"
+                            maxFilesCount={studentBlank.targetAgreementFile.maxFiles}
+                            files={studentBlank.targetAgreementFile.files}
+                            urls={studentBlank.targetAgreementFile.fileUrls}
+                            onFilesChange={(files) =>
+                                dispatch({
+                                    type: "CHANGE_TARGET_AGREEMENT_FILE",
+                                    payload: {
+                                        targetAgreementFile:
+                                            studentBlank.targetAgreementFile.withChangedFiles(
+                                                files
+                                            ),
+                                    },
+                                })
+                            }
+                            onUrlsChange={(urls) =>
+                                dispatch({
+                                    type: "CHANGE_TARGET_AGREEMENT_FILE",
+                                    payload: {
+                                        targetAgreementFile:
+                                            studentBlank.targetAgreementFile.withChangedUrls(urls),
+                                    },
+                                })
+                            }
+                        />
+                    </Stack>
+                </Collapse>
+            </Box>
 
             <Box>
                 <CheckBox
@@ -198,26 +332,63 @@ export const EditStudentForm: React.FC<Props> = ({ initialStudentBlank }) => {
                     }
                 />
 
-                {/* Если подлежит, тогда давать возможность прикрепить файл повестки */}
-
                 <Collapse in={studentBlank.mustServeInArmy}>
-                    <DatePicker
-                        value={studentBlank.armyCallDate}
-                        label="Дата призыва"
-                        onChange={(armyCallDate) =>
-                            dispatch({ type: "CHANGE_ARMY_CALL_DATE", payload: { armyCallDate } })
-                        }
-                    />
+                    <Stack direction="column" gap={2}>
+                        <DatePicker
+                            value={studentBlank.armyCallDate}
+                            label="Дата призыва"
+                            onChange={(armyCallDate) =>
+                                dispatch({
+                                    type: "CHANGE_ARMY_CALL_DATE",
+                                    payload: { armyCallDate },
+                                })
+                            }
+                        />
+
+                        <FilesInput
+                            label="Файлы повестки"
+                            maxFilesCount={studentBlank.armySubpoenaFile.maxFiles}
+                            files={studentBlank.armySubpoenaFile.files}
+                            urls={studentBlank.armySubpoenaFile.fileUrls}
+                            onFilesChange={(files) =>
+                                dispatch({
+                                    type: "CHANGE_ARMY_SUBPOENA_FILE",
+                                    payload: {
+                                        armySubpoenaFile:
+                                            studentBlank.armySubpoenaFile.withChangedFiles(files),
+                                    },
+                                })
+                            }
+                            onUrlsChange={(urls) =>
+                                dispatch({
+                                    type: "CHANGE_ARMY_SUBPOENA_FILE",
+                                    payload: {
+                                        armySubpoenaFile:
+                                            studentBlank.armySubpoenaFile.withChangedUrls(urls),
+                                    },
+                                })
+                            }
+                        />
+                    </Stack>
                 </Collapse>
             </Box>
 
-            <Select
-                options={Peculiarities.getAll()}
-                value={studentBlank.peculiarity}
-                label="Социальные статусы"
-                getOptionLabel={Peculiarities.getDisplayText}
-                onChange={(peculiarity) =>
-                    dispatch({ type: "CHANGE_PECULIARITY", payload: { peculiarity } })
+            <FilesInput
+                label="Прочие файлы"
+                maxFilesCount={studentBlank.otherFiles.maxFiles}
+                files={studentBlank.otherFiles.files}
+                urls={studentBlank.otherFiles.fileUrls}
+                onFilesChange={(files) =>
+                    dispatch({
+                        type: "CHANGE_OTHER_FILES",
+                        payload: { otherFiles: studentBlank.otherFiles.withChangedFiles(files) },
+                    })
+                }
+                onUrlsChange={(urls) =>
+                    dispatch({
+                        type: "CHANGE_OTHER_FILES",
+                        payload: { otherFiles: studentBlank.otherFiles.withChangedUrls(urls) },
+                    })
                 }
             />
 

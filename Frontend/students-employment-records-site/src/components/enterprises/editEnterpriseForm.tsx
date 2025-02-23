@@ -13,8 +13,6 @@ import Button from "../shared/buttons/button"
 import CheckBox from "../shared/buttons/checkBox"
 import { InnInput } from "../shared/inputs/maskedInputs/innInput"
 import TextInput from "../shared/inputs/textInput"
-import { PassportSeriesInput } from "../shared/inputs/maskedInputs/passportSeries"
-import { PassportNumberInput } from "../shared/inputs/maskedInputs/passportnumberInput"
 
 interface Props {
     initialBlank: EnterpriseBlank

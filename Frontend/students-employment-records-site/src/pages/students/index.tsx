@@ -1,6 +1,6 @@
 import { IconPosition, IconType } from "@/components/shared/buttons"
 import Button from "@/components/shared/buttons/button"
-import StudentsTable from "@/components/students/studentsTable"
+import { StudentsTable } from "@/components/students/studentsTable"
 import PageUrls from "@/constants/pageUrls"
 import { Box, Typography } from "@mui/material"
 import { useRouter } from "next/router"

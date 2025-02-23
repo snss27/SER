@@ -1,4 +1,8 @@
-import React from "react";
+import PageUrls from "@/constants/pageUrls"
+import { StudentsProvider } from "@/domain/students/studentsProvider"
+import useDialog from "@/hooks/useDialog/useDialog"
+import useLazyLoad from "@/hooks/useLazyLoad"
+import useNotifications from "@/hooks/useNotifications"
 import {
     Paper,
     Table,
@@ -7,48 +11,43 @@ import {
     TableContainer,
     TableHead,
     TableRow,
-
-} from "@mui/material";
-import { useRouter } from "next/router";
-import useNotifications from "@/hooks/useNotifications"
-import useLazyLoad from "@/hooks/useLazyLoad"
-import useDialog from "@/hooks/useDialog/useDialog"
-import ConfirmModal from "../shared/modals/confirmModal"
+} from "@mui/material"
+import { useRouter } from "next/router"
+import React from "react"
 import { IconType } from "../shared/buttons"
-import PageUrls from "@/constants/pageUrls"
-import { StudentsProvider } from "@/domain/students/studentsProvider";
 import IconButton from "../shared/buttons/iconButtons"
+import ConfirmModal from "../shared/modals/confirmModal"
 
-const StudentsTable: React.FC = () => {
-    const router = useRouter();
-    const { showError, showSuccess } = useNotifications();
+export const StudentsTable: React.FC = () => {
+    const navigator = useRouter()
+    const { showError, showSuccess } = useNotifications()
     const {
         values: students,
         lastElementRef,
         updateValues,
-    } = useLazyLoad({ paginationFunction: StudentsProvider.getPage });
-    const confirmDialog = useDialog(ConfirmModal);
+    } = useLazyLoad({ paginationFunction: StudentsProvider.getPage })
+    const confirmDialog = useDialog(ConfirmModal)
 
-    const handleEditButton = (id: string) => {
-        router.push(`${PageUrls.EditStudents}/${id}`);
-    };
+    async function handleEditButton(id: string) {
+        await navigator.push(`${PageUrls.EditStudents}/${id}`)
+    }
 
-    const handleRemoveButton = async (id: string) => {
-        const student = students.find((student) => student.id === id) ?? null;
-        if (!student) return;
+    async function handleRemoveButton(id: string) {
+        const student = students.find((student) => student.id === id) ?? null
+        if (!student) return
 
         const dialogResult = await confirmDialog.show({
-            title: `Вы уверены, что хотите удалить студента "${student.secondName}"?`, //TODO
-        });
-        if (!dialogResult) return;
+            title: `Вы уверены, что хотите удалить студента "${student.displayName}"?`,
+        })
+        if (!dialogResult) return
 
-        const result = await StudentsProvider.remove(id);
-        if (!result.isSuccess) return showError(result.getErrorsString);
+        const result = await StudentsProvider.remove(id)
+        if (!result.isSuccess) return showError(result.getErrorsString)
 
-        await updateValues();
+        await updateValues()
 
-        showSuccess("Студент успешно удален");
-    };
+        return showSuccess("Студент успешно удален")
+    }
 
     return (
         <TableContainer elevation={3} component={Paper} sx={{ overflow: "auto", flex: 1 }}>
@@ -70,8 +69,7 @@ const StudentsTable: React.FC = () => {
                         <TableRow
                             key={student.id}
                             sx={{ paddingX: 1 }}
-                            ref={index === students.length - 1 ? lastElementRef : undefined}
-                        >
+                            ref={index === students.length - 1 ? lastElementRef : undefined}>
                             <TableCell sx={{ width: "25%" }}>
                                 {student.lastName} {student.name} {student.secondName}
                             </TableCell>
@@ -96,7 +94,5 @@ const StudentsTable: React.FC = () => {
                 </TableBody>
             </Table>
         </TableContainer>
-    );
-};
-
-export default StudentsTable;
+    )
+}

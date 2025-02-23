@@ -1,33 +1,49 @@
-import { Genders } from "../enums/genders"
-import { Peculiarities } from "../enums/peculiarities"
+import { WorkplaceBlank } from "@/domain/workplaces/models/workplaceBlank"
+import { BlankFiles } from "@/tools/blankFiles"
+import { Gender } from "../enums/gender"
+import { SocialStatus } from "../enums/socialStatus"
+import { StudentStatus } from "../enums/studentStatus"
 
 export interface StudentBlank {
     id: string | null
     name: string | null
     secondName: string | null
     lastName: string | null
-    gender: Genders | null
-    birthDate: Date | null
+    status: StudentStatus | null
+    gender: Gender | null
     phoneNumber: string | null
     representativePhoneNumber: string | null
-    isOnPaidStudy: boolean
+    birthDate: Date | null
     snils: string | null
-    groupId: string | null
-    passportId: string | null
-    workplaceInfoId: string | null
-    additionalQualificationIds: string[]
-    isTargetAgreement: boolean
-    targetAgreementFile: string | null
-    mustServeInArmy: boolean
-    armySubpoenaFile: string | null
-    armyCallDate: Date | null
-    peculiarity: Peculiarities | null
-    passportSeries: string | null
-    passportNumber: string | null
+    socialStatuses: SocialStatus[]
+    address: string | null
     mail: string | null
     inn: string | null
+    groupId: string | null
     isForeignCitizen: boolean
-    address: string | null
+    isOnPaidStudy: boolean
+
+    passportSeries: string | null
+    passportNumber: string | null
+    passportIssuedBy: string | null
+    passportIssuedDate: Date | null
+    passportFiles: BlankFiles
+
+    currentWorkplace: WorkplaceBlank | null
+    prevWorkplaces: WorkplaceBlank[]
+
+    additionalQualificationIds: string[]
+
+    isTargetAgreement: boolean
+    targetAgreementDate: Date | null
+    targetAgreementEnterpriseId: string | null
+    targetAgreementFile: BlankFiles
+
+    mustServeInArmy: boolean
+    armySubpoenaFile: BlankFiles
+    armyCallDate: Date | null
+
+    otherFiles: BlankFiles
 }
 
 export namespace StudentBlank {
@@ -37,32 +53,45 @@ export namespace StudentBlank {
             name: null,
             secondName: null,
             lastName: null,
-            gender: null,
-            birthDate: null,
+            status: StudentStatus.Active,
+            gender: Gender.Male,
             phoneNumber: null,
             representativePhoneNumber: null,
-            isOnPaidStudy: false,
+            birthDate: null,
             snils: null,
-            groupId: null,
-            passportId: null,
-            workplaceInfoId: null,
-            additionalQualificationIds: [],
-            isTargetAgreement: false,
-            targetAgreementFile: null,
-            mustServeInArmy: false,
-            armySubpoenaFile: null,
-            armyCallDate: null,
-            peculiarity: null,
-            passportSeries: null,
-            passportNumber: null,
+            socialStatuses: [],
+            address: null,
             mail: null,
             inn: null,
+            groupId: null,
             isForeignCitizen: false,
-            address: null
+            isOnPaidStudy: false,
+
+            passportSeries: null,
+            passportNumber: null,
+            passportIssuedBy: null,
+            passportIssuedDate: null,
+            passportFiles: BlankFiles.create(5),
+
+            currentWorkplace: null,
+            prevWorkplaces: [],
+
+            additionalQualificationIds: [],
+
+            isTargetAgreement: false,
+            targetAgreementDate: null,
+            targetAgreementEnterpriseId: null,
+            targetAgreementFile: BlankFiles.create(1),
+
+            mustServeInArmy: false,
+            armySubpoenaFile: BlankFiles.create(1),
+            armyCallDate: null,
+
+            otherFiles: BlankFiles.create(10),
         }
     }
 
-    export function reducer(state: StudentBlank, action: Action): StudentBlank {
+    export function reducer(state: StudentBlank, action: StudentAction): StudentBlank {
         switch (action.type) {
             case "CHANGE_NAME":
                 return { ...state, name: action.payload.name }
@@ -73,11 +102,11 @@ export namespace StudentBlank {
             case "CHANGE_LAST_NAME":
                 return { ...state, lastName: action.payload.lastName }
 
+            case "CHANGE_STATUS":
+                return { ...state, status: action.payload.status }
+
             case "CHANGE_GENDER":
                 return { ...state, gender: action.payload.gender }
-
-            case "CHANGE_BIRTH_DATE":
-                return { ...state, birthDate: action.payload.birthDate }
 
             case "CHANGE_PHONE_NUMBER":
                 return { ...state, phoneNumber: action.payload.phoneNumber }
@@ -88,36 +117,15 @@ export namespace StudentBlank {
                     representativePhoneNumber: action.payload.representativePhoneNumber,
                 }
 
-            case "CHANGE_IS_ON_PAID_STUDY":
-                return { ...state, isOnPaidStudy: action.payload.isOnPaidStudy }
+            case "CHANGE_BIRTH_DATE":
+                return { ...state, birthDate: action.payload.birthDate }
 
             case "CHANGE_SNILS":
                 return { ...state, snils: action.payload.snils }
 
-            case "CHANGE_GROUP":
-                return { ...state, groupId: action.payload.groupId }
+            case "CHANGE_SOCIAL_STATUSES":
+                return { ...state, socialStatuses: action.payload.socialStatuses }
 
-            case "CHANGE_PASSPORT":
-                return { ...state, passportId: action.payload.passportId }
-
-            case "CHANGE_WORKPLACE_INFO":
-                return { ...state, workplaceInfoId: action.payload.workplaceInfoId }
-
-            case "CHANGE_ADDITIONAL_QUALIFICATIONS":
-                return {
-                    ...state,
-                    additionalQualificationIds: action.payload.additionalQualificationIds,
-                }
-            case "CHANGE_PASSPORTNUMBER":
-                return {
-                    ...state,
-                    passportNumber: action.payload.passportNumber,
-                }
-            case "CHANGE_PASSPORTSERIES":
-                return {
-                     ...state,
-                     passportSeries: action.payload.passportSeries,
-                    }
             case "CHANGE_ADDRESS":
                 return {
                     ...state,
@@ -132,15 +140,61 @@ export namespace StudentBlank {
                 return {
                     ...state,
                     inn: action.payload.inn,
-                    }
+                }
+
+            case "CHANGE_GROUP_ID":
+                return { ...state, groupId: action.payload.groupId }
+
             case "CHANGE_IS_FOREIGN_CITIZEN":
                 return {
-                     ...state,
+                    ...state,
                     isForeignCitizen: action.payload.isForeignCitizen,
-                    }
+                }
 
-            case "TOGGLE_IS_TARGET_AGREEMENT":
-                return { ...state, isTargetAgreement: !state.isTargetAgreement }
+            case "CHANGE_IS_ON_PAID_STUDY":
+                return { ...state, isOnPaidStudy: action.payload.isOnPaidStudy }
+
+            case "CHANGE_PASSPORT_SERIES":
+                return { ...state, passportSeries: action.payload.passportSeries }
+
+            case "CHANGE_PASSPORT_NUMBER":
+                return {
+                    ...state,
+                    passportNumber: action.payload.passportNumber,
+                }
+
+            case "CHANGE_PASSPORT_ISSUED_BY":
+                return { ...state, passportIssuedBy: action.payload.passportIssuedBy }
+
+            case "CHANGE_PASSPORT_ISSUED_DATE":
+                return { ...state, passportIssuedDate: action.payload.passportIssuedDate }
+
+            case "CHANGE_PASSPORT_FILES":
+                return { ...state, passportFiles: action.payload.passportFiles }
+
+            case "CHANGE_CURRENT_WORKPLACE":
+                return { ...state, currentWorkplace: action.payload.currentWorkplace }
+
+            case "CHANGE_PREV_WORKPLACES":
+                return { ...state, prevWorkplaces: action.payload.prevWorkplaces }
+
+            case "CHANGE_ADDITIONAL_QUALIFICATION_IDS":
+                return {
+                    ...state,
+                    additionalQualificationIds: action.payload.additionalQualificationIds,
+                }
+
+            case "CHANGE_IS_TARGET_AGREEMENT":
+                return { ...state, isTargetAgreement: action.payload.isTargetAgreement }
+
+            case "CHANGE_TARGET_AGREEMENT_DATE":
+                return { ...state, targetAgreementDate: action.payload.targetAgreementDate }
+
+            case "CHANGE_TARGET_AGREEMENT_ENTERPRISE_ID":
+                return {
+                    ...state,
+                    targetAgreementEnterpriseId: action.payload.targetAgreementEnterpriseId,
+                }
 
             case "CHANGE_TARGET_AGREEMENT_FILE":
                 return { ...state, targetAgreementFile: action.payload.targetAgreementFile }
@@ -154,16 +208,16 @@ export namespace StudentBlank {
             case "CHANGE_ARMY_CALL_DATE":
                 return { ...state, armyCallDate: action.payload.armyCallDate }
 
-            case "CHANGE_PECULIARITY":
-                return { ...state, peculiarity: action.payload.peculiarity }
+            case "CHANGE_OTHER_FILES":
+                return { ...state, otherFiles: action.payload.otherFiles }
 
             default:
-                return state
+                return { ...state }
         }
     }
 }
 
-type Action =
+export type StudentAction =
     | {
           type: "CHANGE_NAME"
           payload: { name: string }
@@ -177,12 +231,12 @@ type Action =
           payload: { lastName: string }
       }
     | {
-          type: "CHANGE_GENDER"
-          payload: { gender: Genders | null }
+          type: "CHANGE_STATUS"
+          payload: { status: StudentStatus | null }
       }
     | {
-          type: "CHANGE_BIRTH_DATE"
-          payload: { birthDate: Date | null }
+          type: "CHANGE_GENDER"
+          payload: { gender: Gender | null }
       }
     | {
           type: "CHANGE_PHONE_NUMBER"
@@ -193,35 +247,88 @@ type Action =
           payload: { representativePhoneNumber: string | null }
       }
     | {
-          type: "CHANGE_IS_ON_PAID_STUDY"
-          payload: { isOnPaidStudy: boolean }
+          type: "CHANGE_BIRTH_DATE"
+          payload: { birthDate: Date | null }
       }
     | {
           type: "CHANGE_SNILS"
           payload: { snils: string | null }
       }
     | {
-          type: "CHANGE_GROUP"
+          type: "CHANGE_SOCIAL_STATUSES"
+          payload: { socialStatuses: SocialStatus[] }
+      }
+    | {
+          type: "CHANGE_ADDRESS"
+          payload: { address: string | null }
+      }
+    | {
+          type: "CHANGE_MAIL"
+          payload: { mail: string | null }
+      }
+    | {
+          type: "CHANGE_INN"
+          payload: { inn: string | null }
+      }
+    | {
+          type: "CHANGE_GROUP_ID"
           payload: { groupId: string | null }
       }
     | {
-          type: "CHANGE_PASSPORT"
-          payload: { passportId: string | null }
+          type: "CHANGE_IS_FOREIGN_CITIZEN"
+          payload: { isForeignCitizen: boolean }
       }
     | {
-          type: "CHANGE_WORKPLACE_INFO"
-          payload: { workplaceInfoId: string | null }
+          type: "CHANGE_IS_ON_PAID_STUDY"
+          payload: { isOnPaidStudy: boolean }
       }
     | {
-          type: "CHANGE_ADDITIONAL_QUALIFICATIONS"
+          type: "CHANGE_PASSPORT_SERIES"
+          payload: { passportSeries: string | null }
+      }
+    | {
+          type: "CHANGE_PASSPORT_NUMBER"
+          payload: { passportNumber: string | null }
+      }
+    | {
+          type: "CHANGE_PASSPORT_ISSUED_BY"
+          payload: { passportIssuedBy: string | null }
+      }
+    | {
+          type: "CHANGE_PASSPORT_ISSUED_DATE"
+          payload: { passportIssuedDate: Date | null }
+      }
+    | {
+          type: "CHANGE_PASSPORT_FILES"
+          payload: { passportFiles: BlankFiles }
+      }
+    | {
+          type: "CHANGE_CURRENT_WORKPLACE"
+          payload: { currentWorkplace: WorkplaceBlank | null }
+      }
+    | {
+          type: "CHANGE_PREV_WORKPLACES"
+          payload: { prevWorkplaces: WorkplaceBlank[] }
+      }
+    | {
+          type: "CHANGE_ADDITIONAL_QUALIFICATION_IDS"
           payload: { additionalQualificationIds: string[] }
       }
     | {
-          type: "TOGGLE_IS_TARGET_AGREEMENT"
+          type: "CHANGE_IS_TARGET_AGREEMENT"
+          payload: { isTargetAgreement: boolean }
+      }
+    | {
+          type: "CHANGE_TARGET_AGREEMENT_DATE"
+          payload: { targetAgreementDate: Date | null }
+      }
+    | {
+          type: "CHANGE_TARGET_AGREEMENT_ENTERPRISE_ID"
+          payload: { targetAgreementEnterpriseId: string | null }
       }
     | {
           type: "CHANGE_TARGET_AGREEMENT_FILE"
-          payload: { targetAgreementFile: string | null }
+          payload: { targetAgreementFile: BlankFiles }
       }
     | {
           type: "CHANGE_MUST_SERVE_IN_ARMY"
@@ -229,37 +336,13 @@ type Action =
       }
     | {
           type: "CHANGE_ARMY_SUBPOENA_FILE"
-          payload: { armySubpoenaFile: string | null }
+          payload: { armySubpoenaFile: BlankFiles }
       }
     | {
           type: "CHANGE_ARMY_CALL_DATE"
           payload: { armyCallDate: Date | null }
       }
     | {
-          type: "CHANGE_PECULIARITY"
-          payload: { peculiarity: Peculiarities | null }
+          type: "CHANGE_OTHER_FILES"
+          payload: { otherFiles: BlankFiles }
       }
-    | {
-        type: "CHANGE_ADDRESS"
-        payload: { address: string | null }
-    }
-    | {
-        type: "CHANGE_PASSPORTNUMBER"
-        payload: { passportNumber: string | null }
-    }
-    | {
-        type: "CHANGE_PASSPORTSERIES"
-        payload: { passportSeries: string | null }
-    }
-    | {
-        type: "CHANGE_MAIL"
-        payload: { mail: string | null }
-    }
-    | {
-        type: "CHANGE_INN"
-        payload: { inn: string | null }
-    }
-    | {
-        type: "CHANGE_IS_FOREIGN_CITIZEN"
-        payload: { isForeignCitizen: boolean }
-    }

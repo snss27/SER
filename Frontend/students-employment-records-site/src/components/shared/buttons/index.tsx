@@ -6,6 +6,7 @@ import CheckIcon from "@mui/icons-material/Check"
 import CloseIcon from "@mui/icons-material/Close"
 import ContentCopyIcon from "@mui/icons-material/ContentCopy"
 import DeleteIcon from "@mui/icons-material/Delete"
+import DownloadIcon from "@mui/icons-material/Download"
 import EditIcon from "@mui/icons-material/Edit"
 import SaveIcon from "@mui/icons-material/Save"
 
@@ -24,6 +25,7 @@ export enum IconType {
     Check,
     Cancel,
     Copy,
+    Download,
 }
 
 export type ButtonIcon = { type: IconType; position?: IconPosition }
@@ -59,6 +61,8 @@ export function getIconComponent(type: IconType): JSX.Element {
             return <CancelIcon />
         case IconType.Copy:
             return <ContentCopyIcon />
+        case IconType.Download:
+            return <DownloadIcon />
         default:
             throw new NeverUnreachable(type)
     }

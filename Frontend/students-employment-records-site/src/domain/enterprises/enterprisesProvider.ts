@@ -1,7 +1,7 @@
+import { Enterprise } from "@/domain/enterprises/models/enterprise"
 import { Result } from "@/tools/result"
 import HttpClient from "../httpClient"
 import { EnterpriseBlank } from "./models/enterpriseBlank"
-import { Enterprise } from "@/domain/enterprises/models/enterprise"
 
 export class EnterprisesProvider {
     public static async save(blank: EnterpriseBlank): Promise<Result> {
@@ -21,6 +21,13 @@ export class EnterprisesProvider {
 
     public static async getPage(page: number, pageSize: number): Promise<Enterprise[]> {
         const result = await HttpClient.getJsonAsync("/enterprises/get_page", { page, pageSize })
+        return (result as any[]).map(Enterprise.fromAny)
+    }
+
+    public static async getBySearchText(searchText: string): Promise<Enterprise[]> {
+        const result = await HttpClient.getJsonAsync("/enterprises/get_by_search_text", {
+            searchText,
+        })
         return (result as any[]).map(Enterprise.fromAny)
     }
 }

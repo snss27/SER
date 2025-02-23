@@ -6,6 +6,7 @@ interface Props {
     icon: IconType
     size?: "small" | "medium" | "large"
     disabled?: boolean
+    tooltip?: string
     sx?: SxProps<Theme>
     onClick?: (e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => void
 }

@@ -1,21 +1,21 @@
 import { enumToArrayNumber } from "@/tools/enums/enumUtils"
 import { NeverUnreachable } from "@/tools/neverUreachable"
 
-export enum Genders {
+export enum Gender {
     Male = 1,
     Female = 2,
 }
 
-export namespace Genders {
-    export function getAll(): Genders[] {
-        return enumToArrayNumber<Genders>(Genders)
+export namespace Gender {
+    export function getAll(): Gender[] {
+        return enumToArrayNumber<Gender>(Gender)
     }
 
-    export function getDisplayText(gender: Genders): string {
+    export function getDisplayText(gender: Gender): string {
         switch (gender) {
-            case Genders.Male:
+            case Gender.Male:
                 return "Мужской"
-            case Genders.Female:
+            case Gender.Female:
                 return "Женский"
             default:
                 throw new NeverUnreachable(gender)
