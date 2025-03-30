@@ -14,9 +14,9 @@ export class AdditionalQualificationsProvider {
         return Result.fromAny(result)
     }
 
-    public static async get(id: string): Promise<AdditionalQualification> {
+    public static async get(id: string): Promise<AdditionalQualification | null> {
         const result = await HttpClient.getJsonAsync("/additional_qualifications/get", { id })
-        return AdditionalQualification.fromAny(result)
+        return result ? AdditionalQualification.fromAny(result) : null
     }
 
     public static async getPage(

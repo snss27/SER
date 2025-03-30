@@ -1,109 +1,102 @@
 import useDebounce from "@/hooks/useDebounce"
 import { Autocomplete, AutocompleteRenderInputParams, TextField } from "@mui/material"
 import { ClearIcon } from "@mui/x-date-pickers"
-import React, { useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 
-interface Props<T extends { id: string }> {
-    value: string | null
+interface Props<T> {
+    value: T | null
     label: string
     disabled?: boolean
     noOptionsText?: string
     placeholder?: string
-    onChange: (value: string | null) => void
+    onChange: (value: T | null) => void
     loadOptions: (searchString: string) => Promise<T[]>
-    loadOption: (id: string) => Promise<T>
     getOptionLabel: (value: T) => string
+    isOptionEqualToValue?: (option: T, value: T) => boolean
 }
 
-interface State<T extends { id: string }> {
-    currentOption: T | null
+interface AutocompleteState<T> {
+    selectedOption: T | null
     options: T[]
-    searchString: string
+    searchQuery: string
 }
 
-namespace State {
-    export function empty<T extends { id: string }>(): State<T> {
-        return {
-            currentOption: null,
-            options: [],
-            searchString: "",
+const createInitialState = <T,>(): AutocompleteState<T> => ({
+    selectedOption: null,
+    options: [],
+    searchQuery: "",
+})
+
+export const AsyncAutocomplete = <T,>({
+    value,
+    label,
+    disabled,
+    noOptionsText = "Ничего не найдено",
+    placeholder,
+    onChange,
+    loadOptions,
+    getOptionLabel,
+    isOptionEqualToValue,
+}: Props<T>) => {
+    const [state, setState] = useState(createInitialState<T>())
+
+    const fetchOptions = async () => {
+        if (!state.searchQuery) {
+            setState((prev) => ({ ...prev, options: [] }))
+            return
         }
+
+        const options = await loadOptions(state.searchQuery)
+        setState((prev) => ({ ...prev, options }))
     }
-}
 
-export const AsyncAutocomplete = <T extends { id: string }>(props: Props<T>) => {
-    const [state, setState] = useState(State.empty<T>)
-
-    useDebounce(() => loadOptions(), [state.searchString], 300, true)
-
-    async function loadOptions() {
-        if (!state.searchString || state.searchString === "") {
-            setState((state) => ({ ...state, options: [] }))
-        } else {
-            const options: T[] = await props.loadOptions(state.searchString)
-            setState((state) => ({ ...state, options }))
-        }
-    }
+    useDebounce(fetchOptions, [state.searchQuery], 300, true)
 
     useEffect(() => {
-        async function loadValue() {
-            if (props.value === state.currentOption?.id) return
+        if (value === state.selectedOption) return
+        setState((prev) => ({ ...prev, selectedOption: value }))
+    }, [value])
 
-            if (props.value === null)
-                return setState((prevState) => ({ ...prevState, currentOption: null }))
-
-            const value = await props.loadOption(props.value)
-            setState((prevState) => ({ ...state, currentOption: value }))
-        }
-
-        loadValue()
-    }, [props.value])
-
-    async function onSelectOption(option: T | null) {
-        setState((prevState) => ({ ...state, currentOption: option }))
-        props.onChange(option?.id ?? null)
+    const handleOptionSelect = (option: T | null) => {
+        setState((prev) => ({ ...prev, selectedOption: option }))
+        onChange(option)
     }
 
-    function onChangeSearch(value: string) {
-        setState((state) => ({ ...state, searchString: value }))
+    const handleSearchChange = (query: string) => {
+        setState((prev) => ({ ...prev, searchQuery: query }))
     }
 
-    function renderInput(params: AutocompleteRenderInputParams) {
-        return (
-            <TextField
-                {...params}
-                label={props.label}
-                placeholder={props.placeholder}
-                autoComplete="password"
-                onChange={(event) => onChangeSearch(event.target.value)}
-            />
-        )
-    }
+    const renderInputField = (params: AutocompleteRenderInputParams) => (
+        <TextField
+            {...params}
+            label={label}
+            placeholder={placeholder}
+            autoComplete="password"
+            onChange={(e) => handleSearchChange(e.target.value)}
+        />
+    )
 
-    function getOptions() {
-        const options = [...state.options]
+    const getFilteredOptions = () => {
+        const allOptions = [...state.options]
+        if (!state.selectedOption) return allOptions
 
-        const currentOption = state.currentOption
-        if (currentOption === null) return options
-
-        if (!options.some((o) => o.id === currentOption.id)) options.push(currentOption)
-
-        return options
+        return allOptions.includes(state.selectedOption)
+            ? allOptions
+            : [...allOptions, state.selectedOption]
     }
 
     return (
         <Autocomplete
-            options={getOptions()}
-            value={state.currentOption}
-            disabled={props.disabled}
+            options={getFilteredOptions()}
+            value={state.selectedOption}
+            disabled={disabled}
             forcePopupIcon={false}
-            noOptionsText={props.noOptionsText ?? "Ничего не найдено"}
-            onChange={(_, selectedOption) => onSelectOption(selectedOption)}
-            getOptionLabel={props.getOptionLabel}
-            renderInput={renderInput}
+            noOptionsText={noOptionsText}
+            onChange={(_, option) => handleOptionSelect(option)}
+            getOptionLabel={getOptionLabel}
+            renderInput={renderInputField}
             clearIcon={<ClearIcon />}
-            getOptionKey={(option) => option.id}
-            isOptionEqualToValue={(option, value) => option.id === value.id}
+            isOptionEqualToValue={isOptionEqualToValue}
         />
     )
 }

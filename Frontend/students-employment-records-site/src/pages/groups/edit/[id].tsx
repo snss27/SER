@@ -1,18 +1,29 @@
-import { GroupBlank } from "@/domain/groups/models/groupBlank"
-import { Box, Typography } from "@mui/material"
-import { useParams } from "next/navigation"
-import React, { useEffect, useState } from "react"
-import { GroupsProvider } from "@/domain/groups/groupsProvider"
 import { EditGroupForm } from "@/components/groups/editGroupForm"
+import PageUrls from "@/constants/pageUrls"
+import { GroupsProvider } from "@/domain/groups/groupsProvider"
+import { GroupBlank } from "@/domain/groups/models/groupBlank"
+import useNotifications from "@/hooks/useNotifications"
+import { Box, Typography } from "@mui/material"
+import { useParams, useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
 
 const EditGroupPage = () => {
     const [groupBlank, setGroupBlank] = useState<GroupBlank | null>(null)
+
+    const { showError } = useNotifications()
+    const navigator = useRouter()
 
     const { id } = useParams<{ id: string }>()
 
     useEffect(() => {
         async function loadGroup() {
             const group = await GroupsProvider.get(id)
+
+            if (group === null) {
+                showError("Группа не найдена")
+                navigator.push(PageUrls.Groups)
+                return
+            }
 
             setGroupBlank(group.toBlank())
         }

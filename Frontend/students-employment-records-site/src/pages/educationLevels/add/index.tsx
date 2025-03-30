@@ -1,6 +1,6 @@
-import { Box, Typography } from "@mui/material"
 import { EditEducationLevelForm } from "@/components/educationLevels/editEducationLevelForm"
 import { EducationLevelBlank } from "@/domain/educationLevels/models/educationLevelBlank"
+import { Box, Typography } from "@mui/material"
 
 const AddEducationLevelPage = () => {
     return (
@@ -9,7 +9,7 @@ const AddEducationLevelPage = () => {
                 <Typography variant="h1" textAlign="center">
                     Добавление уровня образования
                 </Typography>
-                <EditEducationLevelForm initialSpecialityBlank={EducationLevelBlank.empty()} />
+                <EditEducationLevelForm initialBlank={EducationLevelBlank.empty()} />
             </Box>
         </Box>
     )

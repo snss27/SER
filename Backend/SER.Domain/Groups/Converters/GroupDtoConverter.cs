@@ -6,7 +6,7 @@ namespace SER.Domain.Groups.Converters;
 
 public static class GroupDtoConverter
 {
-	public static GroupDto ToGroupDto(this Group group, EducationLevel? educationLevel, Employee? curator, Cluster? cluster)
+	public static GroupDto ToGroupDto(this Group group, EducationLevel educationLevel, Employee? curator, Cluster? cluster)
 	{
 		return new GroupDto(
 			group.Id,

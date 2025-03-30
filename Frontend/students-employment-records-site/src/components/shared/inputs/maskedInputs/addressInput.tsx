@@ -1,25 +1,27 @@
-import { useMask } from "@react-input/mask";
-import TextInput from "../textInput";
+import { LocationsProvider } from "@/domain/location/locationsProvider"
+import { AsyncAutocomplete } from "../asyncAutocomplete"
 
 interface Props {
-    value: string | null;
-    label?: string;
-    onChange: (value: string | null) => void;
+    value: string | null
+    label?: string
+    onChange: (value: string | null) => void
 }
 
-export const AddressInput = (props: Props) => {
-    const ref = useMask({
-        mask: "г.________, ул.________, д.____, кв.____", 
-        replacement: {
-            _: /[а-яА-ЯёЁa-zA-Z0-9]/,
-        },
-    });
-
+export const AddressInput = ({ value, label, onChange }: Props) => {
     return (
-        <TextInput
-            ref={ref}
-            {...props}
-            placeholder="г.Город, ул.Улица, д.Дом, кв.Квартира"
+        <AsyncAutocomplete
+            value={value}
+            label={label ?? "Адрес"}
+            placeholder="Введите адрес..."
+            noOptionsText="Адрес не найден"
+            onChange={onChange}
+            loadOptions={async (searchText) =>
+                (await LocationsProvider.search(searchText)).map((address) => ({ id: address }))
+            }
+            loadOption={async (searchText) => ({
+                id: (await LocationsProvider.search(searchText))[0],
+            })}
+            getOptionLabel={(address) => address.id}
         />
-    );
-};
+    )
+}

@@ -23,7 +23,7 @@ CREATE TABLE "students" (
   "targetagreemententerpriseid" bytea NULL,
   "mustserveinarmy" bool NOT NULL,
   "armysubpoenafile" varchar NULL,
-  "armyservedate" date NULL,
+  "armycalldate" date NULL,
   "socialstatuses" int[] NOT NULL,
   "status" int NOT NULL,
   "address" varchar NULL,
@@ -39,11 +39,12 @@ CREATE TABLE "students" (
 
 CREATE TABLE "workplaces" (
   "id" bytea PRIMARY KEY,
-  "enterpriseid" varchar NOT NULL,
-  "post" varchar,
-  "workbookextractfile" varchar,
+  "enterpriseid" varchar NULL,
+  "post" varchar NULL,
+  "workbookextractfile" varchar NULL,
   "startdate" date NOT NULL,
-  "finishdate" date,
+  "finishdate" date NULL,
+
   "createddatetimeutc" timestamp NOT NULL,
   "modifieddatetimeutc" timestamp,
   "isremoved" bool NOT NULL

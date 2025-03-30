@@ -9,4 +9,5 @@ public interface IEnterprisesService
 	public Task<Result> Remove(ID id);
 	public Task<Enterprise?> Get(ID id);
 	public Task<Enterprise[]> GetPage(Int32 page, Int32 pageSize);
+	public Task<Enterprise[]> GetBySearchText(String searchText);
 }

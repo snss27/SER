@@ -1,3 +1,7 @@
+import Select from "@/components/shared/inputs/select"
+import { EducationLevelsProvider } from "@/domain/educationLevels/educationLevelsProvider"
+import { EducationLevelTypes } from "@/domain/educationLevels/enums/EducationLevelTypes"
+import { EducationLevelBlank } from "@/domain/educationLevels/models/educationLevelBlank"
 import useNotifications from "@/hooks/useNotifications"
 import { Box } from "@mui/material"
 import { useRouter } from "next/router"
@@ -5,20 +9,13 @@ import { useReducer } from "react"
 import { IconPosition, IconType } from "../shared/buttons"
 import Button from "../shared/buttons/button"
 import TextInput from "../shared/inputs/textInput"
-import { EducationLevelBlank } from "@/domain/educationLevels/models/educationLevelBlank"
-import { EducationLevelsProvider } from "@/domain/educationLevels/educationLevelsProvider"
-import Select from "@/components/shared/inputs/select"
-import { EducationLevelTypes } from "@/domain/educationLevels/enums/EducationLevelTypes"
 
 interface Props {
-    initialSpecialityBlank: EducationLevelBlank
+    initialBlank: EducationLevelBlank
 }
 
-export const EditEducationLevelForm = (props: Props) => {
-    const [educationLevelBlank, dispatch] = useReducer(
-        EducationLevelBlank.reducer,
-        props.initialSpecialityBlank
-    )
+export const EditEducationLevelForm = ({ initialBlank }: Props) => {
+    const [educationLevelBlank, dispatch] = useReducer(EducationLevelBlank.reducer, initialBlank)
 
     const navigator = useRouter()
     const { showError, showSuccess } = useNotifications()

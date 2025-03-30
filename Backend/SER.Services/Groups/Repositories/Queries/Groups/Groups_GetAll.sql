@@ -1,1 +1,0 @@
-select * from groups where not isremoved

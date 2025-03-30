@@ -31,4 +31,10 @@ public class EnterprisesController(IEnterprisesService enterprisesService) : Con
 	{
 		return await enterprisesService.GetPage(page, pageSize);
 	}
+
+	[HttpGet("get_by_search_text")]
+	public async Task<Enterprise[]> GetBySearchText([FromQuery] String searchText)
+	{
+		return await enterprisesService.GetBySearchText(searchText);
+	}
 }

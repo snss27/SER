@@ -33,4 +33,10 @@ public class AdditionalQualificationsController(IAdditionalQualificationsService
 	{
 		return await additionalQualificationsService.GetPage(page, pageSize);
 	}
+
+	[HttpGet("get_by_search_text")]
+	public async Task<AdditionalQualification[]> GetBySearchText([FromQuery] String searchText)
+	{
+		return await additionalQualificationsService.GetBySearchText(searchText);
+	}
 }

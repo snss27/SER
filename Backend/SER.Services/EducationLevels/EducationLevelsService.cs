@@ -1,12 +1,17 @@
 using SER.Domain.EducationLevels;
+using SER.Domain.Groups;
 using SER.Domain.Services;
 using SER.Services.EducationLevels.Repositories;
+using SER.Services.Groups.Repositories;
 using SER.Tools.Types.IDs;
 using SER.Tools.Types.Results;
 
 namespace SER.Services.EducationLevels;
 
-public class EducationLevelsService(IEducationLevelsRepository educationLevelsRepository) : IEducationLevelsService
+public class EducationLevelsService(
+	IEducationLevelsRepository educationLevelsRepository,
+	IGroupsService groupsService
+	) : IEducationLevelsService
 {
 	public async Task<Result> Save(EducationLevelBlank blank)
 	{
@@ -32,26 +37,19 @@ public class EducationLevelsService(IEducationLevelsRepository educationLevelsRe
 
 	public async Task<Result> Remove(ID id)
 	{
+		Group[] groups = await groupsService.GetByEducationLevelId(id);
+		if (groups.Length > 0) return Result.Fail("Невозможно удалить, т.к. существуют группы с данным уровнем образования");
+
 		return await educationLevelsRepository.Remove(id);
 	}
 
-	public async Task<EducationLevel?> Get(ID? id)
+	public async Task<EducationLevel?> Get(ID id)
 	{
-		if (id is null)
-		{
-			return null;
-		}
-
-		return await educationLevelsRepository.Get(id.Value);
+		return await educationLevelsRepository.Get(id);
 	}
 
 	public async Task<EducationLevel[]> Get(ID[] ids)
 	{
-		if (ids.Length == 0)
-		{
-			return [];
-		}
-
 		return await educationLevelsRepository.Get(ids);
 	}
 

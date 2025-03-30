@@ -63,4 +63,9 @@ public class EnterprisesService(IEnterprisesRepository enterprisesRepository) : 
 	{
 		return await enterprisesRepository.GetPage(page, pageSize);
 	}
+
+	public async Task<Enterprise[]> GetBySearchText(String searchText)
+	{
+		return await enterprisesRepository.GetBySearchText(searchText);
+	}
 }

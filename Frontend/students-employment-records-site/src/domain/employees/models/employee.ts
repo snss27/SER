@@ -4,7 +4,7 @@ export class Employee {
     constructor(
         public readonly id: string,
         public readonly name: string,
-        public readonly secondName: string | null,
+        public readonly secondName: string,
         public readonly lastName: string | null
     ) {}
 

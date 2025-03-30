@@ -1,7 +1,7 @@
+import { EducationLevel } from "@/domain/educationLevels/models/educationLevel"
 import { Result } from "@/tools/result"
 import HttpClient from "../httpClient"
 import { EducationLevelBlank } from "./models/educationLevelBlank"
-import { EducationLevel } from "@/domain/educationLevels/models/educationLevel"
 
 export class EducationLevelsProvider {
     public static async save(blank: EducationLevelBlank): Promise<Result> {
@@ -14,9 +14,9 @@ export class EducationLevelsProvider {
         return Result.fromAny(result)
     }
 
-    public static async get(id: string): Promise<EducationLevel> {
+    public static async get(id: string): Promise<EducationLevel | null> {
         const result = await HttpClient.getJsonAsync("/education_levels/get", { id })
-        return EducationLevel.fromAny(result)
+        return result ? EducationLevel.fromAny(result) : null
     }
 
     public static async getPage(page: number, pageSize: number): Promise<EducationLevel[]> {

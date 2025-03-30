@@ -4,11 +4,6 @@ namespace SER.Services.EducationLevels.Repositories.Queries;
 
 internal class Sql
 {
-	#region Groups
-
-	public static String Groups_RemoveEducationLevelsById => SqlFileProvider.GetQuery(folder: "Groups");
-
-	#endregion
 
 	#region EducationLevels
 

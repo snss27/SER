@@ -43,8 +43,7 @@ const App = ({ Component, pageProps }: AppProps) => {
                                         flex: 1,
                                         overflowY: "auto",
                                         "-webkit-overflow-scrolling": "touch",
-                                        pr: 2,
-                                        mb: 2,
+                                        p: 2,
                                     }}>
                                     <Component {...pageProps} />
                                 </Box>

@@ -33,9 +33,9 @@ public class GroupsController(IGroupsService groupsService) : ControllerBase
 		return await groupsService.GetPage(page, pageSize);
 	}
 
-	[HttpGet("get_all")]
-	public async Task<GroupDto[]> GetAll()
+	[HttpGet("get_by_search_text")]
+	public async Task<GroupDto[]> GetBySearchText(String searchText)
 	{
-		return await groupsService.GetAll();
+		return await groupsService.GetBySearchText(searchText);
 	}
 }

@@ -14,9 +14,9 @@ export class EnterprisesProvider {
         return Result.fromAny(result)
     }
 
-    public static async get(id: string): Promise<Enterprise> {
+    public static async get(id: string): Promise<Enterprise | null> {
         const result = await HttpClient.getJsonAsync("/enterprises/get", { id })
-        return Enterprise.fromAny(result)
+        return result ? Enterprise.fromAny(result) : null
     }
 
     public static async getPage(page: number, pageSize: number): Promise<Enterprise[]> {

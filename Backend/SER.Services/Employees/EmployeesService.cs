@@ -15,6 +15,11 @@ public class EmployeesService(IEmployeesRepository employeesRepository) : IEmplo
 			return Result.Fail("Укажите имя сотрудника");
 		}
 
+		if (String.IsNullOrWhiteSpace(blank.SecondName))
+		{
+			return Result.Fail("Укажите фамилию сотрудника");
+		}
+
 		blank.Id ??= ID.New();
 
 		return await employeesRepository.Save(blank);
@@ -25,23 +30,13 @@ public class EmployeesService(IEmployeesRepository employeesRepository) : IEmplo
 		return await employeesRepository.Remove(id);
 	}
 
-	public async Task<Employee?> Get(ID? id)
+	public async Task<Employee?> Get(ID id)
 	{
-		if (id is null)
-		{
-			return null;
-		}
-
-		return await employeesRepository.Get(id.Value);
+		return await employeesRepository.Get(id);
 	}
 
 	public async Task<Employee[]> Get(ID[] ids)
 	{
-		if (ids.Length == 0)
-		{
-			return [];
-		}
-
 		return await employeesRepository.Get(ids);
 	}
 

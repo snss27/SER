@@ -73,4 +73,16 @@ public class AdditionalQualificationsRepository(MainConnector connector)
 
 		return (await session.GetArray<AdditionalQualificationDB>(query)).ToAdditionalQualifications();
 	}
+
+	public async Task<AdditionalQualification[]> GetBySearchText(String searchText)
+	{
+		Query query = _connector.CreateQuery(Sql.AdditionalQualifications_GetBySearchText);
+		{
+			query.Add(searchText);
+		}
+
+		await using IAsyncSeparatelySession session = await _connector.CreateAsyncSession();
+
+		return (await session.GetArray<AdditionalQualificationDB>(query)).ToAdditionalQualifications();
+	}
 }

@@ -14,9 +14,9 @@ export class ClustersProvider {
         return Result.fromAny(result)
     }
 
-    public static async get(id: string): Promise<Cluster> {
+    public static async get(id: string): Promise<Cluster | null> {
         const result = await HttpClient.getJsonAsync("/clusters/get", { id })
-        return Cluster.fromAny(result)
+        return result ? Cluster.fromAny(result) : null
     }
 
     public static async getPage(page: number, pageSize: number): Promise<Cluster[]> {

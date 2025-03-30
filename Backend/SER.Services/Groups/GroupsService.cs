@@ -4,6 +4,7 @@ using SER.Domain.Employees;
 using SER.Domain.Groups;
 using SER.Domain.Groups.Converters;
 using SER.Domain.Services;
+using SER.Domain.Students;
 using SER.Services.Groups.Repositories;
 using SER.Tools.Types.IDs;
 using SER.Tools.Types.Results;
@@ -15,14 +16,20 @@ public class GroupsService(
 	IGroupsRepository groupsRepository,
 	IEducationLevelsService educationLevelsService,
 	IEmployeesService employeesService,
-	IClustersService clustersService
+	IClustersService clustersService,
+	IStudentsService studentsSevice
 ) : IGroupsService
 {
 	public async Task<Result> Save(GroupBlank blank)
 	{
 		if (String.IsNullOrWhiteSpace(blank.Number))
 		{
-			return Result.Fail("Введите номер группы");
+			return Result.Fail("Укажите номер группы");
+		}
+
+		if(blank.EducationLevelId is null)
+		{
+			return Result.Fail("Укажите уровень образования у группы");
 		}
 
 		if (!Regexs.GroupNumberRegex.IsMatch(blank.Number))
@@ -32,17 +39,17 @@ public class GroupsService(
 
 		if (blank.StructuralUnit is null)
 		{
-			return Result.Fail("Выберите струкрутное подразделение");
+			return Result.Fail("Укажите струкрутное подразделение");
 		}
 
 		if (blank.EnrollmentYear is null)
 		{
-			return Result.Fail("Выберите год поступления");
+			return Result.Fail("Укажите год поступления");
 		}
 
 		if (blank.HasCluster && blank.ClusterId is null)
 		{
-			return Result.Fail("Выберите кластер группы");
+			return Result.Fail("Укажите кластер группы");
 		}
 
 		if (!blank.HasCluster)
@@ -57,6 +64,12 @@ public class GroupsService(
 
 	public async Task<Result> Remove(ID id)
 	{
+		Student[] students = await studentsSevice.GetByGroupId(id);
+		if (students.Length > 0)
+		{
+			return Result.Fail("У этой группе есть привязанные студенты");
+		}
+
 		return await groupsRepository.Remove(id);
 	}
 
@@ -69,71 +82,66 @@ public class GroupsService(
 			return null;
 		}
 
-		Task<Employee?> curatorTask = employeesService.Get(group.CuratorId);
 		Task<EducationLevel?> educationLevelTask = educationLevelsService.Get(group.EducationLevelId);
-		Task<Cluster?> clusterTask = clustersService.Get(group.ClusterId);
+		Task<Employee?> curatorTask = group.CuratorId.HasValue
+			? employeesService.Get(group.CuratorId.Value)
+			: Task.FromResult<Employee?>(null);
+		Task<Cluster?> clusterTask = group.ClusterId.HasValue
+			? clustersService.Get(group.ClusterId.Value)
+			: Task.FromResult<Cluster?>(null);
 
-		await Task.WhenAll(curatorTask, educationLevelTask, clusterTask);
+		await Task.WhenAll(educationLevelTask, curatorTask, clusterTask);
 
-		Employee? curator = await curatorTask;
 		EducationLevel? educationLevel = await educationLevelTask;
+		Employee? curator = await curatorTask;
 		Cluster? cluster = await clusterTask;
 
-		return group.ToGroupDto(educationLevel, curator, cluster);
+		return group.ToGroupDto(
+			educationLevel ?? throw new InvalidOperationException("Education level not found"),
+			curator,
+			cluster
+		);
 	}
 
 	public async Task<GroupDto[]> GetPage(Int32 page, Int32 pageSize)
 	{
 		Group[] groups = await groupsRepository.GetPage(page, pageSize);
+		if(groups.Length == 0)
+		{
+			return [];
+		}
 
-		ID[] curatorIds = groups.Where(group => group.CuratorId is not null).Select(group => group.CuratorId.Value)
-			.ToArray();
-		ID[] educationLevelIds = groups.Where(group => group.EducationLevelId is not null)
-			.Select(group => group.EducationLevelId.Value).ToArray();
-		ID[] clusterIds = groups.Where(group => group.ClusterId is not null).Select(group => group.ClusterId.Value)
-			.ToArray();
-
-		//REFACTORING написать обёртку? Тут есть неплохой (вроде) вариант https://dev.to/serhii_korol_ab7776c50dba/the-elegant-way-to-await-multiple-tasks-in-net-11pl
-		Task<Employee[]> curatorsTask = employeesService.Get(curatorIds);
-		Task<EducationLevel[]> educationLevelsTask = educationLevelsService.Get(educationLevelIds);
-		Task<Cluster[]> clustersTask = clustersService.Get(clusterIds);
-
-		await Task.WhenAll(curatorsTask, educationLevelsTask, clustersTask);
-
-		Employee[] curators = await curatorsTask;
-		EducationLevel[] educationLevels = await educationLevelsTask;
-		Cluster[] clusters = await clustersTask;
-
-		return groups.ToGroupDtos(educationLevels, curators, clusters);
+		return await GroupDtos(groups);
 	}
 
-	public async Task<GroupDto[]> GetAll()
+	public async Task<GroupDto[]> GetBySearchText(String searchText)
 	{
-		Group[] groups = await groupsRepository.GetAll();
+		Group[] groups = await groupsRepository.GetBySeacrhText(searchText);
+		if(groups.Length == 0)
+		{
+			return [];
+		}
 
+		return await GroupDtos(groups);
+	}
+
+	private async Task<GroupDto[]> GroupDtos(Group[] groups)
+	{
 		ID[] curatorIds = groups
-			.Where(group => group.CuratorId is not null)
-			.Select(group => group.CuratorId.Value)
-			.Distinct()
-			.ToArray();
-
+	.Where(group => group.CuratorId is not null)
+	.Select(group => group.CuratorId.Value)
+	.ToArray();
 		ID[] educationLevelIds = groups
-			.Where(group => group.EducationLevelId is not null)
-			.Select(group => group.EducationLevelId.Value)
-			.Distinct()
+			.Select(group => group.EducationLevelId)
 			.ToArray();
-
 		ID[] clusterIds = groups
 			.Where(group => group.ClusterId is not null)
 			.Select(group => group.ClusterId.Value)
-			.Distinct()
 			.ToArray();
 
-		//REFACTORING аналогично https://dev.to/serhii_korol_ab7776c50dba/the-elegant-way-to-await-multiple-tasks-in-net-11pl
-
-		Task<Employee[]> curatorsTask = employeesService.Get(curatorIds);
 		Task<EducationLevel[]> educationLevelsTask = educationLevelsService.Get(educationLevelIds);
-		Task<Cluster[]> clustersTask = clustersService.Get(clusterIds);
+		Task<Employee[]> curatorsTask = curatorIds.Length > 0 ? employeesService.Get(curatorIds) : Task.FromResult<Employee[]>([]);
+		Task<Cluster[]> clustersTask = clusterIds.Length > 0 ? clustersService.Get(clusterIds) : Task.FromResult<Cluster[]>([]);
 
 		await Task.WhenAll(curatorsTask, educationLevelsTask, clustersTask);
 
@@ -142,5 +150,10 @@ public class GroupsService(
 		Cluster[] clusters = await clustersTask;
 
 		return groups.ToGroupDtos(educationLevels, curators, clusters);
+	} 
+
+	public async Task<Group[]> GetByEducationLevelId(ID educationLevelId)
+	{
+		return await groupsRepository.GetByEducationLevelId(educationLevelId);
 	}
 }

@@ -5,7 +5,7 @@ public class EmployeeDB
 {
 	public ID Id { get; set; }
 	public String Name { get; set; }
-	public String? SecondName { get; set; }
+	public String SecondName { get; set; }
 	public String? LastName { get; set; }
 
 	public DateTime CreatedDateTimeUtc { get; set; }

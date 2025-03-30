@@ -10,7 +10,7 @@ public record GroupDto(
 	ID Id,
 	String Number,
 	StructuralUnits StructuralUnit,
-	EducationLevel? EducationLevel,
+	EducationLevel EducationLevel,
 	Int32 EnrollmentYear,
 	Employee? Curator,
 	Boolean HasCluster,

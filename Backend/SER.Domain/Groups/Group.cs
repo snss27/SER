@@ -7,7 +7,7 @@ public class Group(
 	ID id,
 	String number,
 	StructuralUnits structuralUnit,
-	ID? educationLevelId,
+	ID educationLevelId,
 	Int32 enrollmentYear,
 	ID? curatorId,
 	Boolean hasCluster,
@@ -20,7 +20,7 @@ public class Group(
 	public ID Id { get; } = id;
 	public String Number { get; } = number;
 	public StructuralUnits StructuralUnit { get; } = structuralUnit;
-	public ID? EducationLevelId { get; } = educationLevelId;
+	public ID EducationLevelId { get; } = educationLevelId;
 	public Int32 EnrollmentYear { get; } = enrollmentYear;
 	public ID? CuratorId { get; } = curatorId;
 	public Boolean HasCluster { get; } = hasCluster;

@@ -40,4 +40,9 @@ public class AdditionalQualificationsService(IAdditionalQualificationsRepository
 	{
 		return await additionalQualificationsRepository.GetPage(page, pageSize);
 	}
+
+	public async Task<AdditionalQualification[]> GetBySearchText(String searchText)
+	{
+		return await additionalQualificationsRepository.GetBySearchText(searchText);
+	}
 }

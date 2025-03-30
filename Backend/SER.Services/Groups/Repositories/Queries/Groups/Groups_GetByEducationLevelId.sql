@@ -1,0 +1,1 @@
+select * from groups where educationlevelid=@p_educationlevelid and not isremoved

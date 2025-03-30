@@ -13,7 +13,7 @@ export class AdditionalQualification {
     }
 
     public get displayTime() {
-        if (this.studyTime === null || this.studyTime.trim() === "") return "Не указан"
+        if (this.studyTime === null || this.studyTime.trim() === "") return "Не указано"
 
         return this.studyTime
     }

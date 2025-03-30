@@ -11,7 +11,7 @@ interface Props {
     dispatch: React.Dispatch<StudentAction>
 }
 
-export function EditStudentWorkplaces({ studentBlank, dispatch }): React.FC<Props> {
+export function EditStudentWorkplaces({ studentBlank, dispatch }: Props) {
     const [editingWorkplace, setEditingWorkplace] = useState<WorkplaceBlank | null>(null)
 
     const handleSaveWorkplace = (updatedWorkplace: WorkplaceBlank) => {

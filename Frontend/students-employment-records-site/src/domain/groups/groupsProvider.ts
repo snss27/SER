@@ -14,9 +14,9 @@ export class GroupsProvider {
         return Result.fromAny(result)
     }
 
-    public static async get(id: string): Promise<Group> {
+    public static async get(id: string): Promise<Group | null> {
         const result = await HttpClient.getJsonAsync("/groups/get", { id })
-        return Group.fromAny(result)
+        return result ? Group.fromAny(result) : null
     }
 
     public static async getPage(page: number, pageSize: number): Promise<Group[]> {

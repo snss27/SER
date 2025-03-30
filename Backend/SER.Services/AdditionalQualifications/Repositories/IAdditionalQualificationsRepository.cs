@@ -9,4 +9,5 @@ public interface IAdditionalQualificationsRepository
 	public Task<Result> Remove(ID id);
 	public Task<AdditionalQualification?> Get(ID id);
 	public Task<AdditionalQualification[]> GetPage(Int32 page, Int32 pageSize);
+	public Task<AdditionalQualification[]> GetBySearchText(String searchText);
 }

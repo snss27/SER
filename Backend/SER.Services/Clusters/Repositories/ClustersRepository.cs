@@ -47,6 +47,17 @@ public class ClustersRepository(MainConnector connector) : BaseRepository(connec
 		return Result.Success();
 	}
 
+	private async Task RemoveFromGroups(ID clusterId, IAsyncTransactionSession transaction)
+	{
+		Query query = _connector.CreateQuery(Sql.Groups_RemoveClusterById);
+		{
+			query.Add(clusterId);
+			query.Add(DateTime.UtcNow, "currentdatetimeutc");
+		}
+
+		await transaction.Execute(query);
+	}
+
 	public async Task<Cluster?> Get(ID id)
 	{
 		Query query = _connector.CreateQuery(Sql.Clusters_Get);
@@ -95,16 +106,5 @@ public class ClustersRepository(MainConnector connector) : BaseRepository(connec
 		await using IAsyncSeparatelySession session = await _connector.CreateAsyncSession();
 
 		return (await session.GetArray<ClusterDB>(query)).ToClusters();
-	}
-
-	private async Task RemoveFromGroups(ID clusterId, IAsyncTransactionSession transaction)
-	{
-		Query query = _connector.CreateQuery(Sql.Groups_RemoveClusterById);
-		{
-			query.Add(clusterId);
-			query.Add(DateTime.UtcNow, "currentdatetimeutc");
-		}
-
-		await transaction.Execute(query);
 	}
 }

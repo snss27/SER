@@ -1,9 +1,10 @@
+import { Employee } from "@/domain/employees/models/employee"
 import { Result } from "@/tools/result"
 import HttpClient from "../httpClient"
-import { Employee } from "@/domain/employees/models/employee"
+import { EmployeeBlank } from "./models/employeeBlank"
 
 export class EmployeesProvider {
-    public static async save(blank: EmployeesProvider): Promise<Result> {
+    public static async save(blank: EmployeeBlank): Promise<Result> {
         const result = await HttpClient.postJsonAsync("/employees/save", blank)
         return Result.fromAny(result)
     }
@@ -13,9 +14,9 @@ export class EmployeesProvider {
         return Result.fromAny(result)
     }
 
-    public static async get(id: string): Promise<Employee> {
+    public static async get(id: string): Promise<Employee | null> {
         const result = await HttpClient.getJsonAsync("/employees/get", { id })
-        return Employee.fromAny(result)
+        return result ? Employee.fromAny(result) : null
     }
 
     public static async getPage(page: number, pageSize: number): Promise<Employee[]> {

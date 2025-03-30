@@ -93,22 +93,8 @@ public class EducationLevelsRepository(MainConnector connector) : BaseRepository
 
 		await using IAsyncTransactionSession transaction = await _connector.CreateAsyncTransaction();
 
-		await Task.WhenAll(
-			transaction.Execute(query),
-			RemoveFromGroups(id, transaction)
-		);
+		await transaction.Execute(query);
 
 		return Result.Success();
-	}
-
-	private async Task RemoveFromGroups(ID educationLevelId, IAsyncTransactionSession transaction)
-	{
-		Query query = _connector.CreateQuery(Sql.Groups_RemoveEducationLevelsById);
-		{
-			query.Add(educationLevelId);
-			query.Add(DateTime.UtcNow, "p_currentdatetimeutc");
-		}
-
-		await transaction.Execute(query);
 	}
 }
