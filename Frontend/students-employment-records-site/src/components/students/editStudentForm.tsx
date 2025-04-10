@@ -17,15 +17,13 @@ import { AsyncAutocomplete } from "../shared/inputs/asyncAutocomplete"
 import DatePicker from "../shared/inputs/datePicker"
 import { FilesInput } from "../shared/inputs/filesInput"
 import { AddressInput } from "../shared/inputs/maskedInputs/addressInput"
-import { InnInput } from "../shared/inputs/maskedInputs/innInput"
+import { HumanInnInput } from "../shared/inputs/maskedInputs/humanInnInput"
 import { MailInput } from "../shared/inputs/maskedInputs/mailInput"
 import { PassportNumberInput } from "../shared/inputs/maskedInputs/passportNumberInput"
 import { PassportSeriesInput } from "../shared/inputs/maskedInputs/passportSeriesInput"
 import { PhoneNumberInput } from "../shared/inputs/maskedInputs/phoneNumberInput"
 import { SnilsInput } from "../shared/inputs/maskedInputs/snilsInput"
-import { MultiAsyncAutocomplete } from "../shared/inputs/multiAsyncAutocomplete"
-import { MultiSelect } from "../shared/inputs/multiSelect"
-import Select from "../shared/inputs/select"
+import { Select } from "../shared/inputs/select"
 import TextInput from "../shared/inputs/textInput"
 import { EditStudentWorkplaces } from "./editStudentWorkPlaces"
 
@@ -80,6 +78,8 @@ export const EditStudentForm: React.FC<Props> = ({ initialStudentBlank }) => {
                 value={studentBlank.status}
                 label="Статус"
                 getOptionLabel={StudentStatus.getDisplayText}
+                required
+                defaultValue={studentBlank.status}
                 onChange={(status) => dispatch({ type: "CHANGE_STATUS", payload: { status } })}
             />
 
@@ -87,6 +87,7 @@ export const EditStudentForm: React.FC<Props> = ({ initialStudentBlank }) => {
                 options={Gender.getAll()}
                 value={studentBlank.gender}
                 label="Пол"
+                required
                 getOptionLabel={Gender.getDisplayText}
                 onChange={(gender) => dispatch({ type: "CHANGE_GENDER", payload: { gender } })}
             />
@@ -124,10 +125,11 @@ export const EditStudentForm: React.FC<Props> = ({ initialStudentBlank }) => {
                 onChange={(snils) => dispatch({ type: "CHANGE_SNILS", payload: { snils } })}
             />
 
-            <MultiSelect
+            <Select
                 options={SocialStatus.getAll()}
                 value={studentBlank.socialStatuses}
                 label="Социальные статусы"
+                multiple
                 getOptionLabel={SocialStatus.getDisplayText}
                 onChange={(socialStatuses) =>
                     dispatch({ type: "CHANGE_SOCIAL_STATUSES", payload: { socialStatuses } })
@@ -146,19 +148,18 @@ export const EditStudentForm: React.FC<Props> = ({ initialStudentBlank }) => {
                 onChange={(mail) => dispatch({ type: "CHANGE_MAIL", payload: { mail } })}
             />
 
-            <InnInput
+            <HumanInnInput
                 value={studentBlank.inn}
                 label="ИНН"
                 onChange={(inn) => dispatch({ type: "CHANGE_INN", payload: { inn } })}
             />
 
             <AsyncAutocomplete
-                value={studentBlank.groupId}
+                value={studentBlank.group}
                 label="Группа"
                 getOptionLabel={(group) => group.number}
-                onChange={(groupId) => dispatch({ type: "CHANGE_GROUP_ID", payload: { groupId } })}
+                onChange={(group) => dispatch({ type: "CHANGE_GROUP", payload: { group } })}
                 loadOptions={GroupsProvider.getBySearchText}
-                loadOption={GroupsProvider.get}
             />
 
             <CheckBox
@@ -237,16 +238,16 @@ export const EditStudentForm: React.FC<Props> = ({ initialStudentBlank }) => {
 
             <EditStudentWorkplaces studentBlank={studentBlank} dispatch={dispatch} />
 
-            <MultiAsyncAutocomplete
-                values={studentBlank.additionalQualificationIds}
+            <AsyncAutocomplete
+                value={studentBlank.additionalQualifications}
+                multiple
                 label="Дополнительные квалификации"
-                loadOption={AdditionalQualificationsProvider.get}
                 loadOptions={AdditionalQualificationsProvider.getBySearchText}
                 getOptionLabel={(qualification) => qualification.displayName}
-                onChange={(additionalQualificationIds) =>
+                onChange={(additionalQualifications) =>
                     dispatch({
-                        type: "CHANGE_ADDITIONAL_QUALIFICATION_IDS",
-                        payload: { additionalQualificationIds },
+                        type: "CHANGE_ADDITIONAL_QUALIFICATIONS",
+                        payload: { additionalQualifications },
                     })
                 }
             />
@@ -277,15 +278,14 @@ export const EditStudentForm: React.FC<Props> = ({ initialStudentBlank }) => {
                         />
 
                         <AsyncAutocomplete
-                            value={studentBlank.targetAgreementEnterpriseId}
+                            value={studentBlank.targetAgreementEnterprise}
                             label="Предприятие, с которым заключён договор"
                             loadOptions={EnterprisesProvider.getBySearchText}
-                            loadOption={EnterprisesProvider.get}
                             getOptionLabel={(enterprise) => enterprise.name}
-                            onChange={(targetAgreementEnterpriseId) =>
+                            onChange={(targetAgreementEnterprise) =>
                                 dispatch({
-                                    type: "CHANGE_TARGET_AGREEMENT_ENTERPRISE_ID",
-                                    payload: { targetAgreementEnterpriseId },
+                                    type: "CHANGE_TARGET_AGREEMENT_ENTERPRISE",
+                                    payload: { targetAgreementEnterprise },
                                 })
                             }
                         />

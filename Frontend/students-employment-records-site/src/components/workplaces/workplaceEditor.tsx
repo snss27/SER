@@ -25,15 +25,14 @@ export const WorkplaceEditor: React.FC<Props> = ({ workplace, onSave, onClose })
     return (
         <Box sx={{ p: 2, display: "flex", flexDirection: "column", gap: 2 }}>
             <AsyncAutocomplete
-                value={editedWorkplace.enterpriseId}
+                value={editedWorkplace.enterprise}
                 label="Предприятие"
                 loadOptions={EnterprisesProvider.getBySearchText}
-                loadOption={EnterprisesProvider.get}
                 getOptionLabel={(enterprise) => enterprise.name}
-                onChange={(enterpriseId) =>
+                onChange={(enterprise) =>
                     dispatch({
-                        type: "CHANGE_ENTERPRISE_ID",
-                        payload: { enterpriseId },
+                        type: "CHANGE_ENTERPRISE",
+                        payload: { enterprise },
                     })
                 }
             />

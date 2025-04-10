@@ -40,11 +40,11 @@ export class Group {
             id: this.id,
             number: this.number,
             structuralUnit: this.structuralUnit,
-            educationLevelId: this.educationLevel.id,
+            educationLevel: this.educationLevel,
             enrollmentYear: this.enrollmentYear,
-            curatorId: this.curator?.id ?? null,
+            curator: this.curator ?? null,
             hasCluster: this.hasCluster,
-            clusterId: this.cluster?.id ?? null,
+            cluster: this.cluster ?? null,
         }
     }
 }

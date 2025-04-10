@@ -9,13 +9,13 @@ CREATE TABLE "students" (
   "representativephonenumber" varchar NULL,
   "isonpaidstudy" bool NOT NULL,
   "snils" varchar NULL,
-  "groupid" bytea NULL,
+  "groupid" bytea NOT NULL,
   "pasportnumber" varchar NULL,
   "pasportseries" varchar NULL,
   "pasportissued" varchar NULL,
   "pasportfiles" varchar[] NOT NULL,
-  "prevworkplaces" bytea[] NOT NULL,
-  "currentworkplace" bytea NULL,
+  "prevworkplaceids" bytea[] NOT NULL,
+  "currentworkplaceid" bytea NULL,
   "additionalqualifications" bytea[] NOT NULL,
   "istargetagreement" bool NOT NULL,
   "targetagreementfile" varchar NULL,
@@ -39,10 +39,10 @@ CREATE TABLE "students" (
 
 CREATE TABLE "workplaces" (
   "id" bytea PRIMARY KEY,
-  "enterpriseid" varchar NULL,
+  "enterpriseid" varchar NOT NULL,
   "post" varchar NULL,
   "workbookextractfile" varchar NULL,
-  "startdate" date NOT NULL,
+  "startdate" date NULL,
   "finishdate" date NULL,
 
   "createddatetimeutc" timestamp NOT NULL,
@@ -82,7 +82,7 @@ CREATE TABLE "additionalqualifications" (
 CREATE TABLE "employees" (
   "id" bytea PRIMARY KEY,
   "name" varchar NOT NULL,
-  "secondname" varchar NULL,
+  "secondname" varchar NOT NULL,
   "lastname" varchar NULL,
   
   "createddatetimeutc" timestamp NOT NULL,
@@ -106,7 +106,7 @@ CREATE TABLE "groups" (
   "id" bytea PRIMARY KEY,
   "number" varchar NOT NULL,
   "structuralunit" int NOT NULL,
-  "educationlevelid" bytea,
+  "educationlevelid" bytea NOT NULL,
   "enrollmentyear" int NOT NULL,
   "curatorid" bytea NULL,
   "hascluster" boolean NOT NULL,

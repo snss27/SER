@@ -1,14 +1,17 @@
+import { Cluster } from "@/domain/clusters/models/cluster"
+import { EducationLevel } from "@/domain/educationLevels/models/educationLevel"
+import { Employee } from "@/domain/employees/models/employee"
 import { StructuralUnits } from "../enums/structuralUnits"
 
 export interface GroupBlank {
     id: string | null
     number: string | null
     structuralUnit: StructuralUnits | null
-    educationLevelId: string | null
+    educationLevel: EducationLevel | null
     enrollmentYear: number | null
-    curatorId: string | null
+    curator: Employee | null
     hasCluster: boolean
-    clusterId: string | null
+    cluster: Cluster | null
 }
 
 export namespace GroupBlank {
@@ -17,11 +20,11 @@ export namespace GroupBlank {
             id: null,
             number: null,
             structuralUnit: null,
-            educationLevelId: null,
+            educationLevel: null,
             enrollmentYear: null,
-            curatorId: null,
+            curator: null,
             hasCluster: false,
-            clusterId: null,
+            cluster: null,
         }
     }
 
@@ -33,20 +36,20 @@ export namespace GroupBlank {
             case "CHANGE_STRUCTURAL_UNIT":
                 return { ...state, structuralUnit: action.payload.structuralUnit }
 
-            case "CHANGE_EDUCATION_LEVEL_ID":
-                return { ...state, educationLevelId: action.payload.educationLevelId }
+            case "CHANGE_EDUCATION_LEVEL":
+                return { ...state, educationLevel: action.payload.educationLevel }
 
             case "CHANGE_ENROLLMENT_YEAR":
                 return { ...state, enrollmentYear: action.payload.enrollmentYear }
 
-            case "CHANGE_CURATOR_ID":
-                return { ...state, curatorId: action.payload.curatorId }
+            case "CHANGE_CURATOR":
+                return { ...state, curator: action.payload.curator }
 
             case "CHANGE_HAS_CLUSTER":
                 return { ...state, hasCluster: action.payload.hasCluster }
 
-            case "CHANGE_CLUSTER_ID":
-                return { ...state, clusterId: action.payload.clusterId }
+            case "CHANGE_CLUSTER":
+                return { ...state, cluster: action.payload.cluster }
 
             default:
                 return { ...state }
@@ -64,22 +67,22 @@ type Action =
           payload: { structuralUnit: StructuralUnits | null }
       }
     | {
-          type: "CHANGE_EDUCATION_LEVEL_ID"
-          payload: { educationLevelId: string | null }
+          type: "CHANGE_EDUCATION_LEVEL"
+          payload: { educationLevel: EducationLevel | null }
       }
     | {
           type: "CHANGE_ENROLLMENT_YEAR"
           payload: { enrollmentYear: number | null }
       }
     | {
-          type: "CHANGE_CURATOR_ID"
-          payload: { curatorId: string | null }
+          type: "CHANGE_CURATOR"
+          payload: { curator: Employee | null }
       }
     | {
           type: "CHANGE_HAS_CLUSTER"
           payload: { hasCluster: boolean }
       }
     | {
-          type: "CHANGE_CLUSTER_ID"
-          payload: { clusterId: string | null }
+          type: "CHANGE_CLUSTER"
+          payload: { cluster: Cluster | null }
       }

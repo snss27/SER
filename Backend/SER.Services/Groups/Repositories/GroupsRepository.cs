@@ -21,11 +21,11 @@ public class GroupsRepository(MainConnector connector) : BaseRepository(connecto
 			query.Add(blank.Id);
 			query.Add(blank.Number);
 			query.Add(blank.StructuralUnit);
-			query.Add(blank.EducationLevelId);
+			query.Add(blank.EducationLevel?.Id, "p_educationlevelid");
 			query.Add(blank.EnrollmentYear);
-			query.Add(blank.CuratorId);
+			query.Add(blank.Curator?.Id, "p_curatorid");
 			query.Add(blank.HasCluster);
-			query.Add(blank.ClusterId);
+			query.Add(blank.Cluster?.Id, "p_clusterid");
 			query.Add(DateTime.UtcNow, "p_currentdatetimeutc");
 		}
 

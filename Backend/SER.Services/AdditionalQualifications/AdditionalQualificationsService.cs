@@ -13,7 +13,7 @@ public class AdditionalQualificationsService(IAdditionalQualificationsRepository
 	{
 		if (String.IsNullOrWhiteSpace(blank.Name))
 		{
-			return Result.Fail("Укажите наименование специальности");
+			return Result.Fail("Укажите наименование квалификации");
 		}
 
 		if (String.IsNullOrWhiteSpace(blank.Code))

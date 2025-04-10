@@ -1,4 +1,7 @@
-import { WorkplaceBlank } from "@/domain/workplaces/models/workplaceBlank"
+import { AdditionalQualification } from "@/domain/additionalQualifications/models/additionalQualification"
+import { Enterprise } from "@/domain/enterprises/models/enterprise"
+import { Group } from "@/domain/groups/models/group"
+import { Workplace } from "@/domain/workplaces/models/workplace"
 import { BlankFiles } from "@/tools/blankFiles"
 import { Gender } from "../enums/gender"
 import { SocialStatus } from "../enums/socialStatus"
@@ -11,157 +14,126 @@ export class Student {
         public readonly name: string,
         public readonly secondName: string,
         public readonly lastName: string | null,
-        public readonly status: StudentStatus,
         public readonly gender: Gender,
+        public readonly birthDate: Date | null,
         public readonly phoneNumber: string | null,
         public readonly representativePhoneNumber: string | null,
-        public readonly birthDate: Date | null,
-        public readonly snils: string | null,
-        public readonly socialStatuses: SocialStatus[],
-        public readonly address: string | null,
-        public readonly mail: string | null,
-        public readonly inn: string | null,
-        public readonly groupId: string | null,
-        public readonly isForeignCitizen: boolean,
         public readonly isOnPaidStudy: boolean,
-
-        public readonly passportSeries: string | null,
+        public readonly snils: string | null,
+        public readonly group: Group,
         public readonly passportNumber: string | null,
-        public readonly passportIssuedBy: string | null,
+        public readonly passportSeries: string | null,
+        public readonly passportIssued: string | null,
         public readonly passportIssuedDate: Date | null,
         public readonly passportFiles: string[],
-
-        public readonly currentWorkplaceId: string | null,
-        public readonly prevWorkplaceIds: string[],
-
-        public readonly additionalQualificationIds: string[],
-
+        public readonly prevWorkplaces: Workplace[],
+        public readonly currentWorkplace: Workplace | null,
+        public readonly additionalQualifications: AdditionalQualification[],
         public readonly isTargetAgreement: boolean,
-        public readonly targetAgreementDate: Date | null,
-        public readonly targetAgreementEnterpriseId: string | null,
         public readonly targetAgreementFile: string | null,
-
+        public readonly targetAgreementDate: Date | null,
+        public readonly targetAgreementEnterprise: Enterprise,
         public readonly mustServeInArmy: boolean,
         public readonly armySubpoenaFile: string | null,
         public readonly armyCallDate: Date | null,
-
-        public readonly otherFiles: string[]
+        public readonly socialStatuses: SocialStatus[],
+        public readonly status: StudentStatus,
+        public readonly address: string | null,
+        public readonly isForeignCitizen: boolean,
+        public readonly inn: string | null,
+        public readonly mail: string | null,
+        public readonly otherFiles: string[],
+        public readonly createdDateTimeUtc: Date,
+        public readonly modifiedDateTimeUtc: Date | null
     ) {}
 
     public get displayName(): string {
-        return `${this.name}  ${this.secondName}`
+        return `${this.name} ${this.secondName}`
     }
 
     public toBlank(): StudentBlank {
-        const birthDate = !!this.birthDate ? new Date(this.birthDate.getTime()) : null
-        const passportIssuedDate = !!this.passportIssuedDate
-            ? new Date(this.passportIssuedDate.getTime())
-            : null
-        const passportFiles = new BlankFiles(this.passportFiles, [], 5)
-        const currentWorkplace = WorkplaceBlank.create(this.currentWorkplaceId)
-        const prevWorkplaces = this.prevWorkplaceIds.map((id) => WorkplaceBlank.create(id))
-        const targetAgreementDate = !!this.targetAgreementDate
-            ? new Date(this.targetAgreementDate.getTime())
-            : null
-        const targetAgreementFile = new BlankFiles(
-            !!this.targetAgreementFile ? [this.targetAgreementFile] : [],
-            [],
-            1
-        )
-        const armySubpoenaFile = new BlankFiles(
-            !!this.armySubpoenaFile ? [this.armySubpoenaFile] : [],
-            [],
-            1
-        )
-        const otherFiles = new BlankFiles(this.otherFiles, [], 10)
-
         return {
             id: this.id,
             name: this.name,
             secondName: this.secondName,
             lastName: this.lastName,
-            status: this.status,
             gender: this.gender,
+            birthDate: this.birthDate,
             phoneNumber: this.phoneNumber,
             representativePhoneNumber: this.representativePhoneNumber,
-            birthDate,
-            snils: this.snils,
-            socialStatuses: this.socialStatuses,
-            address: this.address,
-            mail: this.mail,
-            inn: this.inn,
-            groupId: this.groupId,
-            isForeignCitizen: this.isForeignCitizen,
             isOnPaidStudy: this.isOnPaidStudy,
-
-            passportSeries: this.passportSeries,
+            snils: this.snils,
+            group: this.group,
             passportNumber: this.passportNumber,
-            passportIssuedBy: this.passportIssuedBy,
-            passportIssuedDate,
-            passportFiles,
-
-            currentWorkplace,
-            prevWorkplaces,
-
-            additionalQualificationIds: this.additionalQualificationIds,
-
+            passportSeries: this.passportSeries,
+            passportIssuedBy: this.passportIssued,
+            passportIssuedDate: this.passportIssuedDate,
+            passportFiles: new BlankFiles(this.passportFiles, [], 5),
+            prevWorkplaces: this.prevWorkplaces,
+            currentWorkplace: this.currentWorkplace,
+            additionalQualifications: this.additionalQualifications,
             isTargetAgreement: this.isTargetAgreement,
-            targetAgreementDate,
-            targetAgreementEnterpriseId: this.targetAgreementEnterpriseId,
-            targetAgreementFile,
-
+            targetAgreementFile: new BlankFiles(
+                this.targetAgreementFile ? [this.targetAgreementFile] : [],
+                [],
+                1
+            ),
+            targetAgreementDate: this.targetAgreementDate,
+            targetAgreementEnterprise: this.targetAgreementEnterprise,
             mustServeInArmy: this.mustServeInArmy,
-            armySubpoenaFile,
+            armySubpoenaFile: new BlankFiles(
+                this.armySubpoenaFile ? [this.armySubpoenaFile] : [],
+                [],
+                1
+            ),
             armyCallDate: this.armyCallDate,
-
-            otherFiles,
+            socialStatuses: this.socialStatuses,
+            status: this.status,
+            address: this.address,
+            isForeignCitizen: this.isForeignCitizen,
+            inn: this.inn,
+            mail: this.mail,
+            otherFiles: new BlankFiles(this.otherFiles, [], 10),
         }
     }
 
     public static fromAny(any: any): Student {
-        const birthDate = !!any.birthDate ? new Date(any.birthDate) : null
-        const passportIssuedDate = !!any.passportIssuedDate
-            ? new Date(any.passportIssuedDate)
-            : null
-        const targetAgreementDate = !!any.targetAgreementDate
-            ? new Date(any.targeAgreementDate)
-            : null
-        const armyCallDate = !!any.armyCallDate ? new Date(any.armyCallDate) : null
-
         return new Student(
             any.id,
             any.name,
             any.secondName,
             any.lastName,
-            any.status,
             any.gender,
+            any.birthDate ? new Date(any.birthDate) : null,
             any.phoneNumber,
             any.representativePhoneNumber,
-            birthDate,
-            any.snils,
-            any.socialStatuses,
-            any.address,
-            any.mail,
-            any.inn,
-            any.groupId,
-            any.isForeignCitizen,
             any.isOnPaidStudy,
-            any.passportSeries,
+            any.snils,
+            Group.fromAny(any.group),
             any.passportNumber,
-            any.passportIssuedBy,
-            passportIssuedDate,
+            any.passportSeries,
+            any.passportIssued,
+            any.passportIssuedDate ? new Date(any.passportIssuedDate) : null,
             any.passportFiles,
-            any.currentWorkplaceId,
-            any.prevWorkplaceIds,
-            any.additionalQualificationIds,
+            any.prevWorkplaces.map((w: any) => w),
+            any.currentWorkplace,
+            any.additionalQualifications.map((q: any) => AdditionalQualification.fromAny(q)),
             any.isTargetAgreement,
-            targetAgreementDate,
-            any.targetAgreementEnterpriseId,
             any.targetAgreementFile,
+            any.targetAgreementDate ? new Date(any.targetAgreementDate) : null,
+            Enterprise.fromAny(any.targetAgreementEnterprise),
             any.mustServeInArmy,
             any.armySubpoenaFile,
-            armyCallDate,
-            any.otherFiles
+            any.armyCallDate ? new Date(any.armyCallDate) : null,
+            any.socialStatuses,
+            any.status,
+            any.address,
+            any.isForeignCitizen,
+            any.inn,
+            any.mail,
+            any.otherFiles,
+            new Date(any.createdDateTimeUtc),
+            any.modifiedDateTimeUtc ? new Date(any.modifiedDateTimeUtc) : null
         )
     }
 }

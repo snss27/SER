@@ -15,13 +15,8 @@ export const AddressInput = ({ value, label, onChange }: Props) => {
             placeholder="Введите адрес..."
             noOptionsText="Адрес не найден"
             onChange={onChange}
-            loadOptions={async (searchText) =>
-                (await LocationsProvider.search(searchText)).map((address) => ({ id: address }))
-            }
-            loadOption={async (searchText) => ({
-                id: (await LocationsProvider.search(searchText))[0],
-            })}
-            getOptionLabel={(address) => address.id}
+            loadOptions={LocationsProvider.search}
+            getOptionLabel={(address) => address}
         />
     )
 }

@@ -1,4 +1,3 @@
-import Select from "@/components/shared/inputs/select"
 import { EducationLevelsProvider } from "@/domain/educationLevels/educationLevelsProvider"
 import { EducationLevelTypes } from "@/domain/educationLevels/enums/EducationLevelTypes"
 import { EducationLevelBlank } from "@/domain/educationLevels/models/educationLevelBlank"
@@ -8,6 +7,7 @@ import { useRouter } from "next/router"
 import { useReducer } from "react"
 import { IconPosition, IconType } from "../shared/buttons"
 import Button from "../shared/buttons/button"
+import { Select } from "../shared/inputs/select"
 import TextInput from "../shared/inputs/textInput"
 
 interface Props {

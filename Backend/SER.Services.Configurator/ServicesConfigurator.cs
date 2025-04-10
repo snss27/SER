@@ -15,6 +15,8 @@ using SER.Services.Groups;
 using SER.Services.Groups.Repositories;
 using SER.Services.Students;
 using SER.Services.Students.Repositories;
+using SER.Services.WorkPlaces;
+using SER.Services.WorkPlaces.Repositories;
 
 namespace SER.Services.Configurator;
 public static class ServicesConfigurator
@@ -31,6 +33,7 @@ public static class ServicesConfigurator
 		services.AddSingleton<IEnterprisesService, EnterprisesService>();
 		services.AddSingleton<IClustersService, ClustersService>();
 		services.AddSingleton<IFilesService, FilesService>();
+		services.AddSingleton<IWorkPlacesSevice, WorkPlacesService>();
 
         #endregion
 
@@ -43,6 +46,7 @@ public static class ServicesConfigurator
 		services.AddSingleton<IAdditionalQualificationsRepository, AdditionalQualificationsRepository>();
 		services.AddSingleton<IEnterprisesRepository, EnterprisesRepository>();
 		services.AddSingleton<IClustersRepository, ClustersRepository>();
+		services.AddSingleton<IWorkPlacesRepository, WorkPlacesRepository>();
 
 		#endregion
 

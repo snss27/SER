@@ -1,0 +1,1 @@
+select * from students where groupid=@p_groupid and not isremoved

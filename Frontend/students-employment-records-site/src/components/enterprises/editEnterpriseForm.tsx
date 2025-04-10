@@ -11,7 +11,7 @@ import { useReducer } from "react"
 import { IconPosition, IconType } from "../shared/buttons"
 import Button from "../shared/buttons/button"
 import CheckBox from "../shared/buttons/checkBox"
-import { InnInput } from "../shared/inputs/maskedInputs/innInput"
+import { EnterpriseInnInput } from "../shared/inputs/maskedInputs/enterpriseInnInput"
 import TextInput from "../shared/inputs/textInput"
 
 interface Props {
@@ -62,7 +62,7 @@ export const EditEnterpriseForm = (props: Props) => {
                 label="Адерс (место нахождения)"
                 onChange={(address) => dispatch({ type: "CHANGE_ADDRESS", payload: { address } })}
             />
-            <InnInput
+            <EnterpriseInnInput
                 value={enterpriseBlank.INN}
                 label="ИНН"
                 onChange={(INN) => dispatch({ type: "CHANGE_INN", payload: { INN } })}

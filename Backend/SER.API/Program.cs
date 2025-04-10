@@ -4,12 +4,22 @@ using SER.Configurator.Extensions;
 using SER.Tools.Binders;
 using SER.Tools.Json;
 using SER.Services.Configurator;
+using Microsoft.AspNetCore.Http.Features;
+using static System.Int32;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.Host.ConfigureWeb((context, serviceCollection) => 
 {
     serviceCollection.Initialize();
+});
+
+builder.Services.Configure<FormOptions>(options =>
+{
+	options.ValueLengthLimit = MaxValue;
+	options.BufferBodyLengthLimit = MaxValue;
+	options.KeyLengthLimit = MaxValue;
+	options.MultipartBodyLengthLimit = Int64.MaxValue;
 });
 
 builder.Services.AddResponseCompression(options =>

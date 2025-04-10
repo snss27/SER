@@ -1,3 +1,5 @@
+import { BlankFiles } from "@/tools/blankFiles"
+
 const CACHED_FILES: Map<string, string> = new Map()
 const CONTENT_TYPES_TO_CACHE = ["image/jpeg", "image/png", "image/jpg", "application/pdf"]
 
@@ -37,6 +39,96 @@ export class HttpClient {
         )
 
         return await response.json()
+    }
+
+    public static async postFormDataAsync(
+        url: string,
+        data: any,
+        params: any = null
+    ): Promise<any> {
+        const fullUrl = `${this.host}${url}${
+            params != null ? HttpClient.toQueryString(params) : ""
+        }`
+
+        const formData = new FormData()
+        this.appendToFormData(formData, data)
+
+        const response = await HttpClient.httpHandler(
+            await fetch(fullUrl, {
+                method: "POST",
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest",
+                    Accept: "application/json",
+                },
+                body: formData,
+            })
+        )
+
+        return await response.json()
+    }
+
+    private static appendToFormData(formData: FormData, data: any, prefix = "") {
+        if (!data) return
+
+        if (data instanceof File) {
+            formData.append(prefix || "file", data)
+        } else if (data instanceof BlankFiles) {
+            // Обработка BlankFiles
+            formData.append(`${prefix}.MaxFiles`, data.maxFiles.toString())
+
+            // Отправляем Files как массив
+            if (data.files && data.files.length > 0) {
+                data.files.forEach((file: File, index: number) => {
+                    formData.append(`${prefix}.Files`, file)
+                })
+            } else {
+                // Если массив пустой, отправляем пустой массив как JSON
+                formData.append(`${prefix}.Files`, JSON.stringify([]))
+            }
+
+            // Отправляем FileUrls как массив
+            if (data.fileUrls && data.fileUrls.length > 0) {
+                data.fileUrls.forEach((url: string, index: number) => {
+                    formData.append(`${prefix}.FileUrls`, url)
+                })
+            } else {
+                // Если массив пустой, отправляем пустой массив как JSON
+                formData.append(`${prefix}.FileUrls`, JSON.stringify([]))
+            }
+        } else if (Array.isArray(data)) {
+            data.forEach((item, index) => {
+                const newPrefix = prefix ? `${prefix}[${index}]` : `[${index}]`
+                this.appendToFormData(formData, item, newPrefix)
+            })
+        } else if (typeof data === "object") {
+            Object.entries(data).forEach(([key, value]) => {
+                const newPrefix = prefix ? `${prefix}.${key}` : key
+                this.appendToFormData(formData, value, newPrefix)
+            })
+        } else {
+            formData.append(prefix, String(data))
+        }
+    }
+
+    private static isBlankFiles(obj: any): obj is BlankFiles {
+        return (
+            obj &&
+            Array.isArray(obj.fileUrls) &&
+            Array.isArray(obj.files) &&
+            typeof obj.maxFiles === "number"
+        )
+    }
+
+    private static checkForFiles(obj: any): boolean {
+        if (!obj) return false
+        if (obj instanceof File) return true
+        if (Array.isArray(obj)) {
+            return obj.some((item) => this.checkForFiles(item))
+        }
+        if (typeof obj === "object") {
+            return Object.values(obj).some((value) => this.checkForFiles(value))
+        }
+        return false
     }
 
     public static async getFileWithCache(
@@ -101,6 +193,7 @@ export class HttpClient {
 
         headers.append("X-Requested-With", "XMLHttpRequest")
         headers.append("Content-Type", "application/json")
+        headers.append("Accept", "application/json")
 
         return headers
     }

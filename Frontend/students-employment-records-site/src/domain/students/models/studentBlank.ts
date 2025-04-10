@@ -1,16 +1,18 @@
+import { AdditionalQualification } from "@/domain/additionalQualifications/models/additionalQualification"
+import { Enterprise } from "@/domain/enterprises/models/enterprise"
+import { Group } from "@/domain/groups/models/group"
 import { WorkplaceBlank } from "@/domain/workplaces/models/workplaceBlank"
 import { BlankFiles } from "@/tools/blankFiles"
 import { Gender } from "../enums/gender"
 import { SocialStatus } from "../enums/socialStatus"
 import { StudentStatus } from "../enums/studentStatus"
-
 export interface StudentBlank {
     id: string | null
     name: string | null
     secondName: string | null
     lastName: string | null
-    status: StudentStatus | null
-    gender: Gender | null
+    status: StudentStatus
+    gender: Gender
     phoneNumber: string | null
     representativePhoneNumber: string | null
     birthDate: Date | null
@@ -19,7 +21,7 @@ export interface StudentBlank {
     address: string | null
     mail: string | null
     inn: string | null
-    groupId: string | null
+    group: Group | null
     isForeignCitizen: boolean
     isOnPaidStudy: boolean
 
@@ -32,11 +34,11 @@ export interface StudentBlank {
     currentWorkplace: WorkplaceBlank | null
     prevWorkplaces: WorkplaceBlank[]
 
-    additionalQualificationIds: string[]
+    additionalQualifications: AdditionalQualification[]
 
     isTargetAgreement: boolean
     targetAgreementDate: Date | null
-    targetAgreementEnterpriseId: string | null
+    targetAgreementEnterprise: Enterprise | null
     targetAgreementFile: BlankFiles
 
     mustServeInArmy: boolean
@@ -63,7 +65,7 @@ export namespace StudentBlank {
             address: null,
             mail: null,
             inn: null,
-            groupId: null,
+            group: null,
             isForeignCitizen: false,
             isOnPaidStudy: false,
 
@@ -76,11 +78,11 @@ export namespace StudentBlank {
             currentWorkplace: null,
             prevWorkplaces: [],
 
-            additionalQualificationIds: [],
+            additionalQualifications: [],
 
             isTargetAgreement: false,
             targetAgreementDate: null,
-            targetAgreementEnterpriseId: null,
+            targetAgreementEnterprise: null,
             targetAgreementFile: BlankFiles.create(1),
 
             mustServeInArmy: false,
@@ -142,8 +144,8 @@ export namespace StudentBlank {
                     inn: action.payload.inn,
                 }
 
-            case "CHANGE_GROUP_ID":
-                return { ...state, groupId: action.payload.groupId }
+            case "CHANGE_GROUP":
+                return { ...state, group: action.payload.group }
 
             case "CHANGE_IS_FOREIGN_CITIZEN":
                 return {
@@ -178,10 +180,10 @@ export namespace StudentBlank {
             case "CHANGE_PREV_WORKPLACES":
                 return { ...state, prevWorkplaces: action.payload.prevWorkplaces }
 
-            case "CHANGE_ADDITIONAL_QUALIFICATION_IDS":
+            case "CHANGE_ADDITIONAL_QUALIFICATIONS":
                 return {
                     ...state,
-                    additionalQualificationIds: action.payload.additionalQualificationIds,
+                    additionalQualifications: action.payload.additionalQualifications,
                 }
 
             case "CHANGE_IS_TARGET_AGREEMENT":
@@ -190,10 +192,10 @@ export namespace StudentBlank {
             case "CHANGE_TARGET_AGREEMENT_DATE":
                 return { ...state, targetAgreementDate: action.payload.targetAgreementDate }
 
-            case "CHANGE_TARGET_AGREEMENT_ENTERPRISE_ID":
+            case "CHANGE_TARGET_AGREEMENT_ENTERPRISE":
                 return {
                     ...state,
-                    targetAgreementEnterpriseId: action.payload.targetAgreementEnterpriseId,
+                    targetAgreementEnterprise: action.payload.targetAgreementEnterprise,
                 }
 
             case "CHANGE_TARGET_AGREEMENT_FILE":
@@ -232,11 +234,11 @@ export type StudentAction =
       }
     | {
           type: "CHANGE_STATUS"
-          payload: { status: StudentStatus | null }
+          payload: { status: StudentStatus }
       }
     | {
           type: "CHANGE_GENDER"
-          payload: { gender: Gender | null }
+          payload: { gender: Gender }
       }
     | {
           type: "CHANGE_PHONE_NUMBER"
@@ -271,8 +273,8 @@ export type StudentAction =
           payload: { inn: string | null }
       }
     | {
-          type: "CHANGE_GROUP_ID"
-          payload: { groupId: string | null }
+          type: "CHANGE_GROUP"
+          payload: { group: Group | null }
       }
     | {
           type: "CHANGE_IS_FOREIGN_CITIZEN"
@@ -311,8 +313,8 @@ export type StudentAction =
           payload: { prevWorkplaces: WorkplaceBlank[] }
       }
     | {
-          type: "CHANGE_ADDITIONAL_QUALIFICATION_IDS"
-          payload: { additionalQualificationIds: string[] }
+          type: "CHANGE_ADDITIONAL_QUALIFICATIONS"
+          payload: { additionalQualifications: AdditionalQualification[] }
       }
     | {
           type: "CHANGE_IS_TARGET_AGREEMENT"
@@ -323,8 +325,8 @@ export type StudentAction =
           payload: { targetAgreementDate: Date | null }
       }
     | {
-          type: "CHANGE_TARGET_AGREEMENT_ENTERPRISE_ID"
-          payload: { targetAgreementEnterpriseId: string | null }
+          type: "CHANGE_TARGET_AGREEMENT_ENTERPRISE"
+          payload: { targetAgreementEnterprise: Enterprise | null }
       }
     | {
           type: "CHANGE_TARGET_AGREEMENT_FILE"

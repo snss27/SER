@@ -6,36 +6,30 @@ using SER.Tools.Types.Results;
 
 namespace SER.API.Controllers.Students;
 
-public class StudentsController : ControllerBase
+[Route("api/students/")]
+public class StudentsController(IStudentsService studentsService) : ControllerBase
 {
-	private readonly IStudentsService _studentsService;
-
-	public StudentsController(IStudentsService studentsService)
+	[HttpPost("save")]
+	public async Task<Result> Save([FromForm] StudentBlank blank)
 	{
-		_studentsService = studentsService;
+		return await studentsService.Save(blank);
 	}
 
-	[HttpPost("api/students/save")]
-	public async Task<Result> Save([FromBody] StudentBlank blank)
-	{
-		return await _studentsService.Save(blank);
-	}
-
-	[HttpPost("api/students/remove")]
+	[HttpPost("remove")]
 	public async Task<Result> Remove([FromBody] ID id)
 	{
-		return await _studentsService.Remove(id);
+		return await studentsService.Remove(id);
 	}
 
-	[HttpGet("api/students/get")]
+	[HttpGet("get")]
 	public async Task<Student?> Get([FromQuery] ID id)
 	{
-		return await _studentsService.Get(id);
+		return await studentsService.Get(id);
 	}
 
-	[HttpGet("api/students/get_page")]
+	[HttpGet("get_page")]
 	public async Task<Student[]> GetPage([FromQuery] Int32 page, [FromQuery] Int32 pageSize)
 	{
-		return await _studentsService.GetPage(page, pageSize);
+		return await studentsService.GetPage(page, pageSize);
 	}
 }

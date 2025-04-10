@@ -73,7 +73,7 @@ export const StudentsTable: React.FC = () => {
                             <TableCell sx={{ width: "25%" }}>
                                 {student.lastName} {student.name} {student.secondName}
                             </TableCell>
-                            <TableCell sx={{ width: "20%" }}>{student.groupId}</TableCell>
+                            <TableCell sx={{ width: "20%" }}>{student.group.number}</TableCell>
                             <TableCell sx={{ width: "15%" }}>{student.phoneNumber}</TableCell>
                             <TableCell sx={{ width: "20%" }}>{student.mail}</TableCell>
                             <TableCell sx={{ width: "10%" }}>

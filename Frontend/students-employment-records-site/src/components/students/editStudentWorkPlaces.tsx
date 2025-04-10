@@ -6,6 +6,8 @@ import Button from "../shared/buttons/button"
 import { WorkplaceEditor } from "../workplaces/workplaceEditor"
 import { WorkplaceItem } from "../workplaces/workplaceItem"
 
+type EditMode = { type: "current"; isNew: boolean } | { type: "previous"; isNew: boolean }
+
 interface Props {
     studentBlank: StudentBlank
     dispatch: React.Dispatch<StudentAction>
@@ -13,26 +15,20 @@ interface Props {
 
 export function EditStudentWorkplaces({ studentBlank, dispatch }: Props) {
     const [editingWorkplace, setEditingWorkplace] = useState<WorkplaceBlank | null>(null)
+    const [editMode, setEditMode] = useState<EditMode | null>(null)
 
-    const handleSaveWorkplace = (updatedWorkplace: WorkplaceBlank) => {
-        if (editingWorkplace?.id) {
-            if (studentBlank.currentWorkplace?.id === editingWorkplace.id) {
-                dispatch({
-                    type: "CHANGE_CURRENT_WORKPLACE",
-                    payload: { currentWorkplace: updatedWorkplace },
-                })
-            } else {
-                dispatch({
-                    type: "CHANGE_PREV_WORKPLACES",
-                    payload: {
-                        prevWorkplaces: studentBlank.prevWorkplaces.map((w) =>
-                            w.id === updatedWorkplace.id ? updatedWorkplace : w
-                        ),
-                    },
-                })
-            }
-        } else {
-            if (studentBlank.currentWorkplace) {
+    const openEditor = (workplace: WorkplaceBlank, mode: EditMode) => {
+        // Клонируем workplace, чтобы не мутировать напрямую
+        setEditingWorkplace({ ...workplace })
+        setEditMode(mode)
+    }
+
+    const handleSaveWorkplace = (updated: WorkplaceBlank) => {
+        if (!editMode) return
+
+        if (editMode.type === "current") {
+            if (editMode.isNew && studentBlank.currentWorkplace) {
+                // Переносим старое в предыдущие
                 dispatch({
                     type: "CHANGE_PREV_WORKPLACES",
                     payload: {
@@ -43,12 +39,47 @@ export function EditStudentWorkplaces({ studentBlank, dispatch }: Props) {
                     },
                 })
             }
+            // Устанавливаем новое текущее
             dispatch({
                 type: "CHANGE_CURRENT_WORKPLACE",
-                payload: { currentWorkplace: updatedWorkplace },
+                payload: { currentWorkplace: updated },
             })
+        } else {
+            if (editMode.isNew) {
+                // Добавляем новое в предыдущие
+                dispatch({
+                    type: "CHANGE_PREV_WORKPLACES",
+                    payload: {
+                        prevWorkplaces: [...studentBlank.prevWorkplaces, updated],
+                    },
+                })
+            } else {
+                // Обновляем существующее
+                const updatedList = studentBlank.prevWorkplaces.map((w) =>
+                    w.clientId === updated.clientId ? updated : w
+                )
+                dispatch({
+                    type: "CHANGE_PREV_WORKPLACES",
+                    payload: { prevWorkplaces: updatedList },
+                })
+            }
         }
+
+        closeEditor()
+    }
+
+    const closeEditor = () => {
         setEditingWorkplace(null)
+        setEditMode(null)
+    }
+
+    const handleDeletePrev = (clientId?: string) => {
+        dispatch({
+            type: "CHANGE_PREV_WORKPLACES",
+            payload: {
+                prevWorkplaces: studentBlank.prevWorkplaces.filter((w) => w.clientId !== clientId),
+            },
+        })
     }
 
     return (
@@ -58,7 +89,12 @@ export function EditStudentWorkplaces({ studentBlank, dispatch }: Props) {
                 {studentBlank.currentWorkplace ? (
                     <WorkplaceItem
                         workplace={studentBlank.currentWorkplace}
-                        onEdit={() => setEditingWorkplace(studentBlank.currentWorkplace!)}
+                        onEdit={() =>
+                            openEditor(studentBlank.currentWorkplace!, {
+                                type: "current",
+                                isNew: false,
+                            })
+                        }
                         onDelete={() =>
                             dispatch({
                                 type: "CHANGE_CURRENT_WORKPLACE",
@@ -69,7 +105,9 @@ export function EditStudentWorkplaces({ studentBlank, dispatch }: Props) {
                 ) : (
                     <Button
                         text="Добавить текущее место работы"
-                        onClick={() => setEditingWorkplace(WorkplaceBlank.empty())}
+                        onClick={() =>
+                            openEditor(WorkplaceBlank.empty(), { type: "current", isNew: true })
+                        }
                     />
                 )}
             </Box>
@@ -78,38 +116,27 @@ export function EditStudentWorkplaces({ studentBlank, dispatch }: Props) {
                 <Typography variant="h6">Предыдущие места работы</Typography>
                 {studentBlank.prevWorkplaces.map((workplace) => (
                     <WorkplaceItem
-                        key={workplace.id || "new"}
+                        key={workplace.clientId}
                         workplace={workplace}
-                        onEdit={() => setEditingWorkplace(workplace)}
-                        onDelete={() =>
-                            dispatch({
-                                type: "CHANGE_PREV_WORKPLACES",
-                                payload: {
-                                    prevWorkplaces: studentBlank.prevWorkplaces.filter(
-                                        (w) => w.id !== workplace.id
-                                    ),
-                                },
-                            })
-                        }
+                        onEdit={() => openEditor(workplace, { type: "previous", isNew: false })}
+                        onDelete={() => handleDeletePrev(workplace.clientId)}
                     />
                 ))}
                 <Button
                     text="Добавить предыдущее место работы"
-                    onClick={() => setEditingWorkplace(WorkplaceBlank.empty())}
+                    onClick={() =>
+                        openEditor(WorkplaceBlank.empty(), { type: "previous", isNew: true })
+                    }
                 />
             </Box>
 
-            <Dialog
-                open={!!editingWorkplace}
-                onClose={() => setEditingWorkplace(null)}
-                maxWidth="md"
-                fullWidth>
+            <Dialog open={!!editingWorkplace} onClose={closeEditor} maxWidth="md" fullWidth>
                 <DialogContent>
                     {editingWorkplace && (
                         <WorkplaceEditor
                             workplace={editingWorkplace}
                             onSave={handleSaveWorkplace}
-                            onClose={() => setEditingWorkplace(null)}
+                            onClose={closeEditor}
                         />
                     )}
                 </DialogContent>

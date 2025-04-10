@@ -1,1 +1,4 @@
-select * from students where id=@p_id and not isremoved
+UPDATE students SET
+isremoved = true,
+modifieddatetimeutc = @p_currentdatetimeutc
+where id = @p_id

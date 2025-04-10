@@ -1,23 +1,70 @@
 import { Autocomplete, SxProps, TextField, Theme } from "@mui/material"
 
-export interface Props<T> {
+type BaseProps<T> = {
     options: T[]
-    value: T | null
     label?: string
     disabled?: boolean
     sx?: SxProps<Theme>
-
+    defaultValue?: T
     getOptionLabel: (option: T) => string
-    onChange: (value: T | null) => void
     isOptionEqualToValue?: (first: T, second: T) => boolean
 }
 
-//TODO Возможно лучше написать через TextField с пропсом Select (в документации MUI есть пример)
-const Select = <T,>(props: Props<T>) => {
+type RequiredSingleProps<T> = BaseProps<T> & {
+    required: true
+    multiple?: false | undefined
+    value: T
+    onChange: (value: T) => void
+}
+
+type OptionalSingleProps<T> = BaseProps<T> & {
+    required?: false
+    multiple?: false | undefined
+    value: T | null
+    onChange: (value: T | null) => void
+}
+
+type RequiredMultipleProps<T> = BaseProps<T> & {
+    required: true
+    multiple: true
+    value: T[]
+    onChange: (value: T[]) => void
+}
+
+type OptionalMultipleProps<T> = BaseProps<T> & {
+    required?: false
+    multiple: true
+    value: T[]
+    onChange: (value: T[]) => void
+}
+
+type Props<T> =
+    | RequiredSingleProps<T>
+    | OptionalSingleProps<T>
+    | RequiredMultipleProps<T>
+    | OptionalMultipleProps<T>
+
+export const Select = <T,>(props: Props<T>) => {
     function isOptionEqualToValue(first: T, second: T) {
         if (props.isOptionEqualToValue) return props.isOptionEqualToValue(first, second)
-
         return first === second
+    }
+
+    const handleChange = (_: any, value: T | T[] | null) => {
+        if (props.multiple) {
+            props.onChange(Array.isArray(value) ? value : [])
+            return
+        }
+
+        if (props.required && !value) {
+            props.onChange(props.defaultValue || props.options[0])
+            return
+        }
+        if (props.required) {
+            props.onChange(value as T)
+        } else {
+            props.onChange(value as T | null)
+        }
     }
 
     return (
@@ -27,8 +74,9 @@ const Select = <T,>(props: Props<T>) => {
             noOptionsText="Пусто"
             disabled={props.disabled}
             sx={props.sx}
+            multiple={props.multiple}
             isOptionEqualToValue={isOptionEqualToValue}
-            onChange={(_, value) => props.onChange(value)}
+            onChange={handleChange}
             getOptionLabel={props.getOptionLabel}
             renderInput={(params) => (
                 <TextField {...params} label={props.label} autoComplete="password" />
@@ -36,5 +84,3 @@ const Select = <T,>(props: Props<T>) => {
         />
     )
 }
-
-export default Select

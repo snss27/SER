@@ -9,6 +9,6 @@ public interface IGroupsRepository
 	public Task<Result> Remove(ID id);
 	public Task<Group?> Get(ID id);
 	public Task<Group[]> GetPage(Int32 page, Int32 pageSize);
-	public Task<Group[]> GetBySeacrhText(String searchText);
+	public Task<Group[]> GetBySearchText(String searchText);
 	public Task<Group[]> GetByEducationLevelId(ID eductionLevelId);
 }

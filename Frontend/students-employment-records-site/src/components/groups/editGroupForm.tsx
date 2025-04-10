@@ -1,4 +1,11 @@
+import { AsyncAutocomplete } from "@/components/shared/inputs/asyncAutocomplete"
+import { GroupNumberInput } from "@/components/shared/inputs/maskedInputs/groupNumberInput"
+import { Select } from "@/components/shared/inputs/select"
+import { ClustersProvider } from "@/domain/clusters/clustersProvider"
+import { EducationLevelsProvider } from "@/domain/educationLevels/educationLevelsProvider"
+import { EmployeesProvider } from "@/domain/employees/employeesProvider"
 import { StructuralUnits } from "@/domain/groups/enums/structuralUnits"
+import { GroupsProvider } from "@/domain/groups/groupsProvider"
 import { GroupBlank } from "@/domain/groups/models/groupBlank"
 import useNotifications from "@/hooks/useNotifications"
 import { Box, Collapse } from "@mui/material"
@@ -6,15 +13,8 @@ import { useRouter } from "next/router"
 import { useReducer } from "react"
 import { IconPosition, IconType } from "../shared/buttons"
 import Button from "../shared/buttons/button"
-import Select from "../shared/inputs/select"
-import YearPicker from "../shared/inputs/yearPicker"
-import { GroupsProvider } from "@/domain/groups/groupsProvider"
-import { EducationLevelsProvider } from "@/domain/educationLevels/educationLevelsProvider"
-import { EmployeesProvider } from "@/domain/employees/employeesProvider"
-import { GroupNumberInput } from "@/components/shared/inputs/maskedInputs/groupNumberInput"
-import { AsyncAutocomplete } from "@/components/shared/inputs/asyncAutocomplete"
 import CheckBox from "../shared/buttons/checkBox"
-import { ClustersProvider } from "@/domain/clusters/clustersProvider"
+import YearPicker from "../shared/inputs/yearPicker"
 
 interface Props {
     initialBlank: GroupBlank
@@ -53,8 +53,10 @@ export const EditGroupForm = (props: Props) => {
                 options={StructuralUnits.getAll()}
                 value={groupBlank.structuralUnit}
                 label="Структурное подразделение"
-                getOptionLabel={(structuralUnit) => StructuralUnits.getDisplayText(structuralUnit)}
-                onChange={(structuralUnit) =>
+                getOptionLabel={(structuralUnit: StructuralUnits) =>
+                    StructuralUnits.getDisplayText(structuralUnit)
+                }
+                onChange={(structuralUnit: StructuralUnits | null) =>
                     dispatch({
                         type: "CHANGE_STRUCTURAL_UNIT",
                         payload: { structuralUnit },
@@ -62,12 +64,11 @@ export const EditGroupForm = (props: Props) => {
                 }
             />
             <AsyncAutocomplete
-                value={groupBlank.educationLevelId}
+                value={groupBlank.educationLevel}
                 label="Уровень образования"
-                onChange={(educationLevelId) =>
-                    dispatch({ type: "CHANGE_EDUCATION_LEVEL_ID", payload: { educationLevelId } })
+                onChange={(educationLevel) =>
+                    dispatch({ type: "CHANGE_EDUCATION_LEVEL", payload: { educationLevel } })
                 }
-                loadOption={EducationLevelsProvider.get}
                 loadOptions={EducationLevelsProvider.getBySearchText}
                 getOptionLabel={(educationLevel) => educationLevel.displayName}
             />
@@ -82,16 +83,15 @@ export const EditGroupForm = (props: Props) => {
                 }
             />
             <AsyncAutocomplete
-                value={groupBlank.curatorId}
+                value={groupBlank.curator}
                 label="Куратор"
-                onChange={(curatorId) =>
+                onChange={(curator) =>
                     dispatch({
-                        type: "CHANGE_CURATOR_ID",
-                        payload: { curatorId },
+                        type: "CHANGE_CURATOR",
+                        payload: { curator },
                     })
                 }
                 loadOptions={EmployeesProvider.getBySearchText}
-                loadOption={EmployeesProvider.get}
                 getOptionLabel={(curator) => curator.displayName}
             />
 
@@ -106,13 +106,12 @@ export const EditGroupForm = (props: Props) => {
 
                 <Collapse in={groupBlank.hasCluster}>
                     <AsyncAutocomplete
-                        value={groupBlank.clusterId}
+                        value={groupBlank.cluster}
                         label="Кластер"
-                        onChange={(clusterId) =>
-                            dispatch({ type: "CHANGE_CLUSTER_ID", payload: { clusterId } })
+                        onChange={(cluster) =>
+                            dispatch({ type: "CHANGE_CLUSTER", payload: { cluster } })
                         }
                         loadOptions={ClustersProvider.getBySearchText}
-                        loadOption={ClustersProvider.get}
                         getOptionLabel={(cluster) => cluster.name}
                     />
                 </Collapse>

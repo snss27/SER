@@ -10,7 +10,7 @@ namespace SER.Services.EducationLevels;
 
 public class EducationLevelsService(
 	IEducationLevelsRepository educationLevelsRepository,
-	IGroupsService groupsService
+	IGroupsRepository groupsRepository
 	) : IEducationLevelsService
 {
 	public async Task<Result> Save(EducationLevelBlank blank)
@@ -37,7 +37,7 @@ public class EducationLevelsService(
 
 	public async Task<Result> Remove(ID id)
 	{
-		Group[] groups = await groupsService.GetByEducationLevelId(id);
+		Group[] groups = await groupsRepository.GetByEducationLevelId(id);
 		if (groups.Length > 0) return Result.Fail("Невозможно удалить, т.к. существуют группы с данным уровнем образования");
 
 		return await educationLevelsRepository.Remove(id);

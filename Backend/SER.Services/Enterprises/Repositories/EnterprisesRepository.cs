@@ -79,11 +79,11 @@ public class EnterprisesRepository(MainConnector connector) : BaseRepository(con
 		return (await session.GetArray<EnterpriseDB>(query)).ToEnterprises();
 	}
 
-	public async Task<Enterprise[]> GetBySearchText(String seacrhText)
+	public async Task<Enterprise[]> GetBySearchText(String searchText)
 	{
 		Query query = _connector.CreateQuery(Sql.Enterprises_GetBySearchText);
 		{
-			query.Add(seacrhText);
+			query.Add(searchText);
 		}
 
 		await using IAsyncSeparatelySession session = await _connector.CreateAsyncSession();

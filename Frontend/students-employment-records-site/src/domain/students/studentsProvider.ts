@@ -5,7 +5,8 @@ import { StudentBlank } from "./models/studentBlank"
 
 export class StudentsProvider {
     public static async save(blank: StudentBlank): Promise<Result> {
-        const result = await HttpClient.postJsonAsync("/students/save", blank)
+        console.log(blank)
+        const result = await HttpClient.postFormDataAsync("/students/save", blank)
         return Result.fromAny(result)
     }
 

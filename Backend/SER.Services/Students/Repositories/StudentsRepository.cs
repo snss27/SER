@@ -13,45 +13,47 @@ namespace SER.Services.Students.Repositories;
 
 public class StudentsRepository(MainConnector connector) : BaseRepository(connector), IStudentsRepository
 {
-	public async Task<Result> Save(StudentBlank blank)
+	public async Task<Result> Save(StudentBlank blank, ID? currentWorkplaceId, ID[] prevWorkplaceIds, String[] passportFileUrls, String? targetAgreementFileUrl, String? armySunpoenaFileUrl, String[] otherFileUrls)
 	{
 		Query query = _connector.CreateQuery(Sql.Students_Save);
 		{
-			query.Add(blank.Id, "p_id");
-			query.Add(blank.Name, "p_name");
-			query.Add(blank.Surname, "p_secondname");
-			query.Add(blank.Patronymic, "p_lastname");
-			query.Add(blank.Gender, "p_gender");
-			query.Add(blank.BirthDate, "p_birthDate");
-			query.Add(blank.PhoneNumber, "p_phonenumber");
-			query.Add(blank.RepresentativePhoneNumber, "p_representativephonenumber");
-			query.Add(blank.IsOnPaidStudy, "p_isonpaidstudy");
-			query.Add(blank.Snils, "p_snils");
-			query.Add(blank.GroupId, "p_groupid");
-			query.Add(blank.AdditionalQualifications, "p_additionalqualifications");
-			query.Add(blank.IsTargetAgreement, "p_istargetagreement");
-			query.Add(blank.TargetAgreementFile, "p_targetagreementfile");
-			query.Add(blank.ArmySubpoenaFile, "p_armysubpoenafile");
-			query.Add(blank.ArmyServeDate, "p_armyservedate");
-			query.Add(blank.Address, "p_address");
-			query.Add(blank.IsForeignCitizen, "p_isforeigncitizen");
-			query.Add(blank.Inn, "p_inn");
-			query.Add(blank.Mail, "p_mail");
-			query.Add(blank.PassportNumber, "p_pasportnumber");
-			query.Add(blank.PassportSeries, "p_pasportseries");
+			query.Add(blank.Id);
+			query.Add(blank.Name);
+			query.Add(blank.SecondName);
+			query.Add(blank.LastName);
+			query.Add(blank.Gender);
+			query.Add(blank.BirthDate);
+			query.Add(blank.PhoneNumber);
+			query.Add(blank.RepresentativePhoneNumber);
+			query.Add(blank.IsOnPaidStudy);
+			query.Add(blank.Snils);
+			query.Add(blank.Group?.Id, "p_groupid");
+			query.Add(blank.PassportNumber);
+			query.Add(blank.PassportSeries);
+			query.Add(blank.PassportIssuedBy, "p_pasportissued");
+			query.Add(passportFileUrls, "p_pasportfiles");
+			query.Add(prevWorkplaceIds);
+			query.Add(currentWorkplaceId);
+			query.Add(blank.AdditionalQualifications.Select(q => q.Id).ToArray(), "p_additionalqualifications");
+			query.Add(blank.IsTargetAgreement);
+			query.Add(targetAgreementFileUrl, "p_targetagreementfile");
+			query.Add(blank.TargetAgreementDate);
+			query.Add(blank.TargetAgreementEnterprise?.Id, "p_targetagreemententerpriseid");
+			query.Add(blank.MustServeInArmy);
+			query.Add(armySunpoenaFileUrl, "p_armysubpoenafile");
+			query.Add(blank.ArmyCallDate);
+			query.Add(blank.SocialStatuses);
+			query.Add(blank.Status);
+			query.Add(blank.Address);
+			query.Add(blank.IsForeignCitizen);
+			query.Add(blank.Inn);
+			query.Add(blank.Mail);
+			query.Add(otherFileUrls, "p_otherfiles");
 			query.Add(DateTime.UtcNow, "p_currentdatetimeutc");
 		}
 
-		try
-		{
-			await using IAsyncSeparatelySession session = await _connector.CreateAsyncSession();
-			await session.Execute(query);
-			return Result.Success();
-		}
-		catch (Exception ex)
-		{
-			return Result.Fail($"Ошибка при выполнении запроса: {ex.Message}");
-		}
+		await using IAsyncSeparatelySession session = await _connector.CreateAsyncSession();
+		await session.Execute(query);
 
 		return Result.Success();
 	}
@@ -79,7 +81,7 @@ public class StudentsRepository(MainConnector connector) : BaseRepository(connec
 
 		await using IAsyncSeparatelySession session = await _connector.CreateAsyncSession();
 
-		return (await session.Get<StudentDB?>(query))?.ToFlatStudent();
+		return (await session.Get<StudentDB?>(query))?.TotStudent();
 	}
 
 	public async Task<Student[]> GetPage(Int32 page, Int32 pageSize)
@@ -93,6 +95,18 @@ public class StudentsRepository(MainConnector connector) : BaseRepository(connec
 
 		await using IAsyncSeparatelySession session = await _connector.CreateAsyncSession();
 
-		return (await session.GetArray<StudentDB>(query)).ToFlatStudents();
+		return (await session.GetArray<StudentDB>(query)).ToStudents();
+	}
+
+	public async Task<Student[]> GetByGroupId(ID groupId)
+	{
+		Query query = _connector.CreateQuery(Sql.Students_GetByGroupId);
+		{
+			query.Add(groupId);
+		}
+
+		await using IAsyncSeparatelySession session = await _connector.CreateAsyncSession();
+
+		return (await session.GetArray<StudentDB>(query)).ToStudents();
 	}
 }

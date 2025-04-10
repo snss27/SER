@@ -17,7 +17,7 @@ public class EnterprisesService(IEnterprisesRepository enterprisesRepository) : 
 			return Result.Fail("Укажите наименование организации");
 		}
 
-		if (!String.IsNullOrWhiteSpace(blank.INN) && !Regexs.InnRegex.IsMatch(blank.INN))
+		if (!String.IsNullOrWhiteSpace(blank.INN) && !Regexs.EnterpriseInnRegex.IsMatch(blank.INN))
 		{
 			return Result.Fail("Инн должен содержать 10 цифр");
 		}

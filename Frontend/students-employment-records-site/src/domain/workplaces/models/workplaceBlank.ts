@@ -1,37 +1,34 @@
+import { Enterprise } from "@/domain/enterprises/models/enterprise"
 import { BlankFiles } from "@/tools/blankFiles"
-
 export interface WorkplaceBlank {
     id: string | null
-    enterpriseId: string | null
+    enterprise: Enterprise | null
     post: string | null
     workbookExtractFile: BlankFiles
     startDate: Date | null
     finishDate: Date | null
+
+    clientId: string
 }
 
 export namespace WorkplaceBlank {
     export function empty(): WorkplaceBlank {
         return {
             id: null,
-            enterpriseId: null,
+            enterprise: null,
             post: null,
             workbookExtractFile: BlankFiles.create(1),
             startDate: null,
             finishDate: null,
-        }
-    }
 
-    export function create(id: string | null): WorkplaceBlank {
-        return {
-            ...empty(),
-            id,
+            clientId: crypto.randomUUID(),
         }
     }
 
     export function reducer(state: WorkplaceBlank, action: Action): WorkplaceBlank {
         switch (action.type) {
-            case "CHANGE_ENTERPRISE_ID":
-                return { ...state, enterpriseId: action.payload.enterpriseId }
+            case "CHANGE_ENTERPRISE":
+                return { ...state, enterprise: action.payload.enterprise }
 
             case "CHANGE_POST":
                 return { ...state, post: action.payload.post }
@@ -53,8 +50,8 @@ export namespace WorkplaceBlank {
 
 type Action =
     | {
-          type: "CHANGE_ENTERPRISE_ID"
-          payload: { enterpriseId: string | null }
+          type: "CHANGE_ENTERPRISE"
+          payload: { enterprise: Enterprise | null }
       }
     | {
           type: "CHANGE_POST"

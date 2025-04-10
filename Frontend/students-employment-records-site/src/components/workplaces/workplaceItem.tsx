@@ -1,6 +1,7 @@
 import { WorkplaceBlank } from "@/domain/workplaces/models/workplaceBlank"
-import { Box, Typography } from "@mui/material"
-import Button from "../shared/buttons/button"
+import DeleteIcon from "@mui/icons-material/Delete"
+import EditIcon from "@mui/icons-material/Edit"
+import { Box, Card, CardContent, IconButton, Stack, Typography } from "@mui/material"
 
 interface Props {
     workplace: WorkplaceBlank
@@ -8,18 +9,29 @@ interface Props {
     onDelete: () => void
 }
 
-export const WorkplaceItem: React.FC<Props> = ({ workplace, onEdit, onDelete }) => (
-    <Box sx={{ p: 2, border: 1, borderColor: "divider", borderRadius: 1, mb: 1 }}>
-        <Typography variant="subtitle1">{workplace.post}</Typography>
-        <Typography variant="body2" color="text.secondary">
-            {workplace.enterpriseId ? "Имя" : "Предприятие не указано"}
-        </Typography>
-        <Typography variant="caption">
-            {workplace.id ? "Сохранено на сервере" : "Не сохранено"}
-        </Typography>
-        <Box sx={{ display: "flex", gap: 1, mt: 1 }}>
-            <Button text="Редактировать" onClick={onEdit} />
-            <Button text="Удалить" onClick={onDelete} />
-        </Box>
-    </Box>
-)
+export function WorkplaceItem({ workplace, onEdit, onDelete }: Props) {
+    return (
+        <Card sx={{ mb: 1 }}>
+            <CardContent>
+                <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
+                    <Box>
+                        <Typography variant="subtitle1" fontWeight="bold">
+                            {workplace.post || "Должность не указана"}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                            {workplace.enterprise?.name || "Предприятие не указано"}
+                        </Typography>
+                    </Box>
+                    <Stack direction="row" spacing={1}>
+                        <IconButton onClick={onEdit} size="small">
+                            <EditIcon />
+                        </IconButton>
+                        <IconButton onClick={onDelete} size="small" color="error">
+                            <DeleteIcon />
+                        </IconButton>
+                    </Stack>
+                </Stack>
+            </CardContent>
+        </Card>
+    )
+}

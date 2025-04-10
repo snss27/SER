@@ -27,7 +27,12 @@ public class GroupsService(
 			return Result.Fail("Укажите номер группы");
 		}
 
-		if(blank.EducationLevelId is null)
+		if (blank.StructuralUnit is null)
+		{
+			return Result.Fail("Укажите струкрутное подразделение");
+		}
+
+		if (blank.EducationLevel is null)
 		{
 			return Result.Fail("Укажите уровень образования у группы");
 		}
@@ -37,24 +42,19 @@ public class GroupsService(
 			return Result.Fail("Номер группы должен быть целым пятизначным числом");
 		}
 
-		if (blank.StructuralUnit is null)
-		{
-			return Result.Fail("Укажите струкрутное подразделение");
-		}
-
 		if (blank.EnrollmentYear is null)
 		{
 			return Result.Fail("Укажите год поступления");
 		}
 
-		if (blank.HasCluster && blank.ClusterId is null)
+		if (blank.HasCluster && blank.Cluster is null)
 		{
 			return Result.Fail("Укажите кластер группы");
 		}
 
 		if (!blank.HasCluster)
 		{
-			blank.ClusterId = null;
+			blank.Cluster = null;
 		}
 
 		blank.Id ??= ID.New();
@@ -67,7 +67,7 @@ public class GroupsService(
 		Student[] students = await studentsSevice.GetByGroupId(id);
 		if (students.Length > 0)
 		{
-			return Result.Fail("У этой группе есть привязанные студенты");
+			return Result.Fail("Невозможно удалить, т.к. у этой группы есть привязанные студенты");
 		}
 
 		return await groupsRepository.Remove(id);
@@ -116,7 +116,7 @@ public class GroupsService(
 
 	public async Task<GroupDto[]> GetBySearchText(String searchText)
 	{
-		Group[] groups = await groupsRepository.GetBySeacrhText(searchText);
+		Group[] groups = await groupsRepository.GetBySearchText(searchText);
 		if(groups.Length == 0)
 		{
 			return [];
@@ -151,9 +151,4 @@ public class GroupsService(
 
 		return groups.ToGroupDtos(educationLevels, curators, clusters);
 	} 
-
-	public async Task<Group[]> GetByEducationLevelId(ID educationLevelId)
-	{
-		return await groupsRepository.GetByEducationLevelId(educationLevelId);
-	}
 }

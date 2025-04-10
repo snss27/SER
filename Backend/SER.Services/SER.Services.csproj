@@ -39,6 +39,7 @@
 
 	<ItemGroup>
 	  <Folder Include="Clusters\Repositories\Queries\Groups\" />
+	  <Folder Include="WorkPlaces\Repositories\Queries\WorkPlaces\" />
 	</ItemGroup>
 
 </Project>

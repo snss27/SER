@@ -1,44 +1,68 @@
 import useDebounce from "@/hooks/useDebounce"
-import { Autocomplete, AutocompleteRenderInputParams, TextField } from "@mui/material"
+import { Autocomplete, AutocompleteRenderInputParams, Chip, TextField } from "@mui/material"
 import { ClearIcon } from "@mui/x-date-pickers"
 import { useEffect, useState } from "react"
 
-interface Props<T> {
-    value: T | null
+type BaseProps<T> = {
     label: string
     disabled?: boolean
     noOptionsText?: string
     placeholder?: string
-    onChange: (value: T | null) => void
     loadOptions: (searchString: string) => Promise<T[]>
     getOptionLabel: (value: T) => string
     isOptionEqualToValue?: (option: T, value: T) => boolean
 }
 
-interface AutocompleteState<T> {
-    selectedOption: T | null
-    options: T[]
-    searchQuery: string
+type RequiredSingleProps<T> = BaseProps<T> & {
+    required: true
+    multiple?: false | undefined
+    value: T
+    onChange: (value: T) => void
 }
 
-const createInitialState = <T,>(): AutocompleteState<T> => ({
-    selectedOption: null,
-    options: [],
-    searchQuery: "",
-})
+type OptionalSingleProps<T> = BaseProps<T> & {
+    required?: false
+    multiple?: false | undefined
+    value: T | null
+    onChange: (value: T | null) => void
+}
 
-export const AsyncAutocomplete = <T,>({
-    value,
-    label,
-    disabled,
-    noOptionsText = "Ничего не найдено",
-    placeholder,
-    onChange,
-    loadOptions,
-    getOptionLabel,
-    isOptionEqualToValue,
-}: Props<T>) => {
-    const [state, setState] = useState(createInitialState<T>())
+type RequiredMultipleProps<T> = BaseProps<T> & {
+    required: true
+    multiple: true
+    value: T[]
+    onChange: (value: T[]) => void
+    maxSelections?: number
+}
+
+type OptionalMultipleProps<T> = BaseProps<T> & {
+    required?: false
+    multiple: true
+    value: T[]
+    onChange: (value: T[]) => void
+    maxSelections?: number
+}
+
+type Props<T> =
+    | RequiredSingleProps<T>
+    | OptionalSingleProps<T>
+    | RequiredMultipleProps<T>
+    | OptionalMultipleProps<T>
+
+interface AutocompleteState<T> {
+    selectedOptions: T | T[]
+    options: T[]
+    searchQuery: string
+    isLoading: boolean
+}
+
+export const AsyncAutocomplete = <T,>(props: Props<T>) => {
+    const [state, setState] = useState<AutocompleteState<T>>({
+        selectedOptions: props.multiple ? [] : (null as unknown as T),
+        options: [],
+        searchQuery: "",
+        isLoading: false,
+    })
 
     const fetchOptions = async () => {
         if (!state.searchQuery) {
@@ -46,20 +70,42 @@ export const AsyncAutocomplete = <T,>({
             return
         }
 
-        const options = await loadOptions(state.searchQuery)
-        setState((prev) => ({ ...prev, options }))
+        setState((prev) => ({ ...prev, isLoading: true }))
+        try {
+            const options = await props.loadOptions(state.searchQuery)
+            setState((prev) => ({
+                ...prev,
+                options: Array.isArray(prev.selectedOptions)
+                    ? options.filter(
+                          (opt) =>
+                              !(prev.selectedOptions as T[]).some((o) =>
+                                  props.isOptionEqualToValue
+                                      ? props.isOptionEqualToValue(o, opt)
+                                      : o === opt
+                              )
+                      )
+                    : options,
+                isLoading: false,
+            }))
+        } catch (error) {
+            setState((prev) => ({ ...prev, isLoading: false }))
+        }
     }
 
     useDebounce(fetchOptions, [state.searchQuery], 300, true)
 
     useEffect(() => {
-        if (value === state.selectedOption) return
-        setState((prev) => ({ ...prev, selectedOption: value }))
-    }, [value])
+        if (props.value === state.selectedOptions) return
+        setState((prev) => ({ ...prev, selectedOptions: props.value as T | T[] }))
+    }, [props.value])
 
-    const handleOptionSelect = (option: T | null) => {
-        setState((prev) => ({ ...prev, selectedOption: option }))
-        onChange(option)
+    const handleOptionSelect = (newValue: T | T[]) => {
+        if (props.multiple && "maxSelections" in props && props.maxSelections) {
+            if (Array.isArray(newValue) && newValue.length > props.maxSelections) return
+        }
+
+        setState((prev) => ({ ...prev, selectedOptions: newValue }))
+        props.onChange(newValue as any)
     }
 
     const handleSearchChange = (query: string) => {
@@ -69,34 +115,56 @@ export const AsyncAutocomplete = <T,>({
     const renderInputField = (params: AutocompleteRenderInputParams) => (
         <TextField
             {...params}
-            label={label}
-            placeholder={placeholder}
+            label={props.label}
+            placeholder={props.placeholder}
             autoComplete="password"
             onChange={(e) => handleSearchChange(e.target.value)}
         />
     )
 
+    const renderTags = (selected: T[], getTagProps: any) =>
+        selected.map((option, index) => (
+            <Chip
+                {...getTagProps({ index })}
+                key={index}
+                label={props.getOptionLabel(option)}
+                disabled={props.disabled}
+            />
+        ))
+
     const getFilteredOptions = () => {
         const allOptions = [...state.options]
-        if (!state.selectedOption) return allOptions
+        if (!state.selectedOptions) return allOptions
 
-        return allOptions.includes(state.selectedOption)
+        if (Array.isArray(state.selectedOptions)) {
+            return allOptions
+        }
+
+        return allOptions.includes(state.selectedOptions)
             ? allOptions
-            : [...allOptions, state.selectedOption]
+            : [...allOptions, state.selectedOptions]
     }
 
     return (
         <Autocomplete
             options={getFilteredOptions()}
-            value={state.selectedOption}
-            disabled={disabled}
+            value={props.value}
+            disabled={props.disabled}
+            loading={state.isLoading}
             forcePopupIcon={false}
-            noOptionsText={noOptionsText}
-            onChange={(_, option) => handleOptionSelect(option)}
-            getOptionLabel={getOptionLabel}
+            noOptionsText={props.noOptionsText ?? "Ничего не найдено"}
+            onChange={(_, option) => handleOptionSelect(option as T | T[])}
+            getOptionLabel={props.getOptionLabel}
             renderInput={renderInputField}
+            renderTags={props.multiple ? renderTags : undefined}
+            multiple={props.multiple}
             clearIcon={<ClearIcon />}
-            isOptionEqualToValue={isOptionEqualToValue}
+            isOptionEqualToValue={props.isOptionEqualToValue}
+            componentsProps={{
+                clearIndicator: {
+                    sx: { visibility: props.disabled ? "hidden" : "visible" },
+                },
+            }}
         />
     )
 }
