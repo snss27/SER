@@ -36,6 +36,11 @@ public class AdditionalQualificationsService(IAdditionalQualificationsRepository
 		return await additionalQualificationsRepository.Get(id);
 	}
 
+	public async Task<AdditionalQualification[]> Get(ID[] ids)
+	{
+		return await additionalQualificationsRepository.Get(ids);
+	}
+
 	public async Task<AdditionalQualification[]> GetPage(Int32 page, Int32 pageSize)
 	{
 		return await additionalQualificationsRepository.GetPage(page, pageSize);

@@ -17,7 +17,8 @@ public class Student(
 	ID groupId,
 	String? pasportNumber,
 	String? pasportSeries,
-	String? pasportIssued,
+	String? pasportIssuedBy,
+	DateTime? pasportIssuedDate,
 	String[] pasportFiles,
 	ID[] prevWorkpalceIds,
 	ID? currentWorkpalceId,
@@ -26,7 +27,7 @@ public class Student(
 	String? targetAgreementFile,
 	DateTime? targetAgreementDate,
 	ID? targetAgreementEnterpriseId,
-	Boolean? mustServeInArmy,
+	Boolean mustServeInArmy,
 	String? armySubpoenaFile,
 	DateTime? armyCallDate,
 	SocialStatus[] socialStatuses,
@@ -41,39 +42,40 @@ public class Student(
 	DateTime? modifiedDateTimeUtc
 )
 {
-	ID Id { get;  } = id;
-	String Name { get;} = name;
-	String SecondName { get; } = secondName;
-	String? LastName { get; } = lastName;
-	Genders Gender { get;  } = gender;
-	DateTime? BirthDate { get; } = birthDate;
-	String? PhoneNumber { get; } = phoneNumber;
-	String? RepresentativePhoneNumber { get; } = representativePhoneNumber;
-	Boolean IsOnPaidStudy { get; } = isOnPaidStudy;
-	String? Snils { get; } = snils;
-	ID GroupId { get; } = groupId;
-	String? PasportNumber { get; } = pasportNumber;
-	String? PasportSeries { get; } = pasportSeries;
-	String? PassportIssued { get; } = pasportIssued;
-	String[] PassportFiles { get; } = pasportFiles;
-	ID[] PrevWorkpalceIds { get; } = prevWorkpalceIds;
-	ID? CurrentWorkpalceId { get; } = currentWorkpalceId;
-	ID[] AdditionalQualifications { get; } = additionalQualifications;
-	Boolean IsTargetAgreement { get; } = isTargetAgreement;
-	String? TargetAgreementFile { get; } = targetAgreementFile;
-	DateTime? TargetAgreementDate { get; } = targetAgreementDate;
-	ID? TargetAgreementEnterpriseId { get; } = targetAgreementEnterpriseId;
-	Boolean? MustServeInArmy { get; } = mustServeInArmy;
-	String? ArmySubpoenaFile { get; } = armySubpoenaFile;
-	DateTime? ArmyCallDate { get; } = armyCallDate;
-	SocialStatus[] SocialStatuses { get; } = socialStatuses;
-	StudentStatus Status { get; } = status;
-	String? Address { get; } = address;
-	Boolean IsForeignCitizen { get; } = isForeignCitizen;
-	String? Inn { get; } = inn;
-	String? Mail { get; } = mail;
-	String[] OtherFiles { get; } = otherFiles;
+	public ID Id { get;  } = id;
+	public String Name { get;} = name;
+	public String SecondName { get; } = secondName;
+	public String? LastName { get; } = lastName;
+	public Genders Gender { get;  } = gender;
+	public DateTime? BirthDate { get; } = birthDate;
+	public String? PhoneNumber { get; } = phoneNumber;
+	public String? RepresentativePhoneNumber { get; } = representativePhoneNumber;
+	public Boolean IsOnPaidStudy { get; } = isOnPaidStudy;
+	public String? Snils { get; } = snils;
+	public ID GroupId { get; } = groupId;
+	public String? PasportNumber { get; } = pasportNumber;
+	public String? PasportSeries { get; } = pasportSeries;
+	public String? PassportIssuedBy { get; } = pasportIssuedBy;
+	public DateTime? PassportIssuedDate { get; } = pasportIssuedDate;
+	public String[] PassportFiles { get; } = pasportFiles;
+	public ID[] PrevWorkpalceIds { get; } = prevWorkpalceIds;
+	public ID? CurrentWorkpalceId { get; } = currentWorkpalceId;
+	public ID[] AdditionalQualifications { get; } = additionalQualifications;
+	public Boolean IsTargetAgreement { get; } = isTargetAgreement;
+	public String? TargetAgreementFile { get; } = targetAgreementFile;
+	public DateTime? TargetAgreementDate { get; } = targetAgreementDate;
+	public ID? TargetAgreementEnterpriseId { get; } = targetAgreementEnterpriseId;
+	public Boolean MustServeInArmy { get; } = mustServeInArmy;
+	public String? ArmySubpoenaFile { get; } = armySubpoenaFile;
+	public DateTime? ArmyCallDate { get; } = armyCallDate;
+	public SocialStatus[] SocialStatuses { get; } = socialStatuses;
+	public StudentStatus Status { get; } = status;
+	public String? Address { get; } = address;
+	public Boolean IsForeignCitizen { get; } = isForeignCitizen;
+	public String? Inn { get; } = inn;
+	public String? Mail { get; } = mail;
+	public String[] OtherFiles { get; } = otherFiles;
 
-	DateTime CreatedDateTimeUtc { get; } = createdDateTimeUtc;
-	DateTime? ModifiedDateTimeUtc { get; } = modifiedDateTimeUtc;
+	public DateTime CreatedDateTimeUtc { get; } = createdDateTimeUtc;
+	public DateTime? ModifiedDateTimeUtc { get; } = modifiedDateTimeUtc;
 }

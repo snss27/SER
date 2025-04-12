@@ -1,0 +1,1 @@
+select * from workpalces where id=@p_id and not isremoved

@@ -3,6 +3,7 @@ using SER.Domain.Enterprises;
 using SER.Domain.Groups;
 using SER.Domain.Students.Enums;
 using SER.Domain.Workplaces;
+using SER.Domain.WorkPlaces;
 using SER.Tools.Types.IDs;
 using System;
 using System.Reflection;
@@ -23,26 +24,24 @@ public record StudentDto(
 	GroupDto Group,
 	String? PassportNumber,
 	String? PassportSeries,
-	String? PassportIssued,
+	String? PassportIssuedBy,
 	DateTime? PassportIssuedDate,
 	String[] PassportFiles,
-	WorkplaceBlank[] PrevWorkplaces,
-	WorkplaceBlank? CurrentWorkplace,
+	WorkPlaceDto[] PrevWorkplaces,
+	WorkPlaceDto? CurrentWorkplace,
 	AdditionalQualification[] AdditionalQualifications,
-	bool IsTargetAgreement,
-	string? TargetAgreementFile,
+	Boolean IsTargetAgreement,
+	String? TargetAgreementFile,
 	DateTime? TargetAgreementDate,
 	Enterprise? TargetAgreementEnterprise,
-	bool MustServeInArmy,
-	string? ArmySubpoenaFile,
+	Boolean MustServeInArmy,
+	String? ArmySubpoenaFile,
 	DateTime? ArmyCallDate,
 	SocialStatus[] SocialStatuses,
 	StudentStatus Status,
-	string? Address,
-	bool IsForeignCitizen,
-	string? Inn,
-	string? Mail,
-	string[] OtherFiles,
-	DateTime CreatedDateTimeUtc,
-	DateTime? ModifiedDateTimeUtc
+	String? Address,
+	Boolean IsForeignCitizen,
+	String? Inn,
+	String? Mail,
+	String[] OtherFiles
 );

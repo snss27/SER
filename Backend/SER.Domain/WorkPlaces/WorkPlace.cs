@@ -16,7 +16,7 @@ public class WorkPlace(
 	public ID Id { get; } = id;
 	public ID EnterpriseId { get; } = enterpriseId;
 	public String? Post {  get; } = post;
-	public String? WotkBookExtractFile { get; } = workBookExtractFile;
+	public String? WorkBookExtractFile { get; } = workBookExtractFile;
 	public DateTime? StartDateTime { get; } = startDateTime;
 	public DateTime? FinishDateTime { get; } = finishDateTime;
 

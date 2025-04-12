@@ -65,6 +65,18 @@ public class EnterprisesRepository(MainConnector connector) : BaseRepository(con
 		return (await session.Get<EnterpriseDB?>(query))?.ToEnterprise();
 	}
 
+	public async Task<Enterprise[]> Get(ID[] ids)
+	{
+		Query query = _connector.CreateQuery(Sql.Enterprises_GetByIds);
+		{
+			query.Add(ids);
+		}
+
+		await using IAsyncSeparatelySession session = await _connector.CreateAsyncSession();
+
+		return (await session.GetArray<EnterpriseDB>(query)).ToEnterprises();
+	}
+
 	public async Task<Enterprise[]> GetPage(Int32 page, Int32 pageSize)
 	{
 		Query query = _connector.CreateQuery(Sql.Enterprises_GetPage);

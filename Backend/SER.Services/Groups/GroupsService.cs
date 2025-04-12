@@ -6,6 +6,7 @@ using SER.Domain.Groups.Converters;
 using SER.Domain.Services;
 using SER.Domain.Students;
 using SER.Services.Groups.Repositories;
+using SER.Services.Students.Repositories;
 using SER.Tools.Types.IDs;
 using SER.Tools.Types.Results;
 using SER.Tools.Utils;
@@ -17,7 +18,7 @@ public class GroupsService(
 	IEducationLevelsService educationLevelsService,
 	IEmployeesService employeesService,
 	IClustersService clustersService,
-	IStudentsService studentsSevice
+	IStudentsRepository studentsRepository
 ) : IGroupsService
 {
 	public async Task<Result> Save(GroupBlank blank)
@@ -64,7 +65,7 @@ public class GroupsService(
 
 	public async Task<Result> Remove(ID id)
 	{
-		Student[] students = await studentsSevice.GetByGroupId(id);
+		Student[] students = await studentsRepository.GetByGroupId(id);
 		if (students.Length > 0)
 		{
 			return Result.Fail("Невозможно удалить, т.к. у этой группы есть привязанные студенты");
@@ -101,6 +102,13 @@ public class GroupsService(
 			curator,
 			cluster
 		);
+	}
+
+	public async Task<GroupDto[]> Get(ID[] ids)
+	{
+		Group[] groups = await groupsRepository.Get(ids);
+
+		return await GroupDtos(groups);
 	}
 
 	public async Task<GroupDto[]> GetPage(Int32 page, Int32 pageSize)

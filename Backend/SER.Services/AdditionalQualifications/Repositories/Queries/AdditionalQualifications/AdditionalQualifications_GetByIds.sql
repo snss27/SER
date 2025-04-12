@@ -1,0 +1,1 @@
+select * from additionalqualifications where id=ANY(@p_ids) and not isremoved

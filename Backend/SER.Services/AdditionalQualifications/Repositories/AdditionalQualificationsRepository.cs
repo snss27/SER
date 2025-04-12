@@ -60,6 +60,18 @@ public class AdditionalQualificationsRepository(MainConnector connector)
 		return (await session.Get<AdditionalQualificationDB?>(query))?.ToAdditionalQualification();
 	}
 
+	public async Task<AdditionalQualification[]> Get(ID[] ids)
+	{
+		Query query = _connector.CreateQuery(Sql.AdditionalQualifications_GetByIds);
+		{
+			query.Add(ids);
+		}
+
+		await using IAsyncSeparatelySession session = await _connector.CreateAsyncSession();
+
+		return (await session.GetArray<AdditionalQualificationDB>(query)).ToAdditionalQualifications();
+	}
+
 	public async Task<AdditionalQualification[]> GetPage(Int32 page, Int32 pageSize)
 	{
 		Query query = _connector.CreateQuery(Sql.AdditionalQualifications_GetPage);

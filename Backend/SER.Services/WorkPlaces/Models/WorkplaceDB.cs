@@ -1,7 +1,7 @@
 using SER.Tools.Types.IDs;
 
 namespace SER.Services.WorkPlaces.Models;
-public class WorkplaceDB
+public class WorkPlaceDB
 {
 	public ID Id { get; set; }
 	public ID EnterpriseId { get; set; }

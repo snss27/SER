@@ -30,7 +30,8 @@ public class StudentsRepository(MainConnector connector) : BaseRepository(connec
 			query.Add(blank.Group?.Id, "p_groupid");
 			query.Add(blank.PassportNumber);
 			query.Add(blank.PassportSeries);
-			query.Add(blank.PassportIssuedBy, "p_pasportissued");
+			query.Add(blank.PassportIssuedBy);
+			query.Add(blank.PassportIssuedDate);
 			query.Add(passportFileUrls, "p_pasportfiles");
 			query.Add(prevWorkplaceIds);
 			query.Add(currentWorkplaceId);
@@ -81,7 +82,7 @@ public class StudentsRepository(MainConnector connector) : BaseRepository(connec
 
 		await using IAsyncSeparatelySession session = await _connector.CreateAsyncSession();
 
-		return (await session.Get<StudentDB?>(query))?.TotStudent();
+		return (await session.Get<StudentDB?>(query))?.ToStudent();
 	}
 
 	public async Task<Student[]> GetPage(Int32 page, Int32 pageSize)

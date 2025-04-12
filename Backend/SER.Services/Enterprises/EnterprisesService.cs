@@ -59,6 +59,11 @@ public class EnterprisesService(IEnterprisesRepository enterprisesRepository) : 
 		return await enterprisesRepository.Get(id);
 	}
 
+	public async Task<Enterprise[]> Get(ID[] ids)
+	{
+		return await enterprisesRepository.Get(ids);
+	}
+
 	public async Task<Enterprise[]> GetPage(Int32 page, Int32 pageSize)
 	{
 		return await enterprisesRepository.GetPage(page, pageSize);

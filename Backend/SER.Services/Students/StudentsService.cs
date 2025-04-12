@@ -1,14 +1,18 @@
-using SER.Domain.Students;
+using SER.Domain.AdditionalQualifications;
+using SER.Domain.Enterprises;
+using SER.Domain.Groups;
 using SER.Domain.Services;
+using SER.Domain.Students;
+using SER.Domain.Students.Converters;
+using SER.Domain.WorkPlaces;
 using SER.Services.Students.Repositories;
 using SER.Tools.Types.IDs;
 using SER.Tools.Types.Results;
 using SER.Tools.Utils;
-using SER.Domain.Workplaces;
 
 namespace SER.Services.Students;
 
-public class StudentsService(IStudentsRepository studentsRepository, IWorkPlacesSevice workPlacesSevice, IFilesService filesService) : IStudentsService
+public class StudentsService(IStudentsRepository studentsRepository, IWorkPlacesSevice workPlacesSevice, IFilesService filesService, IGroupsService groupsService, IAdditionalQualificationsService additionalQualificationsService, IEnterprisesService enterprisesService) : IStudentsService
 {
 
 	public async Task<Result> Save(StudentBlank blank)
@@ -123,18 +127,70 @@ public class StudentsService(IStudentsRepository studentsRepository, IWorkPlaces
 		return await studentsRepository.Remove(id);
 	}
 
-	public async Task<Student?> Get(ID id)
+	public async Task<StudentDto?> Get(ID id)
 	{
-		return await studentsRepository.Get(id);
+		Student? student = await studentsRepository.Get(id);
+
+		if(student is null) return null;
+
+		Task<GroupDto?> groupTask = groupsService.Get(student.GroupId);
+		Task<WorkPlaceDto?> currentWorkPlaceTask = student.CurrentWorkpalceId.HasValue
+			? workPlacesSevice.Get(student.CurrentWorkpalceId.Value)
+			: Task.FromResult<WorkPlaceDto?>(null);
+		Task<WorkPlaceDto[]> prevWorkPlacesTask = workPlacesSevice.Get(student.PrevWorkpalceIds);
+		Task<AdditionalQualification[]> additionalQualificationsTask = additionalQualificationsService.Get(student.AdditionalQualifications);
+		Task<Enterprise?> targetAgreementEnterpriseTask = student.TargetAgreementEnterpriseId.HasValue
+			? enterprisesService.Get(student.TargetAgreementEnterpriseId.Value)
+			: Task.FromResult<Enterprise?>(null);
+
+		await Task.WhenAll(groupTask, currentWorkPlaceTask, prevWorkPlacesTask, additionalQualificationsTask, targetAgreementEnterpriseTask);
+
+		GroupDto group = await groupTask ?? throw new NullReferenceException("Группа у студента не может отсутствовать");
+		WorkPlaceDto? currentWorkPlace = await currentWorkPlaceTask;
+		WorkPlaceDto[] prevWorkPlaces = await prevWorkPlacesTask;
+		AdditionalQualification[] additionalQualifications = await additionalQualificationsTask;
+		Enterprise? targetAgreementEnterprise = await targetAgreementEnterpriseTask;
+
+		return student.ToStudentDto(group, currentWorkPlace, prevWorkPlaces, additionalQualifications, targetAgreementEnterprise);
 	}
 
-	public async Task<Student[]> GetPage(int page, int pageSize)
+	public async Task<StudentDto[]> GetPage(int page, int pageSize)
 	{
-		return await studentsRepository.GetPage(page, pageSize);
+		Student[] students = await studentsRepository.GetPage(page, pageSize);
+
+		return await StudentDtos(students);
 	}
 
 	public async Task<Student[]> GetByGroupId(ID groupId)
 	{
 		return await studentsRepository.GetByGroupId(groupId);
+	}
+
+	private async Task<StudentDto[]> StudentDtos(Student[] students)
+	{
+		ID[] groupIds = students.Select(student => student.GroupId).ToArray();
+		Task<GroupDto[]> groupsTask = groupsService.Get(groupIds);
+
+		ID[] currentWorkPlaceIds = students.Where(s => s.CurrentWorkpalceId.HasValue).Select(s => s.CurrentWorkpalceId.Value).Distinct().ToArray();
+		Task<WorkPlaceDto[]> currentWorkPlacesTask = workPlacesSevice.Get(currentWorkPlaceIds);
+
+		ID[] prevWorkPlaceIds = students.SelectMany(s => s.PrevWorkpalceIds).Distinct().ToArray();
+		Task<WorkPlaceDto[]> prevWorkPlacesTask = workPlacesSevice.Get(prevWorkPlaceIds);
+
+		ID[] additionalQualificationIds = students.SelectMany(s => s.AdditionalQualifications).Distinct().ToArray();
+		Task<AdditionalQualification[]> additionalQualificationsTask = additionalQualificationsService.Get(additionalQualificationIds);
+
+		ID[] targetAgreementEnterpriseIds = students.Where(s => s.TargetAgreementEnterpriseId.HasValue).Select(s => s.TargetAgreementEnterpriseId.Value).Distinct().ToArray();
+		Task<Enterprise[]> targetArgreementEnterprisesTask = enterprisesService.Get(targetAgreementEnterpriseIds);
+
+		await Task.WhenAll(groupsTask, currentWorkPlacesTask, prevWorkPlacesTask, additionalQualificationsTask, targetArgreementEnterprisesTask);
+
+		GroupDto[] groups = await groupsTask;
+		WorkPlaceDto[] currentWorkPlaces = await currentWorkPlacesTask;
+		WorkPlaceDto[] prevWorkPlaces = await prevWorkPlacesTask;
+		AdditionalQualification[] additionalQualifications = await additionalQualificationsTask;
+		Enterprise[] targetAgreementEnterprises = await targetArgreementEnterprisesTask;
+
+		return students.ToStudentDtos(groups, currentWorkPlaces, prevWorkPlaces, additionalQualifications, targetAgreementEnterprises);
 	}
 }

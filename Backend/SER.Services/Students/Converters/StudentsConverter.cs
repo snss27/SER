@@ -4,7 +4,7 @@ namespace SER.Services.Students.Converters;
 
 public static class StudentsConverter
 {
-	public static Student TotStudent(this StudentDB studentDb)
+	public static Student ToStudent(this StudentDB studentDb)
 	{
 		return new Student(
 			id: studentDb.Id,
@@ -20,7 +20,8 @@ public static class StudentsConverter
 			groupId: studentDb.GroupId,
 			pasportNumber: studentDb.PasportNumber,
 			pasportSeries: studentDb.PasportSeries,
-			pasportIssued: studentDb.PassportIssued,
+			pasportIssuedBy: studentDb.PassportIssuedBy,
+			pasportIssuedDate: studentDb.PassportIssuedDate,
 			pasportFiles: studentDb.PassportFiles,
 			prevWorkpalceIds: studentDb.PrevWorkplaceIds,
 			currentWorkpalceId: studentDb.CurrentWorkplaceId,
@@ -46,6 +47,6 @@ public static class StudentsConverter
 
 	public static Student[] ToStudents(this StudentDB[] studentDbs)
     {
-        return studentDbs.Select(TotStudent).ToArray();
+        return studentDbs.Select(ToStudent).ToArray();
     }
 }

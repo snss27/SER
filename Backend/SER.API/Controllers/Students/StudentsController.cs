@@ -22,13 +22,13 @@ public class StudentsController(IStudentsService studentsService) : ControllerBa
 	}
 
 	[HttpGet("get")]
-	public async Task<Student?> Get([FromQuery] ID id)
+	public async Task<StudentDto?> Get([FromQuery] ID id)
 	{
 		return await studentsService.Get(id);
 	}
 
 	[HttpGet("get_page")]
-	public async Task<Student[]> GetPage([FromQuery] Int32 page, [FromQuery] Int32 pageSize)
+	public async Task<StudentDto[]> GetPage([FromQuery] Int32 page, [FromQuery] Int32 pageSize)
 	{
 		return await studentsService.GetPage(page, pageSize);
 	}

@@ -1,11 +1,14 @@
+using SER.Domain.Enterprises;
 using SER.Domain.Services;
 using SER.Domain.Workplaces;
+using SER.Domain.WorkPlaces;
+using SER.Domain.WorkPlaces.Converters;
 using SER.Services.WorkPlaces.Repositories;
 using SER.Tools.Types.IDs;
 using SER.Tools.Types.Results;
 
 namespace SER.Services.WorkPlaces;
-public class WorkPlacesService(IWorkPlacesRepository workPlacesRepository, IFilesService filesService) : IWorkPlacesSevice
+public class WorkPlacesService(IWorkPlacesRepository workPlacesRepository, IEnterprisesService enterprisesService, IFilesService filesService) : IWorkPlacesSevice
 {
 	public async Task<DataResult<ID>> Save(WorkPlaceBlank blank, String groupAlias, String studentAlias)
 	{
@@ -54,6 +57,27 @@ public class WorkPlacesService(IWorkPlacesRepository workPlacesRepository, IFile
 		}
 
 		return Result.Success();
+	}
+
+	public async Task<WorkPlaceDto?> Get(ID id)
+	{
+		WorkPlace? workPlace = await workPlacesRepository.Get(id);
+
+		if (workPlace is null) return null;
+
+		Enterprise enterprise = await enterprisesService.Get(workPlace.EnterpriseId) ?? throw new NullReferenceException("Предприятия места работы не найдено");
+
+		return workPlace.ToWorkpalceDto(enterprise);
+	}
+
+	public async Task<WorkPlaceDto[]> Get(ID[] ids)
+	{
+		WorkPlace[] workPlaces = await workPlacesRepository.Get(ids);
+
+		ID[] enterpriseIds = workPlaces.Select(x => x.EnterpriseId).ToArray();
+		Enterprise[] enterprises = await enterprisesService.Get(enterpriseIds);
+
+		return workPlaces.ToWorkpalceDtos(enterprises);
 	}
 }
 

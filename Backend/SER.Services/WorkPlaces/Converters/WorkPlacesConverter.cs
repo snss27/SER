@@ -4,7 +4,7 @@ using SER.Services.WorkPlaces.Models;
 namespace SER.Services.WorkPlaces.Converters;
 public static class WorkPlacesConverter
 {
-	public static WorkPlace ToWorkPlace(this WorkplaceDB db)
+	public static WorkPlace ToWorkPlace(this WorkPlaceDB db)
 	{
 		return new WorkPlace(
 			db.Id,
@@ -18,7 +18,7 @@ public static class WorkPlacesConverter
 		);
 	}
 
-	public static WorkPlace[] ToWorkPlaces(this WorkplaceDB[] dbs)
+	public static WorkPlace[] ToWorkPlaces(this WorkPlaceDB[] dbs)
 	{
 		return dbs.Select(ToWorkPlace).ToArray();
 	}

@@ -19,7 +19,8 @@ public class StudentDB
 	public ID GroupId { get; set; }
 	public String? PasportNumber { get; set; }
 	public String? PasportSeries { get; set; }
-	public String? PassportIssued { get; set; }
+	public String? PassportIssuedBy { get; set; }
+	public DateTime? PassportIssuedDate { get; set; }
 	public Catalog<String> PassportFiles { get; set; }
 	public Catalog<ID> PrevWorkplaceIds { get; set; }
 	public ID? CurrentWorkplaceId { get; set; }
