@@ -6,7 +6,7 @@ public static class ClustersConverter
 {
 	public static Cluster ToCluster(this ClusterDB db)
 	{
-		return new Cluster(db.Id, db.Name, db.CreatedDateTimeUtc, db.ModifiedDateTimeUtc);
+		return new Cluster(db.Id, db.Name);
 	}
 
 	public static Cluster[] ToClusters(this ClusterDB[] dbs)

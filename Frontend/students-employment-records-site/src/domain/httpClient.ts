@@ -68,38 +68,37 @@ export class HttpClient {
     }
 
     private static appendToFormData(formData: FormData, data: any, prefix = "") {
-        if (!data) return
+        if (data === null || data === undefined) return
 
         if (data instanceof File) {
             formData.append(prefix || "file", data)
         } else if (data instanceof BlankFiles) {
-            // Обработка BlankFiles
             formData.append(`${prefix}.MaxFiles`, data.maxFiles.toString())
 
-            // Отправляем Files как массив
             if (data.files && data.files.length > 0) {
-                data.files.forEach((file: File, index: number) => {
+                data.files.forEach((file: File) => {
                     formData.append(`${prefix}.Files`, file)
                 })
-            } else {
-                // Если массив пустой, отправляем пустой массив как JSON
-                formData.append(`${prefix}.Files`, JSON.stringify([]))
             }
 
-            // Отправляем FileUrls как массив
             if (data.fileUrls && data.fileUrls.length > 0) {
-                data.fileUrls.forEach((url: string, index: number) => {
+                data.fileUrls.forEach((url: string) => {
                     formData.append(`${prefix}.FileUrls`, url)
                 })
-            } else {
-                // Если массив пустой, отправляем пустой массив как JSON
-                formData.append(`${prefix}.FileUrls`, JSON.stringify([]))
             }
+        } else if (data instanceof Date) {
+            const hours = data.getHours()
+            data.setHours(hours + 3)
+            formData.append(prefix, data.toISOString()) // 👈 добавлено
         } else if (Array.isArray(data)) {
-            data.forEach((item, index) => {
-                const newPrefix = prefix ? `${prefix}[${index}]` : `[${index}]`
-                this.appendToFormData(formData, item, newPrefix)
-            })
+            if (data.length === 0) {
+                formData.append(`${prefix}[0]`, "")
+            } else {
+                data.forEach((item, index) => {
+                    const newPrefix = prefix ? `${prefix}[${index}]` : `[${index}]`
+                    this.appendToFormData(formData, item, newPrefix)
+                })
+            }
         } else if (typeof data === "object") {
             Object.entries(data).forEach(([key, value]) => {
                 const newPrefix = prefix ? `${prefix}.${key}` : key
@@ -108,15 +107,6 @@ export class HttpClient {
         } else {
             formData.append(prefix, String(data))
         }
-    }
-
-    private static isBlankFiles(obj: any): obj is BlankFiles {
-        return (
-            obj &&
-            Array.isArray(obj.fileUrls) &&
-            Array.isArray(obj.files) &&
-            typeof obj.maxFiles === "number"
-        )
     }
 
     private static checkForFiles(obj: any): boolean {

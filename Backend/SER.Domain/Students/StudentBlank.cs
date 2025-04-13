@@ -24,7 +24,7 @@ public class StudentBlank
 	public String? Address { get; set; }
 	public String? Mail { get; set; }
 	public String? Inn { get; set; }
-	public Group? Group { get; set; }
+	public GroupDto? Group { get; set; }
 	public Boolean IsForeignCitizen { get; set; }
 	public Boolean IsOnPaidStudy { get; set; }
 

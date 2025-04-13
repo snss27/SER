@@ -9,6 +9,14 @@ export class BlankFiles {
         return new BlankFiles([], [], maxFiles)
     }
 
+    public static fromUrls(urls: string[], maxFiles: number): BlankFiles {
+        return new BlankFiles(urls, [], maxFiles)
+    }
+
+    public static fromUrl(url: string): BlankFiles {
+        return new BlankFiles([url], [], 1)
+    }
+
     public withChangedUrls(urls: string[]): BlankFiles {
         return this.modify((bf) => (bf.fileUrls = urls))
     }

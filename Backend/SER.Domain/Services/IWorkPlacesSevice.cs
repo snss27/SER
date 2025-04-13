@@ -10,4 +10,5 @@ public interface IWorkPlacesSevice
 	public Task<DataResult<ID[]>> Save(WorkPlaceBlank[] blanks, String groupAlias, String studentAlias);
 	public Task<WorkPlaceDto?> Get(ID id);
 	public Task<WorkPlaceDto[]> Get(ID[] ids);
+	public Task<WorkPlace[]> GetByEnterpriseId(ID enterpriseId);
 }

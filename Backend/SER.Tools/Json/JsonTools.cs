@@ -56,7 +56,8 @@ public static class JsonTools
 		return JsonSerializer.Deserialize<T>(@string, new JsonSerializerOptions
 		{
 			DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
-			PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+			PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+			
 		});
 	}
 }

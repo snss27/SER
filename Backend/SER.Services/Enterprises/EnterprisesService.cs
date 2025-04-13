@@ -1,13 +1,15 @@
 using SER.Domain.Enterprises;
 using SER.Domain.Services;
+using SER.Domain.Workplaces;
 using SER.Services.Enterprises.Repositories;
+using SER.Services.WorkPlaces.Repositories;
 using SER.Tools.Types.IDs;
 using SER.Tools.Types.Results;
 using SER.Tools.Utils;
 
 namespace SER.Services.Enterprises;
 
-public class EnterprisesService(IEnterprisesRepository enterprisesRepository) : IEnterprisesService
+public class EnterprisesService(IEnterprisesRepository enterprisesRepository, IWorkPlacesRepository workPlacesRepository) : IEnterprisesService
 {
 	//TODO Нужна ли регулярка на адрес, чтобы иметь одинаковый формат
 	public async Task<Result> Save(EnterpriseBlank blank)
@@ -51,6 +53,12 @@ public class EnterprisesService(IEnterprisesRepository enterprisesRepository) : 
 
 	public async Task<Result> Remove(ID id)
 	{
+		WorkPlace[] workPlaces = await workPlacesRepository.GetByEnterpriseId(id);
+		if(workPlaces.Length > 0)
+		{
+			return Result.Fail("Невозможно удалить, т.к. есть места работы с данной огранизацией");
+		}
+
 		return await enterprisesRepository.Remove(id);
 	}
 

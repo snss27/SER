@@ -32,7 +32,7 @@ public class StudentsRepository(MainConnector connector) : BaseRepository(connec
 			query.Add(blank.PassportSeries);
 			query.Add(blank.PassportIssuedBy);
 			query.Add(blank.PassportIssuedDate);
-			query.Add(passportFileUrls, "p_pasportfiles");
+			query.Add(passportFileUrls, "p_passportfiles");
 			query.Add(prevWorkplaceIds);
 			query.Add(currentWorkplaceId);
 			query.Add(blank.AdditionalQualifications.Select(q => q.Id).ToArray(), "p_additionalqualifications");
@@ -43,7 +43,7 @@ public class StudentsRepository(MainConnector connector) : BaseRepository(connec
 			query.Add(blank.MustServeInArmy);
 			query.Add(armySunpoenaFileUrl, "p_armysubpoenafile");
 			query.Add(blank.ArmyCallDate);
-			query.Add(blank.SocialStatuses);
+			query.Add(blank.SocialStatuses.Select(sc => (Int32)sc).ToArray(), "p_socialstatuses");
 			query.Add(blank.Status);
 			query.Add(blank.Address);
 			query.Add(blank.IsForeignCitizen);

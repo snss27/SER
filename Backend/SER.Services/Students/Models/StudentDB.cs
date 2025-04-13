@@ -17,8 +17,8 @@ public class StudentDB
 	public Boolean IsOnPaidStudy { get; set; }
 	public String? Snils { get; set; }
 	public ID GroupId { get; set; }
-	public String? PasportNumber { get; set; }
-	public String? PasportSeries { get; set; }
+	public String? PassportNumber { get; set; }
+	public String? PassportSeries { get; set; }
 	public String? PassportIssuedBy { get; set; }
 	public DateTime? PassportIssuedDate { get; set; }
 	public Catalog<String> PassportFiles { get; set; }

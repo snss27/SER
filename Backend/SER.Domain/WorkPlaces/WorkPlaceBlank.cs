@@ -6,7 +6,7 @@ namespace SER.Domain.Workplaces;
 public class WorkPlaceBlank
 {
 	public ID? Id {  get; set; }
-	public EnterpriseBlank? Enterprise { get; set; }
+	public Enterprise? Enterprise { get; set; }
 	public String? Post {  get; set; }
 	public BlankFiles WorkBookExtractFile { get; set; }
 	public DateTime? StartDate { get; set; }

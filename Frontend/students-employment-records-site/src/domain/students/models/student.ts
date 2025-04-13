@@ -2,6 +2,7 @@ import { AdditionalQualification } from "@/domain/additionalQualifications/model
 import { Enterprise } from "@/domain/enterprises/models/enterprise"
 import { Group } from "@/domain/groups/models/group"
 import { Workplace } from "@/domain/workplaces/models/workplace"
+import { WorkplaceBlank } from "@/domain/workplaces/models/workplaceBlank"
 import { BlankFiles } from "@/tools/blankFiles"
 import { Gender } from "../enums/gender"
 import { SocialStatus } from "../enums/socialStatus"
@@ -23,7 +24,7 @@ export class Student {
         public readonly group: Group,
         public readonly passportNumber: string | null,
         public readonly passportSeries: string | null,
-        public readonly passportIssued: string | null,
+        public readonly passportIssuedBy: string | null,
         public readonly passportIssuedDate: Date | null,
         public readonly passportFiles: string[],
         public readonly prevWorkplaces: Workplace[],
@@ -32,7 +33,7 @@ export class Student {
         public readonly isTargetAgreement: boolean,
         public readonly targetAgreementFile: string | null,
         public readonly targetAgreementDate: Date | null,
-        public readonly targetAgreementEnterprise: Enterprise,
+        public readonly targetAgreementEnterprise: Enterprise | null,
         public readonly mustServeInArmy: boolean,
         public readonly armySubpoenaFile: string | null,
         public readonly armyCallDate: Date | null,
@@ -42,16 +43,18 @@ export class Student {
         public readonly isForeignCitizen: boolean,
         public readonly inn: string | null,
         public readonly mail: string | null,
-        public readonly otherFiles: string[],
-        public readonly createdDateTimeUtc: Date,
-        public readonly modifiedDateTimeUtc: Date | null
+        public readonly otherFiles: string[]
     ) {}
 
     public get displayName(): string {
-        return `${this.name} ${this.secondName}`
+        return `${this.secondName} ${this.name} ${this.lastName ?? ""}`
     }
 
     public toBlank(): StudentBlank {
+        const currentWorkplace = this.currentWorkplace
+            ? WorkplaceBlank.create(this.currentWorkplace)
+            : null
+        const prevWorkplaces = this.prevWorkplaces.map(WorkplaceBlank.create)
         return {
             id: this.id,
             name: this.name,
@@ -66,26 +69,22 @@ export class Student {
             group: this.group,
             passportNumber: this.passportNumber,
             passportSeries: this.passportSeries,
-            passportIssuedBy: this.passportIssued,
+            passportIssuedBy: this.passportIssuedBy,
             passportIssuedDate: this.passportIssuedDate,
-            passportFiles: new BlankFiles(this.passportFiles, [], 5),
-            prevWorkplaces: this.prevWorkplaces,
-            currentWorkplace: this.currentWorkplace,
+            passportFiles: BlankFiles.fromUrls(this.passportFiles, 5),
+            prevWorkplaces,
+            currentWorkplace,
             additionalQualifications: this.additionalQualifications,
             isTargetAgreement: this.isTargetAgreement,
-            targetAgreementFile: new BlankFiles(
-                this.targetAgreementFile ? [this.targetAgreementFile] : [],
-                [],
-                1
-            ),
+            targetAgreementFile: this.targetAgreementFile
+                ? BlankFiles.fromUrl(this.targetAgreementFile)
+                : BlankFiles.create(1),
             targetAgreementDate: this.targetAgreementDate,
             targetAgreementEnterprise: this.targetAgreementEnterprise,
             mustServeInArmy: this.mustServeInArmy,
-            armySubpoenaFile: new BlankFiles(
-                this.armySubpoenaFile ? [this.armySubpoenaFile] : [],
-                [],
-                1
-            ),
+            armySubpoenaFile: this.armySubpoenaFile
+                ? BlankFiles.fromUrl(this.armySubpoenaFile)
+                : BlankFiles.create(1),
             armyCallDate: this.armyCallDate,
             socialStatuses: this.socialStatuses,
             status: this.status,
@@ -93,47 +92,63 @@ export class Student {
             isForeignCitizen: this.isForeignCitizen,
             inn: this.inn,
             mail: this.mail,
-            otherFiles: new BlankFiles(this.otherFiles, [], 10),
+            otherFiles: BlankFiles.fromUrls(this.otherFiles, 10),
         }
     }
 
     public static fromAny(any: any): Student {
+        const birthDate = any.birthDate ? new Date(any.birthDate) : null
+        const group = Group.fromAny(any.group)
+        const passportIssuedDate = any.passportIssuedDate ? new Date(any.passportIssuedDate) : null
+        const prevWorkplaces = (any.prevWorkplaces as any[]).map(Workplace.fromAny)
+        const currentWorkplace = any.currentWorkplace
+            ? Workplace.fromAny(any.currentWorkplace)
+            : null
+        const additionalQualifications = (any.additionalQualifications as any[]).map(
+            AdditionalQualification.fromAny
+        )
+        const targetAgreementDate = any.targetAgreementDate
+            ? new Date(any.targetAgreementDate)
+            : null
+        const targetAgreementEnterprise = any.targetAgreementEnterprise
+            ? Enterprise.fromAny(any.targetAgreementEnterprise)
+            : null
+        const armyCallDate = any.armyCallDate ? new Date(any.armyCallDate) : null
+
         return new Student(
             any.id,
             any.name,
             any.secondName,
             any.lastName,
             any.gender,
-            any.birthDate ? new Date(any.birthDate) : null,
+            birthDate,
             any.phoneNumber,
             any.representativePhoneNumber,
             any.isOnPaidStudy,
             any.snils,
-            Group.fromAny(any.group),
+            group,
             any.passportNumber,
             any.passportSeries,
-            any.passportIssued,
-            any.passportIssuedDate ? new Date(any.passportIssuedDate) : null,
+            any.passportIssuedBy,
+            passportIssuedDate,
             any.passportFiles,
-            any.prevWorkplaces.map((w: any) => w),
-            any.currentWorkplace,
-            any.additionalQualifications.map((q: any) => AdditionalQualification.fromAny(q)),
+            prevWorkplaces,
+            currentWorkplace,
+            additionalQualifications,
             any.isTargetAgreement,
             any.targetAgreementFile,
-            any.targetAgreementDate ? new Date(any.targetAgreementDate) : null,
-            Enterprise.fromAny(any.targetAgreementEnterprise),
+            targetAgreementDate,
+            targetAgreementEnterprise,
             any.mustServeInArmy,
             any.armySubpoenaFile,
-            any.armyCallDate ? new Date(any.armyCallDate) : null,
+            armyCallDate,
             any.socialStatuses,
             any.status,
             any.address,
             any.isForeignCitizen,
             any.inn,
             any.mail,
-            any.otherFiles,
-            new Date(any.createdDateTimeUtc),
-            any.modifiedDateTimeUtc ? new Date(any.modifiedDateTimeUtc) : null
+            any.otherFiles
         )
     }
 }

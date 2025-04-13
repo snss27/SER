@@ -157,7 +157,7 @@ export const EditStudentForm: React.FC<Props> = ({ initialStudentBlank }) => {
             <AsyncAutocomplete
                 value={studentBlank.group}
                 label="Группа"
-                getOptionLabel={(group) => group.number}
+                getOptionLabel={(group) => group.displayName}
                 onChange={(group) => dispatch({ type: "CHANGE_GROUP", payload: { group } })}
                 loadOptions={GroupsProvider.getBySearchText}
             />
@@ -269,10 +269,10 @@ export const EditStudentForm: React.FC<Props> = ({ initialStudentBlank }) => {
                         <DatePicker
                             value={studentBlank.targetAgreementDate}
                             label="Дата заключение договора"
-                            onChange={(armyCallDate) =>
+                            onChange={(targetAgreementDate) =>
                                 dispatch({
-                                    type: "CHANGE_ARMY_CALL_DATE",
-                                    payload: { armyCallDate },
+                                    type: "CHANGE_TARGET_AGREEMENT_DATE",
+                                    payload: { targetAgreementDate },
                                 })
                             }
                         />

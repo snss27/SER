@@ -10,4 +10,6 @@ internal class Sql
 	public static String AdditionalQualifications_GetPage => SqlFileProvider.GetQuery(folder: "AdditionalQualifications");
 	public static String AdditionalQualifications_GetBySearchText => SqlFileProvider.GetQuery(folder: "AdditionalQualifications");
 
+	public static String Students_RemoveAdditionalQualification => SqlFileProvider.GetQuery(folder: "Students");
+
 }

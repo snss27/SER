@@ -28,6 +28,11 @@ public class GroupsService(
 			return Result.Fail("Укажите номер группы");
 		}
 
+		if (!Regexs.GroupNumberRegex.IsMatch(blank.Number))
+		{
+			return Result.Fail("Номер группы должен быть целым пятизначным числом");
+		}
+
 		if (blank.StructuralUnit is null)
 		{
 			return Result.Fail("Укажите струкрутное подразделение");
@@ -36,11 +41,6 @@ public class GroupsService(
 		if (blank.EducationLevel is null)
 		{
 			return Result.Fail("Укажите уровень образования у группы");
-		}
-
-		if (!Regexs.GroupNumberRegex.IsMatch(blank.Number))
-		{
-			return Result.Fail("Номер группы должен быть целым пятизначным числом");
 		}
 
 		if (blank.EnrollmentYear is null)

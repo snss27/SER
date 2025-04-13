@@ -13,7 +13,7 @@ const EditStudentPage: React.FC = () => {
     useEffect(() => {
         async function loadStudent() {
             const student = await StudentsProvider.get(id)
-            
+
             setStudentBlank(student.toBlank())
         }
 
@@ -23,13 +23,18 @@ const EditStudentPage: React.FC = () => {
     if (studentBlank === null) return null
 
     return (
-        <Box className="container-fill">
-            <Box className="edit-page-container">
-                <Typography variant="h1" textAlign="center">
-                    Редактирование студента
-                </Typography>
-                <EditStudentForm initialStudentBlank={studentBlank} />
-            </Box>
+        <Box
+            sx={{
+                width: "100%",
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                gap: 1.5,
+            }}>
+            <Typography variant="h1" textAlign="center">
+                Редактирование студента
+            </Typography>
+            <EditStudentForm initialStudentBlank={studentBlank} />
         </Box>
     )
 }

@@ -1,12 +1,32 @@
-import { BlankFiles } from "@/tools/blankFiles"
+import { Enterprise } from "@/domain/enterprises/models/enterprise"
+import { WorkplaceBlank } from "./workplaceBlank"
 
 export class Workplace {
     constructor(
         public readonly id: string,
-        public readonly enterpriseId: string,
+        public readonly enterprise: Enterprise,
         public readonly post: string | null,
-        public readonly workBookExtractFile: BlankFiles,
+        public readonly workBookExtractFile: string | null,
         public readonly startDate: Date | null,
         public readonly finishDate: Date | null
     ) {}
+
+    public toBlank(): WorkplaceBlank {
+        return WorkplaceBlank.create(this)
+    }
+
+    public static fromAny(any: any): Workplace {
+        const enterprise = Enterprise.fromAny(any.enterprise)
+        const startDate = any.startDate ? new Date(any.startDate) : null
+        const finishDate = any.finishDate ? new Date(any.finishDate) : null
+
+        return new Workplace(
+            any.id,
+            enterprise,
+            any.post,
+            any.workBookExtractFile,
+            startDate,
+            finishDate
+        )
+    }
 }

@@ -6,22 +6,20 @@ internal static class EnterprisesConverter
 {
 	public static Enterprise ToEnterprise(this EnterpriseDB db)
 	{
-		return new Enterprise(
-			db.Id,
-			db.Name,
-			db.LegalAddress,
-			db.ActualAddress,
-			db.Address,
-			db.INN,
-			db.KPP,
-			db.ORGN,
-			db.Phone,
-			db.Mail,
-			db.IsOPK,
-
-			db.CreatedDateTimeUtc,
-			db.ModifiedDateTimeUtc
-		);
+		return new Enterprise()
+		{
+			Id = db.Id,
+			Name = db.Name,
+			ActualAddress = db.ActualAddress,
+			Address = db.Address,
+			INN = db.INN,
+			IsOPK = db.IsOPK,
+			KPP = db.KPP,
+			LegalAddress = db.LegalAddress,
+			Mail = db.Mail,
+			ORGN = db.ORGN,
+			Phone = db.Phone
+		};
 	}
 
 	public static Enterprise[] ToEnterprises(this EnterpriseDB[] dbs)

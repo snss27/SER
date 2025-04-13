@@ -100,7 +100,7 @@ public class StudentsService(IStudentsRepository studentsRepository, IWorkPlaces
 		if(blank.IsTargetAgreement)
 		{
 			String[] targetAgreementFiles = filesService.SaveTargetAfreementFiles(blank.TargetAgreementFile, blank.Group.Number, blank.Name + blank.SecondName);
-			targetAgreementFileUrl = targetAgreementFiles[0];
+			targetAgreementFileUrl = targetAgreementFiles.FirstOrDefault();
 		}
 
 		if (!blank.MustServeInArmy)
@@ -113,7 +113,7 @@ public class StudentsService(IStudentsRepository studentsRepository, IWorkPlaces
 		if (blank.MustServeInArmy)
 		{
 			String[] armySubpoenaFiles = filesService.SaveArmySubpoenaFiles(blank.ArmySubpoenaFile, blank.Group.Number, blank.Name + blank.SecondName);
-			armySubpoenaFileUrl = armySubpoenaFiles[0];
+			armySubpoenaFileUrl = armySubpoenaFiles.FirstOrDefault();
 		}
 
 		String[] otherFileUrls = filesService.SaveOtherFiles(blank.OtherFiles, blank.Group.Number, blank.Name + blank.SecondName);

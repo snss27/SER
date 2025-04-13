@@ -1,4 +1,5 @@
 import PageUrls from "@/constants/pageUrls"
+import { EnterprisesProvider } from "@/domain/enterprises/enterprisesProvider"
 import useDialog from "@/hooks/useDialog/useDialog"
 import useLazyLoad from "@/hooks/useLazyLoad"
 import useNotifications from "@/hooks/useNotifications"
@@ -12,11 +13,10 @@ import {
     TableRow,
 } from "@mui/material"
 import { useRouter } from "next/router"
+import React from "react"
 import { IconType } from "../shared/buttons"
 import IconButton from "../shared/buttons/iconButtons"
 import ConfirmModal from "../shared/modals/confirmModal"
-import React from "react"
-import { EnterprisesProvider } from "@/domain/enterprises/enterprisesProvider"
 
 export const EnterprisesTable: React.FC = () => {
     const navigator = useRouter()
@@ -55,8 +55,11 @@ export const EnterprisesTable: React.FC = () => {
                 <Table stickyHeader>
                     <TableHead>
                         <TableRow sx={{ paddingX: 1 }}>
-                            <TableCell sx={{ width: "75%", fontWeight: "bold" }}>
+                            <TableCell sx={{ width: "65%", fontWeight: "bold" }}>
                                 Наименование
+                            </TableCell>
+                            <TableCell sx={{ width: "10%", fontWeight: "bold" }}>
+                                Входит в ОПК?
                             </TableCell>
                             <TableCell align="right" sx={{ width: "25%", fontWeight: "bold" }}>
                                 Действия
@@ -69,7 +72,10 @@ export const EnterprisesTable: React.FC = () => {
                                 key={enterprise.id}
                                 sx={{ paddingX: 1 }}
                                 ref={index === enterprises.length - 1 ? lastElementRef : undefined}>
-                                <TableCell sx={{ width: "75%" }}>{enterprise.name}</TableCell>
+                                <TableCell sx={{ width: "65%" }}>{enterprise.name}</TableCell>
+                                <TableCell sx={{ width: "10%" }}>
+                                    {enterprise.isOPK ? "Да" : "Нет"}
+                                </TableCell>
                                 <TableCell align="right" sx={{ width: "25%" }}>
                                     <IconButton
                                         icon={IconType.Edit}

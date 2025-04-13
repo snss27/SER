@@ -6,4 +6,5 @@ internal static class Sql
 	public static String WorkPlaces_Save => SqlFileProvider.GetQuery(folder: "WorkPlaces");
 	public static String WorkPlaces_Get => SqlFileProvider.GetQuery(folder: "WorkPlaces");
 	public static String WorkPlaces_GetByIds => SqlFileProvider.GetQuery(folder: "WorkPlaces");
+	public static String WorkPlaces_GetByEnterpriseId => SqlFileProvider.GetQuery(folder: "WorkPlaces");
 }

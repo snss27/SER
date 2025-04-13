@@ -6,7 +6,7 @@ public static class EmployeesConverter
 {
 	public static Employee ToEmployee(this EmployeeDB db)
 	{
-		return new Employee(db.Id, db.Name, db.SecondName, db.LastName, db.CreatedDateTimeUtc, db.ModifiedDateTimeUtc);
+		return new Employee(db.Id, db.Name, db.SecondName, db.LastName);
 	}
 
 	public static Employee[] ToEmployees(this EmployeeDB[] dbs)

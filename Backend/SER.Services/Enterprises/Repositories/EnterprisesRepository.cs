@@ -46,9 +46,23 @@ public class EnterprisesRepository(MainConnector connector) : BaseRepository(con
 			query.Add(DateTime.UtcNow, "p_currentdatetimeutc");
 		}
 
-		await using IAsyncSeparatelySession session = await _connector.CreateAsyncSession();
+		await using IAsyncTransactionSession transaction = await _connector.CreateAsyncTransaction();
 
-		await session.Execute(query);
+		await transaction.Execute(query);
+		await RemoveFromStudentTargetAgreementEnterprises(id, transaction);
+
+		return Result.Success();
+	}
+
+	private async Task<Result> RemoveFromStudentTargetAgreementEnterprises(ID enterpriseId, IAsyncTransactionSession transaction)
+	{
+		Query query = _connector.CreateQuery(Sql.Students_RemoveTargetAgreementEnterprise);
+		{
+			query.Add(enterpriseId);
+			query.Add(DateTime.UtcNow, "p_currentdatetimeutc");
+		}
+
+		await transaction.Execute(query);
 
 		return Result.Success();
 	}

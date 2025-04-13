@@ -18,7 +18,6 @@ export function EditStudentWorkplaces({ studentBlank, dispatch }: Props) {
     const [editMode, setEditMode] = useState<EditMode | null>(null)
 
     const openEditor = (workplace: WorkplaceBlank, mode: EditMode) => {
-        // Клонируем workplace, чтобы не мутировать напрямую
         setEditingWorkplace({ ...workplace })
         setEditMode(mode)
     }

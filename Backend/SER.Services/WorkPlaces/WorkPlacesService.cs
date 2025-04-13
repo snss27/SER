@@ -1,3 +1,4 @@
+using System.Net.Http.Headers;
 using SER.Domain.Enterprises;
 using SER.Domain.Services;
 using SER.Domain.Workplaces;
@@ -18,11 +19,11 @@ public class WorkPlacesService(IWorkPlacesRepository workPlacesRepository, IEnte
 
 		String[] fileUrls = filesService.SaveWorkBookFile(blank.WorkBookExtractFile, groupAlias, studentAlias);
 
-		ID id = blank.Id ?? ID.New();	
+		blank.Id ??= ID.New();	
 
-		await workPlacesRepository.Save(blank, fileUrls[0]);
+		await workPlacesRepository.Save(blank, fileUrls.FirstOrDefault());
 
-		return DataResult<ID>.Success(id);
+		return DataResult<ID>.Success(blank.Id.Value);
 	}
 
 	public async Task<DataResult<ID[]>> Save(WorkPlaceBlank[] blanks, String groupAlias, String studentAlias)
@@ -40,10 +41,10 @@ public class WorkPlacesService(IWorkPlacesRepository workPlacesRepository, IEnte
 		{
 			String[] fileUrls = filesService.SaveWorkBookFile(blank.WorkBookExtractFile, groupAlias, studentAlias);
 
-			ID id = blank.Id ?? ID.New();
+			blank.Id ??= ID.New();
 
-			await workPlacesRepository.Save(blank, fileUrls[0]);
-			workPlaceIds.Add(id);
+			await workPlacesRepository.Save(blank, fileUrls.FirstOrDefault());
+			workPlaceIds.Add(blank.Id.Value);
 		}
 
 		return DataResult<ID[]>.Success(workPlaceIds.ToArray());
@@ -78,6 +79,11 @@ public class WorkPlacesService(IWorkPlacesRepository workPlacesRepository, IEnte
 		Enterprise[] enterprises = await enterprisesService.Get(enterpriseIds);
 
 		return workPlaces.ToWorkpalceDtos(enterprises);
+	}
+
+	public async Task<WorkPlace[]> GetByEnterpriseId(ID enterpriseId)
+	{
+		return await workPlacesRepository.GetByEnterpriseId(enterpriseId);
 	}
 }
 

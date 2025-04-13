@@ -92,10 +92,8 @@ public class EmployeesRepository(MainConnector connector) : BaseRepository(conne
 
 		await using IAsyncTransactionSession transaction = await _connector.CreateAsyncTransaction();
 
-		await Task.WhenAll(
-			transaction.Execute(query),
-			RemoveFromGroups(id, transaction)
-		);
+		await transaction.Execute(query);
+		await RemoveFromGroups(id, transaction);
 
 		return Result.Success();
 	}

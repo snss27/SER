@@ -16,6 +16,10 @@ export class Group {
         public readonly cluster: Cluster | null
     ) {}
 
+    public get displayName() {
+        return `${this.number} "${this.educationLevel.displayName}"`
+    }
+
     public static fromAny(any: any): Group {
         const educationLevel = EducationLevel.fromAny(any.educationLevel)
 

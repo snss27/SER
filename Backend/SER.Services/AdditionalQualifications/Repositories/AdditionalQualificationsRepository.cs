@@ -41,9 +41,23 @@ public class AdditionalQualificationsRepository(MainConnector connector)
 			query.Add(DateTime.UtcNow, "p_currentdatetimeutc");
 		}
 
-		await using IAsyncSeparatelySession session = await _connector.CreateAsyncSession();
+		await using IAsyncTransactionSession transaction = await _connector.CreateAsyncTransaction();
 
-		await session.Execute(query);
+		await transaction.Execute(query);
+		await RemoveAdditionalQualificationFromStudents(id, transaction);
+
+		return Result.Success();
+	}
+
+	private async Task<Result> RemoveAdditionalQualificationFromStudents(ID id, IAsyncTransactionSession transaction)
+	{
+		Query query = _connector.CreateQuery(Sql.Students_RemoveAdditionalQualification);
+		{
+			query.Add(id);
+			query.Add(DateTime.UtcNow, "p_currentdatetimeutc");
+		}
+
+		await transaction.Execute(query);
 
 		return Result.Success();
 	}

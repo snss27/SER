@@ -91,6 +91,8 @@ const FileIcon = ({
     }
 }
 
+const BASE_API_URL = "https://localhost:44377/"
+
 export function FilesInput({
     urls: existingUrls,
     files: newFiles,
@@ -220,7 +222,7 @@ export function FilesInput({
 
     const handleFileClick = (item: FileItem) => {
         if (item.type === "existing") {
-            setSelectedFile({ url: item.value, type: "image" }) // Предполагаем, что существующие URL - изображения
+            setSelectedFile({ url: BASE_API_URL + item.value.replace(/\\/g, "/"), type: "image" }) // Предполагаем, что существующие URL - изображения
         } else {
             const { fileType } = item.value
             if (fileType === "image") {
@@ -252,7 +254,10 @@ export function FilesInput({
                 }}>
                 {allItems.map((item, index) => {
                     const isImage = item.type === "existing" || item.value.fileType === "image"
-                    const url = item.type === "existing" ? item.value : item.value.preview
+                    const url =
+                        item.type === "existing"
+                            ? BASE_API_URL + item.value.replace(/\\/g, "/")
+                            : item.value.preview
                     const fileType = item.type === "existing" ? "image" : item.value.fileType
 
                     return (

@@ -53,4 +53,16 @@ public class WorkPlacesRepository(MainConnector connector) : BaseRepository(conn
 
 		return (await session.GetArray<WorkPlaceDB>(query)).ToWorkPlaces();
 	}
+
+	public async Task<WorkPlace[]> GetByEnterpriseId(ID enterpriseId)
+	{
+		Query query = _connector.CreateQuery(Sql.WorkPlaces_GetByEnterpriseId);
+		{
+			query.Add(enterpriseId);
+		}
+
+		await using IAsyncSeparatelySession session = await _connector.CreateAsyncSession();
+
+		return (await session.GetArray<WorkPlaceDB>(query)).ToWorkPlaces();
+	}
 }

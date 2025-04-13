@@ -39,10 +39,9 @@ public class ClustersRepository(MainConnector connector) : BaseRepository(connec
 
 		await using IAsyncTransactionSession transaction = await _connector.CreateAsyncTransaction();
 
-		await Task.WhenAll(
-			transaction.Execute(query),
-			RemoveFromGroups(id, transaction)
-		);
+		await transaction.Execute(query);
+
+		await RemoveFromGroups(id, transaction);
 
 		return Result.Success();
 	}

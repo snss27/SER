@@ -1,5 +1,6 @@
 import { Enterprise } from "@/domain/enterprises/models/enterprise"
 import { BlankFiles } from "@/tools/blankFiles"
+import { Workplace } from "./workplace"
 export interface WorkplaceBlank {
     id: string | null
     enterprise: Enterprise | null
@@ -20,6 +21,22 @@ export namespace WorkplaceBlank {
             workbookExtractFile: BlankFiles.create(1),
             startDate: null,
             finishDate: null,
+
+            clientId: crypto.randomUUID(),
+        }
+    }
+
+    export function create(workPlace: Workplace): WorkplaceBlank {
+        const workbookExtractFile = workPlace.workBookExtractFile
+            ? BlankFiles.fromUrl(workPlace.workBookExtractFile)
+            : BlankFiles.create(1)
+        return {
+            id: workPlace.id,
+            enterprise: workPlace.enterprise,
+            post: workPlace.post,
+            workbookExtractFile,
+            startDate: workPlace.startDate,
+            finishDate: workPlace.finishDate,
 
             clientId: crypto.randomUUID(),
         }

@@ -1,1 +1,1 @@
-select * from workpalces where id=@p_id and not isremoved
+select * from workplaces where id=@p_id and not isremoved

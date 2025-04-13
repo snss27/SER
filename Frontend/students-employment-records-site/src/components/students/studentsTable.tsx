@@ -56,9 +56,15 @@ export const StudentsTable: React.FC = () => {
                     <TableRow sx={{ paddingX: 1 }}>
                         <TableCell sx={{ width: "25%", fontWeight: "bold" }}>ФИО</TableCell>
                         <TableCell sx={{ width: "20%", fontWeight: "bold" }}>Группа</TableCell>
-                        <TableCell sx={{ width: "15%", fontWeight: "bold" }}>Телефон</TableCell>
-                        <TableCell sx={{ width: "20%", fontWeight: "bold" }}>Почта</TableCell>
-                        <TableCell sx={{ width: "10%", fontWeight: "bold" }}>Статус</TableCell>
+                        <TableCell sx={{ width: "15%", fontWeight: "bold" }}>
+                            Целевое обучение?
+                        </TableCell>
+                        <TableCell sx={{ width: "20%", fontWeight: "bold" }}>
+                            Иностранный гражданин?
+                        </TableCell>
+                        <TableCell sx={{ width: "10%", fontWeight: "bold" }}>
+                            Платное обучение?
+                        </TableCell>
                         <TableCell align="right" sx={{ width: "10%", fontWeight: "bold" }}>
                             Действия
                         </TableCell>
@@ -70,14 +76,16 @@ export const StudentsTable: React.FC = () => {
                             key={student.id}
                             sx={{ paddingX: 1 }}
                             ref={index === students.length - 1 ? lastElementRef : undefined}>
-                            <TableCell sx={{ width: "25%" }}>
-                                {student.lastName} {student.name} {student.secondName}
+                            <TableCell sx={{ width: "25%" }}>{student.displayName}</TableCell>
+                            <TableCell sx={{ width: "20%" }}>{student.group.displayName}</TableCell>
+                            <TableCell sx={{ width: "15%" }}>
+                                {student.isTargetAgreement ? "Да" : "Нет"}
                             </TableCell>
-                            <TableCell sx={{ width: "20%" }}>{student.group.number}</TableCell>
-                            <TableCell sx={{ width: "15%" }}>{student.phoneNumber}</TableCell>
-                            <TableCell sx={{ width: "20%" }}>{student.mail}</TableCell>
+                            <TableCell sx={{ width: "20%" }}>
+                                {student.isForeignCitizen ? "Да" : "Нет"}
+                            </TableCell>
                             <TableCell sx={{ width: "10%" }}>
-                                {student.isOnPaidStudy ? "Платное" : "Бюджетное"}
+                                {student.isOnPaidStudy ? "Да" : "Нет"}
                             </TableCell>
                             <TableCell align="right" sx={{ width: "10%" }}>
                                 <IconButton
