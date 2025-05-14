@@ -52,6 +52,14 @@ builder.Services.AddCors(options =>
 	});
 });
 
+builder.WebHost.ConfigureKestrel(options =>
+{
+	options.ListenLocalhost(44377, listenOptions =>
+	{
+		listenOptions.UseHttps();
+	});
+});
+
 WebApplication application = builder.Build();
 
 if (application.Environment.IsDevelopment())
