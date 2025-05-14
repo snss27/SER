@@ -111,6 +111,17 @@ export const EditStudentForm: React.FC<Props> = ({ initialStudentBlank }) => {
                 }
             />
 
+            <TextInput
+                value={studentBlank.representativeAlias}
+                label="Как обратится к представителю"
+                onChange={(representativeAlias) =>
+                    dispatch({
+                        type: "CHANGE_REPRESENTATIVE_ALIAS",
+                        payload: { representativeAlias },
+                    })
+                }
+            />
+
             <DatePicker
                 value={studentBlank.birthDate}
                 label="Дата рождения"
@@ -266,6 +277,17 @@ export const EditStudentForm: React.FC<Props> = ({ initialStudentBlank }) => {
 
                 <Collapse in={studentBlank.isTargetAgreement}>
                     <Stack direction="column" gap={2}>
+                        <TextInput
+                            value={studentBlank.targetAgreementNumber}
+                            label="Номер договора"
+                            onChange={(targetAgreementNumber) =>
+                                dispatch({
+                                    type: "CHANGE_TARGET_AGREEMENT_NUMBER",
+                                    payload: { targetAgreementNumber },
+                                })
+                            }
+                        />
+
                         <DatePicker
                             value={studentBlank.targetAgreementDate}
                             label="Дата заключение договора"

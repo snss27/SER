@@ -15,6 +15,7 @@ export interface StudentBlank {
     gender: Gender
     phoneNumber: string | null
     representativePhoneNumber: string | null
+    representativeAlias: string | null
     birthDate: Date | null
     snils: string | null
     socialStatuses: SocialStatus[]
@@ -37,6 +38,7 @@ export interface StudentBlank {
     additionalQualifications: AdditionalQualification[]
 
     isTargetAgreement: boolean
+    targetAgreementNumber: string | null
     targetAgreementDate: Date | null
     targetAgreementEnterprise: Enterprise | null
     targetAgreementFile: BlankFiles
@@ -59,6 +61,7 @@ export namespace StudentBlank {
             gender: Gender.Male,
             phoneNumber: null,
             representativePhoneNumber: null,
+            representativeAlias: null,
             birthDate: null,
             snils: null,
             socialStatuses: [],
@@ -81,6 +84,7 @@ export namespace StudentBlank {
             additionalQualifications: [],
 
             isTargetAgreement: false,
+            targetAgreementNumber: null,
             targetAgreementDate: null,
             targetAgreementEnterprise: null,
             targetAgreementFile: BlankFiles.create(1),
@@ -118,6 +122,9 @@ export namespace StudentBlank {
                     ...state,
                     representativePhoneNumber: action.payload.representativePhoneNumber,
                 }
+
+            case "CHANGE_REPRESENTATIVE_ALIAS":
+                return { ...state, representativeAlias: action.payload.representativeAlias }
 
             case "CHANGE_BIRTH_DATE":
                 return { ...state, birthDate: action.payload.birthDate }
@@ -189,6 +196,9 @@ export namespace StudentBlank {
             case "CHANGE_IS_TARGET_AGREEMENT":
                 return { ...state, isTargetAgreement: action.payload.isTargetAgreement }
 
+            case "CHANGE_TARGET_AGREEMENT_NUMBER":
+                return { ...state, targetAgreementNumber: action.payload.targetAgreementNumber }
+
             case "CHANGE_TARGET_AGREEMENT_DATE":
                 return { ...state, targetAgreementDate: action.payload.targetAgreementDate }
 
@@ -247,6 +257,10 @@ export type StudentAction =
     | {
           type: "CHANGE_REPRESENTATIVE_PHONE_NUMBER"
           payload: { representativePhoneNumber: string | null }
+      }
+    | {
+          type: "CHANGE_REPRESENTATIVE_ALIAS"
+          payload: { representativeAlias: string | null }
       }
     | {
           type: "CHANGE_BIRTH_DATE"
@@ -319,6 +333,10 @@ export type StudentAction =
     | {
           type: "CHANGE_IS_TARGET_AGREEMENT"
           payload: { isTargetAgreement: boolean }
+      }
+    | {
+          type: "CHANGE_TARGET_AGREEMENT_NUMBER"
+          payload: { targetAgreementNumber: string | null }
       }
     | {
           type: "CHANGE_TARGET_AGREEMENT_DATE"

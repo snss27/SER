@@ -18,6 +18,7 @@ public class StudentBlank
 	public Genders Gender { get; set; }
 	public String? PhoneNumber { get; set; }
 	public String? RepresentativePhoneNumber { get; set; }
+	public String? RepresentativeAlias { get; set; }
 	public DateTime? BirthDate { get; set; }
 	public String? Snils { get; set; }
 	public SocialStatus[] SocialStatuses { get; set; }
@@ -40,6 +41,7 @@ public class StudentBlank
 	public AdditionalQualification[] AdditionalQualifications { get; set; }
 
 	public Boolean IsTargetAgreement { get; set; }
+	public String? TargetAgreementNumber { get; set; }
 	public DateTime? TargetAgreementDate { get; set; }
 	public Enterprise? TargetAgreementEnterprise { get; set; }
 	public BlankFiles TargetAgreementFile { get; set; }

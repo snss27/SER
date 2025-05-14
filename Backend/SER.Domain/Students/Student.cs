@@ -12,6 +12,7 @@ public class Student(
 	DateTime? birthDate,
 	String? phoneNumber,
 	String? representativePhoneNumber,
+	String? representativeAlias,
 	Boolean isOnPaidStudy,
 	String? snils,
 	ID groupId,
@@ -24,6 +25,7 @@ public class Student(
 	ID? currentWorkpalceId,
 	ID[] additionalQualifications,
 	Boolean isTargetAgreement,
+	String? targetAgreementNumber,
 	String? targetAgreementFile,
 	DateTime? targetAgreementDate,
 	ID? targetAgreementEnterpriseId,
@@ -50,6 +52,7 @@ public class Student(
 	public DateTime? BirthDate { get; } = birthDate;
 	public String? PhoneNumber { get; } = phoneNumber;
 	public String? RepresentativePhoneNumber { get; } = representativePhoneNumber;
+	public String? RepresentativeAlias { get; } = representativeAlias;
 	public Boolean IsOnPaidStudy { get; } = isOnPaidStudy;
 	public String? Snils { get; } = snils;
 	public ID GroupId { get; } = groupId;
@@ -62,6 +65,7 @@ public class Student(
 	public ID? CurrentWorkpalceId { get; } = currentWorkpalceId;
 	public ID[] AdditionalQualifications { get; } = additionalQualifications;
 	public Boolean IsTargetAgreement { get; } = isTargetAgreement;
+	public String? TargetAgreementNumber { get; } = targetAgreementNumber;
 	public String? TargetAgreementFile { get; } = targetAgreementFile;
 	public DateTime? TargetAgreementDate { get; } = targetAgreementDate;
 	public ID? TargetAgreementEnterpriseId { get; } = targetAgreementEnterpriseId;

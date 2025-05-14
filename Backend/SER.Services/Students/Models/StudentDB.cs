@@ -14,6 +14,7 @@ public class StudentDB
 	public DateTime? BirthDate { get; set; }
 	public String? PhoneNumber { get; set; }
 	public String? RepresentativePhoneNumber { get; set; }
+	public String? RepresentativeAlias { get; set; }
 	public Boolean IsOnPaidStudy { get; set; }
 	public String? Snils { get; set; }
 	public ID GroupId { get; set; }
@@ -26,6 +27,7 @@ public class StudentDB
 	public ID? CurrentWorkplaceId { get; set; }
 	public Catalog<ID> AdditionalQualifications { get; set; }
 	public Boolean IsTargetAgreement { get; set; }
+	public String? TargetAgreementNumber { get; set; }
 	public String? TargetAgreementFile { get; set; }
 	public DateTime? TargetAgreementDate { get; set; }
 	public ID? TargetAgreementEnterpriseId { get; set; }

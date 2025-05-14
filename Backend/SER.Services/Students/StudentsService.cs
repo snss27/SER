@@ -91,6 +91,7 @@ public class StudentsService(IStudentsRepository studentsRepository, IWorkPlaces
 
 		if (!blank.IsTargetAgreement)
 		{
+			blank.TargetAgreementNumber = null;
 			blank.TargetAgreementDate = null;
 			blank.TargetAgreementEnterprise = null;
 		}

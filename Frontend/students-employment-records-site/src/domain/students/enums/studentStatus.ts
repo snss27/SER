@@ -5,6 +5,7 @@ export enum StudentStatus {
     Active = 1,
     Expelled = 2,
     Finished = 3,
+    AcademicLeave = 4,
 }
 
 export namespace StudentStatus {
@@ -20,6 +21,8 @@ export namespace StudentStatus {
                 return "Отчислен"
             case StudentStatus.Finished:
                 return "Отчислен, в связи с окончанием обучения"
+            case StudentStatus.AcademicLeave:
+                return "Академический отпуск"
             default:
                 throw new NeverUnreachable(status)
         }

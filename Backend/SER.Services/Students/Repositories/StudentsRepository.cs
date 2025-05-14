@@ -25,6 +25,7 @@ public class StudentsRepository(MainConnector connector) : BaseRepository(connec
 			query.Add(blank.BirthDate);
 			query.Add(blank.PhoneNumber);
 			query.Add(blank.RepresentativePhoneNumber);
+			query.Add(blank.RepresentativeAlias);
 			query.Add(blank.IsOnPaidStudy);
 			query.Add(blank.Snils);
 			query.Add(blank.Group?.Id, "p_groupid");
@@ -37,6 +38,7 @@ public class StudentsRepository(MainConnector connector) : BaseRepository(connec
 			query.Add(currentWorkplaceId);
 			query.Add(blank.AdditionalQualifications.Select(q => q.Id).ToArray(), "p_additionalqualifications");
 			query.Add(blank.IsTargetAgreement);
+			query.Add(blank.TargetAgreementNumber);
 			query.Add(targetAgreementFileUrl, "p_targetagreementfile");
 			query.Add(blank.TargetAgreementDate);
 			query.Add(blank.TargetAgreementEnterprise?.Id, "p_targetagreemententerpriseid");
