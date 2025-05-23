@@ -1,5 +1,5 @@
 namespace SER.Domain.Groups.Enums;
-public enum StructuralUnits
+public enum StructuralUnit
 {
 	SP1 = 1,
 	SP2 = 2,

@@ -1,14 +1,15 @@
+using SER.Database.Models.ConfigurationTools;
+using SER.Database.Models.Enterprises;
+using SER.Database.Models.Groups;
+using SER.Database.Models.WorkPlaces;
 using SER.Domain.Students.Enums;
-using SER.Tools.Types.Catalog;
 using SER.Tools.Types.IDs;
 
-namespace SER.Domain.Students;
-
-public class StudentDB
+namespace SER.Database.Models.Students;
+public class StudentEntity : BaseEntity
 {
-	public ID Id { get; set; }
-	public String Name { get; set; }
-	public String SecondName { get; set; }
+	public String Name { get; set; } = default!;
+	public String SecondName { get; set; } = default!;
 	public String? LastName { get; set; }
 	public Gender Gender { get; set; }
 	public DateTime? BirthDate { get; set; }
@@ -17,30 +18,26 @@ public class StudentDB
 	public Boolean IsOnPaidStudy { get; set; }
 	public String? Snils { get; set; }
 	public ID GroupId { get; set; }
+	public GroupEntity Group { get; set; } = default!;
 	public String? PassportNumber { get; set; }
 	public String? PassportSeries { get; set; }
 	public String? PassportIssuedBy { get; set; }
 	public DateTime? PassportIssuedDate { get; set; }
-	public Catalog<String> PassportFiles { get; set; }
-	public Catalog<ID> PrevWorkplaceIds { get; set; }
-	public ID? CurrentWorkplaceId { get; set; }
-	public Catalog<ID> AdditionalQualifications { get; set; }
+	public List<String> PassportFiles { get; set; } = default!;
+	public List<WorkPlaceEntity> WorkPlaces { get; set; } = default!;
 	public Boolean IsTargetAgreement { get; set; }
-	public String? TargetAgreementFile { get; set; }
+	public List<String> TargetAgreementFiles { get; set; } = default!;
 	public DateTime? TargetAgreementDate { get; set; }
 	public ID? TargetAgreementEnterpriseId { get; set; }
+	public EnterpriseEntity? TargetAgreementEnterprise { get; set; }
 	public Boolean MustServeInArmy { get; set; }
-	public String? ArmySubpoenaFile { get; set; }
+	public List<String> ArmySubpoenaFiles { get; set; } = default!;
 	public DateTime? ArmyCallDate { get; set; }
-	public Catalog<SocialStatus> SocialStatuses { get; set; }
+	public List<SocialStatus> SocialStatuses { get; set; } = default!;
 	public StudentStatus Status { get; set; }
 	public String? Address { get; set; }
 	public Boolean IsForeignCitizen { get; set; }
 	public String? Inn { get; set; }
 	public String? Mail { get; set; }
-	public Catalog<String> OtherFiles { get; set; }
-
-	public DateTime CreatedDateTimeUtc { get; set; }
-	public DateTime? ModifiedDateTimeUtc { get; set; }
-	public Boolean IsRemoved { get; set; }
+	public List<String> OtherFiles { get; set; } = default!;
 }

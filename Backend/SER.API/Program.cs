@@ -6,8 +6,12 @@ using SER.Tools.Json;
 using SER.Services.Configurator;
 using Microsoft.AspNetCore.Http.Features;
 using static System.Int32;
+using DotNetEnv;
+using SER.Database;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+
+Env.Load();
 
 builder.Host.ConfigureWeb((context, serviceCollection) => 
 {
@@ -21,6 +25,8 @@ builder.Services.Configure<FormOptions>(options =>
 	options.KeyLengthLimit = MaxValue;
 	options.MultipartBodyLengthLimit = Int64.MaxValue;
 });
+
+builder.Services.AddSERDbContext(builder.Configuration);
 
 builder.Services.AddResponseCompression(options =>
 {

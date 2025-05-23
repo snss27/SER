@@ -6,7 +6,7 @@ namespace SER.Domain.Groups;
 public class Group(
 	ID id,
 	String number,
-	StructuralUnits structuralUnit,
+	StructuralUnit structuralUnit,
 	ID educationLevelId,
 	Int32 enrollmentYear,
 	ID? curatorId,
@@ -19,7 +19,7 @@ public class Group(
 {
 	public ID Id { get; } = id;
 	public String Number { get; } = number;
-	public StructuralUnits StructuralUnit { get; } = structuralUnit;
+	public StructuralUnit StructuralUnit { get; } = structuralUnit;
 	public ID EducationLevelId { get; } = educationLevelId;
 	public Int32 EnrollmentYear { get; } = enrollmentYear;
 	public ID? CuratorId { get; } = curatorId;

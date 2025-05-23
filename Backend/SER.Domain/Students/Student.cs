@@ -8,7 +8,7 @@ public class Student(
 	String name,
 	String secondName,
 	String? lastName,
-	Genders gender,
+	Gender gender,
 	DateTime? birthDate,
 	String? phoneNumber,
 	String? representativePhoneNumber,
@@ -46,7 +46,7 @@ public class Student(
 	public String Name { get;} = name;
 	public String SecondName { get; } = secondName;
 	public String? LastName { get; } = lastName;
-	public Genders Gender { get;  } = gender;
+	public Gender Gender { get;  } = gender;
 	public DateTime? BirthDate { get; } = birthDate;
 	public String? PhoneNumber { get; } = phoneNumber;
 	public String? RepresentativePhoneNumber { get; } = representativePhoneNumber;

@@ -9,7 +9,7 @@ namespace SER.Domain.Groups;
 public record GroupDto(
 	ID Id,
 	String Number,
-	StructuralUnits StructuralUnit,
+	StructuralUnit StructuralUnit,
 	EducationLevel EducationLevel,
 	Int32 EnrollmentYear,
 	Employee? Curator,

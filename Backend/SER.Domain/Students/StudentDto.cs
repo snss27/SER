@@ -15,7 +15,7 @@ public record StudentDto(
 	String Name,
 	String SecondName,
 	String? LastName,
-	Genders Gender,
+	Gender Gender,
 	DateTime? BirthDate,
 	String? PhoneNumber,
 	String? RepresentativePhoneNumber,

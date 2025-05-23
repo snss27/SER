@@ -6,7 +6,7 @@ namespace SER.Services.EducationLevels.Models;
 public class EducationLevelDB
 {
 	public ID Id { get; set; }
-	public EducationLevelTypes Type { get; set; }
+	public EducationLevelType Type { get; set; }
 	public String Name { get; set; }
 	public String Code { get; set; }
 	public String? StudyTime { get; set; }

@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SER.Configurator\SER.Configurator.csproj" />
+    <ProjectReference Include="..\SER.Database\SER.Database.csproj" />
     <ProjectReference Include="..\SER.Domain\SER.Domain.csproj" />
     <ProjectReference Include="..\SER.Services.Configurator\SER.Services.Configurator.csproj" />
     <ProjectReference Include="..\SER.Tools\SER.Tools.csproj" />
@@ -13,6 +14,11 @@
 
   <ItemGroup>
     <PackageReference Include="CSharpFunctionalExtensions" Version="3.6.0" />
+    <PackageReference Include="DotNetEnv" Version="3.1.1" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.5">
+	  <PrivateAssets>all</PrivateAssets>
+	  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	</PackageReference>
   </ItemGroup>
 
 </Project>

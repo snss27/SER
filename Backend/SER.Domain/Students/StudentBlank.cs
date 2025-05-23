@@ -15,7 +15,7 @@ public class StudentBlank
 	public String? SecondName { get; set; }
 	public String? LastName { get; set; }
 	public StudentStatus Status { get; set; }
-	public Genders Gender { get; set; }
+	public Gender Gender { get; set; }
 	public String? PhoneNumber { get; set; }
 	public String? RepresentativePhoneNumber { get; set; }
 	public DateTime? BirthDate { get; set; }

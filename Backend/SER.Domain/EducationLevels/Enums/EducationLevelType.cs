@@ -1,5 +1,5 @@
 namespace SER.Domain.EducationLevels.Enums;
-public enum EducationLevelTypes
+public enum EducationLevelType
 {
 	Speciality = 1,
 	Profession = 2,

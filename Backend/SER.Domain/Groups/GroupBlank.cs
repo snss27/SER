@@ -10,7 +10,7 @@ public class GroupBlank
 {
 	public ID? Id { get; set; }
 	public String? Number { get; set; }
-	public StructuralUnits? StructuralUnit { get; set; }
+	public StructuralUnit? StructuralUnit { get; set; }
 	public EducationLevel? EducationLevel { get; set; }
 	public Int32? EnrollmentYear { get; set; }
 	public Employee? Curator { get; set; }

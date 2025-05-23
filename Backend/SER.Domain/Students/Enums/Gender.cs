@@ -1,5 +1,5 @@
 namespace SER.Domain.Students.Enums;
-public enum Genders
+public enum Gender
 {
 	Male = 1,
 	Female = 2
