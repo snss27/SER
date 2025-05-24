@@ -17,13 +17,13 @@ public class EmployeesService(SERDbContext dbContext) : IEmployeesService
 	public async Task<OperationResult> Save(EmployeeBlank blank)
 	{
 		Result<Employee, Error> result = Employee.Create(blank.Id, blank.Name, blank.SecondName, blank.LastName);
-		if(result.IsFailure) return OperationResult.Fail(result.Error);
+		if (result.IsFailure) return OperationResult.Fail(result.Error);
 
 		Employee employee = result.Value;
 
 		Boolean isNew = blank.Id is null;
 
-		if(isNew)
+		if (isNew)
 		{
 			EmployeeEntity entity = employee.ToEntity();
 			await dbContext.AddAsync(entity);
@@ -31,7 +31,6 @@ public class EmployeesService(SERDbContext dbContext) : IEmployeesService
 		else
 		{
 			EmployeeEntity? entity = await dbContext.Employees.FirstOrDefaultAsync(e => e.Id == employee.Id);
-
 			if (entity is null) return OperationResult.Fail("Работник не найден");
 
 			entity.ApplyChanges(employee);

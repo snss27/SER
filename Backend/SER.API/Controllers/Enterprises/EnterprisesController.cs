@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using SER.API.Models.Enterprises;
+using SER.API.Models.Enterprises.Converters;
 using SER.Domain.Enterprises;
 using SER.Domain.Services;
 using SER.Tools.Types.IDs;
@@ -21,20 +23,23 @@ public class EnterprisesController(IEnterprisesService enterprisesService) : Con
 	}
 
 	[HttpGet("get")]
-	public async Task<Enterprise?> Get([FromQuery] ID id)
+	public async Task<EnterpriseDto?> Get([FromQuery] ID id)
 	{
-		return await enterprisesService.Get(id);
+		Enterprise? enterprise = await enterprisesService.Get(id);
+		return enterprise?.ToDto();
 	}
 
 	[HttpGet("get_page")]
-	public async Task<Enterprise[]> GetPage([FromQuery] Int32 page, [FromQuery] Int32 pageSize)
+	public async Task<EnterpriseDto[]> GetPage([FromQuery] Int32 page, [FromQuery] Int32 pageSize)
 	{
-		return await enterprisesService.GetPage(page, pageSize);
+		Enterprise[] enterprises = await enterprisesService.GetPage(page, pageSize);
+		return [.. enterprises.Select(e => e.ToDto())];
 	}
 
 	[HttpGet("get_by_search_text")]
-	public async Task<Enterprise[]> GetBySearchText([FromQuery] String searchText)
+	public async Task<EnterpriseDto[]> GetBySearchText([FromQuery] String searchText)
 	{
-		return await enterprisesService.GetBySearchText(searchText);
+		Enterprise[] enterprises = await enterprisesService.GetBySearchText(searchText);
+		return [.. enterprises.Select(e => e.ToDto())];
 	}
 }

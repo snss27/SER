@@ -19,7 +19,6 @@ internal static class EmployeeExtensions
 
 	public static void ApplyChanges(this EmployeeEntity entity, Employee employee)
 	{
-		entity.Id = employee.Id;
 		entity.Name = employee.FullName.First;
 		entity.SecondName = employee.FullName.Second;
 		entity.LastName = employee.FullName.Last;
