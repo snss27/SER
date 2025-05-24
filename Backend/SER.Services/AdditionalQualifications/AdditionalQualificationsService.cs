@@ -24,7 +24,7 @@ public class AdditionalQualificationsService(SERDbContext dbContext) : IAddition
 		if (isNew)
 		{
 			AdditionalQualificationEntity entity = additionalQualification.ToEntity();
-			dbContext.Add(entity);
+			await dbContext.AddAsync(entity);
 		}
 		else
 		{

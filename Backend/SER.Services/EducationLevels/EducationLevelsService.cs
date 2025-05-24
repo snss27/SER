@@ -25,7 +25,7 @@ public class EducationLevelsService(SERDbContext dbContext) : IEducationLevelsSe
 		if (isNew)
 		{
 			EducationLevelEntity entity = educationLevel.ToEntity();
-			dbContext.Add(entity);
+			await dbContext.AddAsync(entity);
 		}
 		else
 		{

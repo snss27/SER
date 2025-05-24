@@ -15,7 +15,7 @@ public class FullName : ValueObject
 		Last = last;
 	}
 
-	public static Result<FullName, Error> Create(String first, String second, String? last)
+	public static Result<FullName, Error> Create(String? first, String? second, String? last)
 	{
 		if (String.IsNullOrWhiteSpace(first)) return new Error("Укажите имя");
 

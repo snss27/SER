@@ -4,7 +4,6 @@ using SER.Services.AdditionalQualifications;
 using SER.Services.Clusters;
 using SER.Services.EducationLevels;
 using SER.Services.Employees;
-using SER.Services.Employees.Repositories;
 using SER.Services.Enterprises;
 using SER.Services.Enterprises.Repositories;
 using SER.Services.Files;
@@ -38,7 +37,6 @@ public static class ServicesConfigurator
 
         services.AddSingleton<IStudentsRepository, StudentsRepository>();
 		services.AddSingleton<IGroupsRepository, GroupsRepository>();
-		services.AddSingleton<IEmployeesRepository, EmployeesRepository>();
 		services.AddSingleton<IEnterprisesRepository, EnterprisesRepository>();
 		services.AddSingleton<IWorkPlacesRepository, WorkPlacesRepository>();
 

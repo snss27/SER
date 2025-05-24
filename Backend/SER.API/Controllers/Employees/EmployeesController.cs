@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using SER.API.Models.Employees;
+using SER.API.Models.Employees.Converters;
 using SER.Domain.Employees;
 using SER.Domain.Services;
 using SER.Tools.Types.IDs;
@@ -22,20 +24,23 @@ public class EmployeesController(IEmployeesService employeesService) : Controlle
 	}
 
 	[HttpGet("get")]
-	public async Task<Employee?> Get([FromQuery] ID id)
+	public async Task<EmployeeDto?> Get([FromQuery] ID id)
 	{
-		return await employeesService.Get(id);
+		Employee? employee = await employeesService.Get(id);
+		return employee?.ToDto();
 	}
 
 	[HttpGet("get_page")]
-	public async Task<Employee[]> GetPage([FromQuery] Int32 page, [FromQuery] Int32 pageSize)
+	public async Task<EmployeeDto[]> GetPage([FromQuery] Int32 page, [FromQuery] Int32 pageSize)
 	{
-		return await employeesService.GetPage(page, pageSize);
+		Employee[] employees = await employeesService.GetPage(page, pageSize);
+		return [.. employees.Select(e => e.ToDto())];	
 	}
 
 	[HttpGet("get_by_search_text")]
-	public async Task<Employee[]> GetBySearchText([FromQuery] String searchText)
+	public async Task<EmployeeDto[]> GetBySearchText([FromQuery] String searchText)
 	{
-		return await employeesService.Get(searchText);
+		Employee[] employees =  await employeesService.Get(searchText);
+		return [.. employees.Select(e => e.ToDto())];
 	}
 }

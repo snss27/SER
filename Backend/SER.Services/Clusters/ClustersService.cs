@@ -24,7 +24,7 @@ public class ClustersService(SERDbContext dbContext) : IClustersService
 		if (isNew)
 		{
 			ClusterEntity entity = cluster.ToEntity();
-			dbContext.Add(entity);
+			await dbContext.AddAsync(entity);
 		}
 		else
 		{
