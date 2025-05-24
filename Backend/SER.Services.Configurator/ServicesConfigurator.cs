@@ -3,7 +3,6 @@ using SER.Domain.Services;
 using SER.Services.AdditionalQualifications;
 using SER.Services.Clusters;
 using SER.Services.EducationLevels;
-using SER.Services.EducationLevels.Repositories;
 using SER.Services.Employees;
 using SER.Services.Employees.Repositories;
 using SER.Services.Enterprises;
@@ -38,7 +37,6 @@ public static class ServicesConfigurator
         #region Repositories
 
         services.AddSingleton<IStudentsRepository, StudentsRepository>();
-		services.AddSingleton<IEducationLevelsRepository, EducationLevelsRepository>();
 		services.AddSingleton<IGroupsRepository, GroupsRepository>();
 		services.AddSingleton<IEmployeesRepository, EmployeesRepository>();
 		services.AddSingleton<IEnterprisesRepository, EnterprisesRepository>();

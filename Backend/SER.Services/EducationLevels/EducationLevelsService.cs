@@ -1,65 +1,101 @@
+using CSharpFunctionalExtensions;
+using Microsoft.EntityFrameworkCore;
+using SER.Database;
+using SER.Database.Models.EducationLevels;
 using SER.Domain.EducationLevels;
-using SER.Domain.Groups;
 using SER.Domain.Services;
-using SER.Services.EducationLevels.Repositories;
-using SER.Services.Groups.Repositories;
+using SER.Services.EducationLevels.Converters;
 using SER.Tools.Types.IDs;
 using SER.Tools.Types.Results;
+using static SER.Tools.Utils.NumberUtils;
 
 namespace SER.Services.EducationLevels;
 
-public class EducationLevelsService(
-	IEducationLevelsRepository educationLevelsRepository,
-	IGroupsRepository groupsRepository
-	) : IEducationLevelsService
+public class EducationLevelsService(SERDbContext dbContext) : IEducationLevelsService
 {
 	public async Task<OperationResult> Save(EducationLevelBlank blank)
 	{
-		if (blank.Type is null)
+		Result<EducationLevel, Error> result = EducationLevel.Create(blank.Id, blank.Type, blank.Name, blank.Code, blank.StudyTime);
+		if (result.IsFailure) return OperationResult.Fail(result.Error);
+
+		EducationLevel educationLevel = result.Value;
+
+		Boolean isNew = blank.Id is null;
+
+		if (isNew)
 		{
-			return OperationResult.Fail("Укажите тип уровня образования");
+			EducationLevelEntity entity = educationLevel.ToEntity();
+			dbContext.Add(entity);
+		}
+		else
+		{
+			EducationLevelEntity? entity = await dbContext.EducationLevels.FirstOrDefaultAsync(el => el.Id == educationLevel.Id);
+
+			if (entity is null) return OperationResult.Fail("Уровень образования не найден");
+
+			entity.ApplyChanges(educationLevel);
+			dbContext.Update(entity);
 		}
 
-		if (String.IsNullOrWhiteSpace(blank.Name))
-		{
-			return OperationResult.Fail("Укажите наименование уровня образования");
-		}
-
-		if (String.IsNullOrWhiteSpace(blank.Code))
-		{
-			return OperationResult.Fail("Укажите код уровня образования");
-		}
-
-		blank.Id ??= ID.New();
-
-		return await educationLevelsRepository.Save(blank);
+		await dbContext.SaveChangesAsync();
+		return OperationResult.Success();
 	}
 
 	public async Task<OperationResult> Remove(ID id)
 	{
-		Group[] groups = await groupsRepository.GetByEducationLevelId(id);
-		if (groups.Length > 0) return OperationResult.Fail("Невозможно удалить, т.к. существуют группы с данным уровнем образования");
+		Boolean hasGroups = await dbContext.Groups
+			.AnyAsync(g => g.EducationLevelId == id);
+		if (hasGroups) return OperationResult.Fail("Невозможно удалить, т.к. существуют группы с данным уровнем образования");
 
-		return await educationLevelsRepository.Remove(id);
+		EducationLevelEntity? entity = await dbContext.EducationLevels.FirstOrDefaultAsync(el => el.Id == id);
+		if (entity is null) return OperationResult.Fail("Уровень образования не найден");
+
+		dbContext.Remove(entity);
+		await dbContext.SaveChangesAsync();
+
+		return OperationResult.Success();
 	}
 
 	public async Task<EducationLevel?> Get(ID id)
 	{
-		return await educationLevelsRepository.Get(id);
+		EducationLevelEntity? entity = await dbContext.EducationLevels.FirstOrDefaultAsync(el => el.Id == id);
+		return entity?.ToDomain();
 	}
 
 	public async Task<EducationLevel[]> Get(ID[] ids)
 	{
-		return await educationLevelsRepository.Get(ids);
+		List<EducationLevelEntity> entities = await dbContext.EducationLevels
+			.Where(el => ids.Contains(el.Id))
+			.ToListAsync();
+
+		return [.. entities.Select(el => el.ToDomain())];
 	}
 
+	//TASK Возвращать totalCount для клиента
 	public async Task<EducationLevel[]> GetPage(Int32 page, Int32 pageSize)
 	{
-		return await educationLevelsRepository.GetPage(page, pageSize);
+		(Int32 offset, Int32 limit) = NormalizeRange(page, pageSize);
+
+		List<EducationLevelEntity> entities = await dbContext.EducationLevels
+			.OrderByDescending(el => el.CreatedDateTimeUtc)
+			.ThenByDescending(el => el.ModifiedDateTimeUtc)
+			.Skip(offset)
+			.Take(limit)
+			.ToListAsync();
+
+		return [.. entities.Select(el => el.ToDomain())];
 	}
 
 	public async Task<EducationLevel[]> Get(String searchText)
 	{
-		return await educationLevelsRepository.Get(searchText);
+		List<EducationLevelEntity> entites = await dbContext.EducationLevels
+			.Where(el =>
+			EF.Functions.ILike(el.Name, $"%{searchText}%")
+			|| EF.Functions.ILike(el.Code, $"%{searchText}%")
+			)
+			.OrderBy(el => el.Name)
+			.ToListAsync();
+
+		return [.. entites.Select(el => el.ToDomain())];
 	}
 }
