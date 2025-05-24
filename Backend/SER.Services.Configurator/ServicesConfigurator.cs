@@ -7,7 +7,6 @@ using SER.Services.Employees;
 using SER.Services.Enterprises;
 using SER.Services.Files;
 using SER.Services.Groups;
-using SER.Services.Groups.Repositories;
 using SER.Services.Students;
 using SER.Services.Students.Repositories;
 using SER.Services.WorkPlaces;
@@ -35,7 +34,6 @@ public static class ServicesConfigurator
         #region Repositories
 
         services.AddSingleton<IStudentsRepository, StudentsRepository>();
-		services.AddSingleton<IGroupsRepository, GroupsRepository>();
 		services.AddSingleton<IWorkPlacesRepository, WorkPlacesRepository>();
 
 		#endregion

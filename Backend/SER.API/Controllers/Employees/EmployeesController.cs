@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using SER.API.Models.Employees;
-using SER.API.Models.Employees.Converters;
 using SER.Domain.Employees;
+using SER.Domain.Employees.Converters;
 using SER.Domain.Services;
 using SER.Tools.Types.IDs;
 using SER.Tools.Types.Results;

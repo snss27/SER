@@ -1,6 +1,6 @@
 using SER.Tools.Types.IDs;
 
-namespace SER.API.Models.AdditionalQualifications;
+namespace SER.Domain.AdditionalQualifications;
 
 public record AdditionalQualificationDto(
 	ID Id,

@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using SER.API.Models.EducationLevels;
-using SER.API.Models.EducationLevels.Converters;
 using SER.Domain.EducationLevels;
+using SER.Domain.EducationLevels.Converters;
 using SER.Domain.Services;
 using SER.Tools.Types.IDs;
 using SER.Tools.Types.Results;

@@ -1,6 +1,4 @@
-using SER.Domain.Enterprises;
-
-namespace SER.API.Models.Enterprises.Converters;
+namespace SER.Domain.Enterprises.Converters;
 
 public static class EnterprisesConverter
 {

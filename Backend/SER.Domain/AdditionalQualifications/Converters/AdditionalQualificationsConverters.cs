@@ -1,6 +1,4 @@
-using SER.Domain.AdditionalQualifications;
-
-namespace SER.API.Models.AdditionalQualifications.Converters;
+namespace SER.Domain.AdditionalQualifications.Converters;
 
 public static class AdditionalQualificationsConverters
 {

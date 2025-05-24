@@ -1,162 +1,124 @@
+using CSharpFunctionalExtensions;
+using Microsoft.EntityFrameworkCore;
+using SER.Database;
+using SER.Database.Models.Groups;
 using SER.Domain.Clusters;
+using SER.Domain.Clusters.Converters;
 using SER.Domain.EducationLevels;
+using SER.Domain.EducationLevels.Converters;
 using SER.Domain.Employees;
+using SER.Domain.Employees.Converters;
 using SER.Domain.Groups;
-using SER.Domain.Groups.Converters;
 using SER.Domain.Services;
-using SER.Domain.Students;
-using SER.Services.Groups.Repositories;
-using SER.Services.Students.Repositories;
+using SER.Services.Enterprises.Converters;
+using SER.Services.Groups.Converters;
 using SER.Tools.Types.IDs;
 using SER.Tools.Types.Results;
-using SER.Tools.Utils;
+using static SER.Tools.Utils.NumberUtils;
 
 namespace SER.Services.Groups;
 
-public class GroupsService(
-	IGroupsRepository groupsRepository,
-	IEducationLevelsService educationLevelsService,
-	IEmployeesService employeesService,
-	IClustersService clustersService,
-	IStudentsRepository studentsRepository
-) : IGroupsService
+public class GroupsService(SERDbContext dbContext) : IGroupsService
 {
 	public async Task<OperationResult> Save(GroupBlank blank)
 	{
-		if (String.IsNullOrWhiteSpace(blank.Number))
+		if (blank.EducationLevel is null) return OperationResult.Fail("Укажите уровень образования");
+		EducationLevel educationLevel = blank.EducationLevel.ToDomain();
+		Employee? curator = blank.Curator?.ToDomain();
+		Cluster? cluster = blank.Cluster?.ToDomain();
+
+		Result<Group, Error> result = Group.Create(blank.Id, blank.Number, blank.StructuralUnit, educationLevel, blank.EnrollmentYear, curator, blank.HasCluster, cluster);
+
+		Group group = result.Value;
+
+		Boolean isNew = blank.Id is null;
+
+		if (isNew)
 		{
-			return OperationResult.Fail("Укажите номер группы");
+			GroupEntity entity = group.ToEntity();
+			await dbContext.AddAsync(entity);
+		}
+		else
+		{
+			GroupEntity? entity = await dbContext.Groups.FirstOrDefaultAsync(g => g.Id == group.Id);
+			if (entity is null) return OperationResult.Fail("Группа не найдена");
+
+			entity.ApplyChanges(group);
+			dbContext.Update(entity);
 		}
 
-		if (!Regexs.GroupNumberRegex.IsMatch(blank.Number))
-		{
-			return OperationResult.Fail("Номер группы должен быть целым пятизначным числом");
-		}
-
-		if (blank.StructuralUnit is null)
-		{
-			return OperationResult.Fail("Укажите струкрутное подразделение");
-		}
-
-		if (blank.EducationLevel is null)
-		{
-			return OperationResult.Fail("Укажите уровень образования у группы");
-		}
-
-		if (blank.EnrollmentYear is null)
-		{
-			return OperationResult.Fail("Укажите год поступления");
-		}
-
-		if (blank.HasCluster && blank.Cluster is null)
-		{
-			return OperationResult.Fail("Укажите кластер группы");
-		}
-
-		if (!blank.HasCluster)
-		{
-			blank.Cluster = null;
-		}
-
-		blank.Id ??= ID.New();
-
-		return await groupsRepository.Save(blank);
+		await dbContext.SaveChangesAsync();
+		return OperationResult.Success();
 	}
 
 	public async Task<OperationResult> Remove(ID id)
 	{
-		Student[] students = await studentsRepository.GetByGroupId(id);
-		if (students.Length > 0)
+		Boolean hasStudents = await dbContext.Students.AnyAsync(s => s.GroupId == id);
+		if (hasStudents)
 		{
 			return OperationResult.Fail("Невозможно удалить, т.к. у этой группы есть привязанные студенты");
 		}
 
-		return await groupsRepository.Remove(id);
+		GroupEntity? entity = await dbContext.Groups.FirstOrDefaultAsync(g => g.Id == id);
+		if (entity is null) return OperationResult.Fail("Группа не найдена");
+
+		dbContext.Remove(entity);
+		await dbContext.SaveChangesAsync();
+
+		return OperationResult.Success();
 	}
 
 
-	public async Task<GroupDto?> Get(ID id)
+	public async Task<Group?> Get(ID id)
 	{
-		Group? group = await groupsRepository.Get(id);
-		if (group is null)
-		{
-			return null;
-		}
+		GroupEntity? entity = await dbContext.Groups
+			.Include(g => g.EducationLevel)
+			.Include(g => g.Curator)
+			.Include(g => g.Cluster)
+			.FirstOrDefaultAsync(g => g.Id == id);
 
-		Task<EducationLevel?> educationLevelTask = educationLevelsService.Get(group.EducationLevelId);
-		Task<Employee?> curatorTask = group.CuratorId.HasValue
-			? employeesService.Get(group.CuratorId.Value)
-			: Task.FromResult<Employee?>(null);
-		Task<Cluster?> clusterTask = group.ClusterId.HasValue
-			? clustersService.Get(group.ClusterId.Value)
-			: Task.FromResult<Cluster?>(null);
-
-		await Task.WhenAll(educationLevelTask, curatorTask, clusterTask);
-
-		EducationLevel? educationLevel = await educationLevelTask;
-		Employee? curator = await curatorTask;
-		Cluster? cluster = await clusterTask;
-
-		return group.ToGroupDto(
-			educationLevel ?? throw new InvalidOperationException("Education level not found"),
-			curator,
-			cluster
-		);
+		return entity?.ToDomain();
 	}
 
-	public async Task<GroupDto[]> Get(ID[] ids)
+	public async Task<Group[]> Get(ID[] ids)
 	{
-		Group[] groups = await groupsRepository.Get(ids);
+		List<GroupEntity> entities = await dbContext.Groups
+			.Include(g => g.EducationLevel)
+			.Include(g => g.Curator)
+			.Include(g => g.Cluster)
+			.Where(el => ids.Contains(el.Id))
+			.ToListAsync();
 
-		return await GroupDtos(groups);
+		return [.. entities.Select(e => e.ToDomain())];
 	}
 
-	public async Task<GroupDto[]> GetPage(Int32 page, Int32 pageSize)
+	public async Task<Group[]> GetPage(Int32 page, Int32 pageSize)
 	{
-		Group[] groups = await groupsRepository.GetPage(page, pageSize);
-		if(groups.Length == 0)
-		{
-			return [];
-		}
+		(Int32 offset, Int32 limit) = NormalizeRange(page, pageSize);
 
-		return await GroupDtos(groups);
+		List<GroupEntity> entities = await dbContext.Groups
+			.Include(g => g.EducationLevel)
+			.Include(g => g.Curator)
+			.Include(g => g.Cluster)
+			.OrderByDescending(e => e.CreatedDateTimeUtc)
+			.ThenByDescending(e => e.ModifiedDateTimeUtc)
+			.Skip(offset)
+			.Take(limit)
+			.ToListAsync();
+
+		return [.. entities.Select(e => e.ToDomain())];
 	}
 
-	public async Task<GroupDto[]> GetBySearchText(String searchText)
+	public async Task<Group[]> GetBySearchText(String searchText)
 	{
-		Group[] groups = await groupsRepository.GetBySearchText(searchText);
-		if(groups.Length == 0)
-		{
-			return [];
-		}
+		List<GroupEntity> entites = await dbContext.Groups
+			.Include(g => g.EducationLevel)
+			.Include(g => g.Curator)
+			.Include(g => g.Cluster)
+			.Where(e => EF.Functions.ILike(e.Number, $"%{searchText}%"))
+			.OrderBy(e => e.Number)
+			.ToListAsync();
 
-		return await GroupDtos(groups);
+		return [.. entites.Select(el => el.ToDomain())];
 	}
-
-	private async Task<GroupDto[]> GroupDtos(Group[] groups)
-	{
-		ID[] curatorIds = groups
-	.Where(group => group.CuratorId is not null)
-	.Select(group => group.CuratorId.Value)
-	.ToArray();
-		ID[] educationLevelIds = groups
-			.Select(group => group.EducationLevelId)
-			.ToArray();
-		ID[] clusterIds = groups
-			.Where(group => group.ClusterId is not null)
-			.Select(group => group.ClusterId.Value)
-			.ToArray();
-
-		Task<EducationLevel[]> educationLevelsTask = educationLevelsService.Get(educationLevelIds);
-		Task<Employee[]> curatorsTask = curatorIds.Length > 0 ? employeesService.Get(curatorIds) : Task.FromResult<Employee[]>([]);
-		Task<Cluster[]> clustersTask = clusterIds.Length > 0 ? clustersService.Get(clusterIds) : Task.FromResult<Cluster[]>([]);
-
-		await Task.WhenAll(curatorsTask, educationLevelsTask, clustersTask);
-
-		Employee[] curators = await curatorsTask;
-		EducationLevel[] educationLevels = await educationLevelsTask;
-		Cluster[] clusters = await clustersTask;
-
-		return groups.ToGroupDtos(educationLevels, curators, clusters);
-	} 
 }

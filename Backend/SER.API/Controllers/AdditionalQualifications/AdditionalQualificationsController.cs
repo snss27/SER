@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using SER.API.Models.AdditionalQualifications;
-using SER.API.Models.AdditionalQualifications.Converters;
 using SER.Domain.AdditionalQualifications;
+using SER.Domain.AdditionalQualifications.Converters;
 using SER.Domain.Services;
 using SER.Tools.Types.IDs;
 using SER.Tools.Types.Results;

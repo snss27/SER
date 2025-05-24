@@ -1,10 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-using SER.API.Models.Clusters;
-using SER.API.Models.Clusters.Converters;
 using SER.Domain.Clusters;
 using SER.Domain.Services;
 using SER.Tools.Types.IDs;
 using SER.Tools.Types.Results;
+using SER.Domain.Clusters.Converters;
 
 namespace SER.API.Controllers.Clusters;
 

@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using SER.API.Models.Enterprises;
-using SER.API.Models.Enterprises.Converters;
 using SER.Domain.Enterprises;
+using SER.Domain.Enterprises.Converters;
 using SER.Domain.Services;
 using SER.Tools.Types.IDs;
 using SER.Tools.Types.Results;

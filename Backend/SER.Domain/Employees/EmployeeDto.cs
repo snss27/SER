@@ -1,6 +1,6 @@
 using SER.Tools.Types.IDs;
 
-namespace SER.API.Models.Employees;
+namespace SER.Domain.Employees;
 
 public record EmployeeDto(
 	ID Id,

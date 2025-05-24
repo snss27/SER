@@ -1,6 +1,6 @@
 using SER.Tools.Types.IDs;
 
-namespace SER.API.Models.Enterprises;
+namespace SER.Domain.Enterprises;
 
 public record EnterpriseDto(
 	ID Id,
