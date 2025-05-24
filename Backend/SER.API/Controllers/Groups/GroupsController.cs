@@ -10,13 +10,13 @@ namespace SER.API.Controllers.Groups;
 public class GroupsController(IGroupsService groupsService) : ControllerBase
 {
 	[HttpPost("save")]
-	public async Task<Result> Save([FromBody] GroupBlank blank)
+	public async Task<OperationResult> Save([FromBody] GroupBlank blank)
 	{
 		return await groupsService.Save(blank);
 	}
 
 	[HttpPost("remove")]
-	public async Task<Result> Remove([FromBody] ID id)
+	public async Task<OperationResult> Remove([FromBody] ID id)
 	{
 		return await groupsService.Remove(id);
 	}

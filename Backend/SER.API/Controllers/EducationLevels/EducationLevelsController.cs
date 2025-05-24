@@ -10,13 +10,13 @@ namespace SER.API.Controllers.EducationLevels;
 public class EducationLevelsController(IEducationLevelsService educationLevelsService) : ControllerBase
 {
 	[HttpPost("save")]
-	public async Task<Result> Save([FromBody] EducationLevelBlank blank)
+	public async Task<OperationResult> Save([FromBody] EducationLevelBlank blank)
 	{
 		return await educationLevelsService.Save(blank);
 	}
 
 	[HttpPost("remove")]
-	public async Task<Result> Remove([FromBody] ID id)
+	public async Task<OperationResult> Remove([FromBody] ID id)
 	{
 		return await educationLevelsService.Remove(id);
 	}

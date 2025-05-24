@@ -21,36 +21,36 @@ public class GroupsService(
 	IStudentsRepository studentsRepository
 ) : IGroupsService
 {
-	public async Task<Result> Save(GroupBlank blank)
+	public async Task<OperationResult> Save(GroupBlank blank)
 	{
 		if (String.IsNullOrWhiteSpace(blank.Number))
 		{
-			return Result.Fail("Укажите номер группы");
+			return OperationResult.Fail("Укажите номер группы");
 		}
 
 		if (!Regexs.GroupNumberRegex.IsMatch(blank.Number))
 		{
-			return Result.Fail("Номер группы должен быть целым пятизначным числом");
+			return OperationResult.Fail("Номер группы должен быть целым пятизначным числом");
 		}
 
 		if (blank.StructuralUnit is null)
 		{
-			return Result.Fail("Укажите струкрутное подразделение");
+			return OperationResult.Fail("Укажите струкрутное подразделение");
 		}
 
 		if (blank.EducationLevel is null)
 		{
-			return Result.Fail("Укажите уровень образования у группы");
+			return OperationResult.Fail("Укажите уровень образования у группы");
 		}
 
 		if (blank.EnrollmentYear is null)
 		{
-			return Result.Fail("Укажите год поступления");
+			return OperationResult.Fail("Укажите год поступления");
 		}
 
 		if (blank.HasCluster && blank.Cluster is null)
 		{
-			return Result.Fail("Укажите кластер группы");
+			return OperationResult.Fail("Укажите кластер группы");
 		}
 
 		if (!blank.HasCluster)
@@ -63,12 +63,12 @@ public class GroupsService(
 		return await groupsRepository.Save(blank);
 	}
 
-	public async Task<Result> Remove(ID id)
+	public async Task<OperationResult> Remove(ID id)
 	{
 		Student[] students = await studentsRepository.GetByGroupId(id);
 		if (students.Length > 0)
 		{
-			return Result.Fail("Невозможно удалить, т.к. у этой группы есть привязанные студенты");
+			return OperationResult.Fail("Невозможно удалить, т.к. у этой группы есть привязанные студенты");
 		}
 
 		return await groupsRepository.Remove(id);

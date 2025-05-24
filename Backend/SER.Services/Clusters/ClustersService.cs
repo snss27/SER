@@ -7,16 +7,16 @@ using SER.Tools.Types.Results;
 namespace SER.Services.Clusters;
 public class ClustersService(IClustersRepository clustersRepository) : IClustersService
 {
-	public async Task<Result> Save(ClusterBlank blank)
+	public async Task<OperationResult> Save(ClusterBlank blank)
 	{
-		if (String.IsNullOrWhiteSpace(blank.Name)) return Result.Fail("Укажите наименование кластера");
+		if (String.IsNullOrWhiteSpace(blank.Name)) return OperationResult.Fail("Укажите наименование кластера");
 
 		blank.Id ??= ID.New();
 
 		return await clustersRepository.Save(blank);
 	}
 
-	public async Task<Result> Remove(ID id)
+	public async Task<OperationResult> Remove(ID id)
 	{
 		return await clustersRepository.Remove(id);
 	}

@@ -13,7 +13,7 @@ public class WorkPlacesService(IWorkPlacesRepository workPlacesRepository, IEnte
 {
 	public async Task<DataResult<ID>> Save(WorkPlaceBlank blank, String groupAlias, String studentAlias)
 	{
-		Result validateResult = Validate(blank);
+		OperationResult validateResult = Validate(blank);
 
 		if (!validateResult.IsSuccess) return DataResult<ID>.Failed(validateResult.Errors[0].Message);
 
@@ -30,7 +30,7 @@ public class WorkPlacesService(IWorkPlacesRepository workPlacesRepository, IEnte
 	{
 		foreach(WorkPlaceBlank blank in blanks)
 		{
-			Result validateResult = Validate(blank);
+			OperationResult validateResult = Validate(blank);
 
 			if (!validateResult.IsSuccess) return DataResult<ID[]>.Failed(validateResult.Errors[0].Message);
 		}
@@ -50,14 +50,14 @@ public class WorkPlacesService(IWorkPlacesRepository workPlacesRepository, IEnte
 		return DataResult<ID[]>.Success(workPlaceIds.ToArray());
 	}
 
-	private Result Validate(WorkPlaceBlank blank)
+	private OperationResult Validate(WorkPlaceBlank blank)
 	{
 		if(blank.Enterprise is null)
 		{
-			return Result.Fail($"Укажите предприятие для места работы");
+			return OperationResult.Fail($"Укажите предприятие для места работы");
 		}
 
-		return Result.Success();
+		return OperationResult.Success();
 	}
 
 	public async Task<WorkPlaceDto?> Get(ID id)

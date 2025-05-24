@@ -5,8 +5,8 @@ using SER.Tools.Types.Results;
 namespace SER.Services.Groups.Repositories;
 public interface IGroupsRepository
 {
-	public Task<Result> Save(GroupBlank blank);
-	public Task<Result> Remove(ID id);
+	public Task<OperationResult> Save(GroupBlank blank);
+	public Task<OperationResult> Remove(ID id);
 	public Task<Group?> Get(ID id);
 	public Task<Group[]> Get(ID[] ids);
 	public Task<Group[]> GetPage(Int32 page, Int32 pageSize);

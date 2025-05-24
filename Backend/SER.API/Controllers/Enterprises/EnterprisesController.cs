@@ -9,13 +9,13 @@ namespace SER.API.Controllers.Enterprises;
 public class EnterprisesController(IEnterprisesService enterprisesService) : ControllerBase
 {
 	[HttpPost("save")]
-	public async Task<Result> Save([FromBody] EnterpriseBlank blank)
+	public async Task<OperationResult> Save([FromBody] EnterpriseBlank blank)
 	{
 		return await enterprisesService.Save(blank);
 	}
 
 	[HttpPost("remove")]
-	public async Task<Result> Remove([FromBody] ID id)
+	public async Task<OperationResult> Remove([FromBody] ID id)
 	{
 		return await enterprisesService.Remove(id);
 	}

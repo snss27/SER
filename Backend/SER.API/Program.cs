@@ -5,13 +5,12 @@ using SER.Tools.Binders;
 using SER.Tools.Json;
 using SER.Services.Configurator;
 using Microsoft.AspNetCore.Http.Features;
-using static System.Int32;
 using DotNetEnv;
 using SER.Database;
 
-WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
-
 Env.Load();
+
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.Host.ConfigureWeb((context, serviceCollection) => 
 {
@@ -20,9 +19,9 @@ builder.Host.ConfigureWeb((context, serviceCollection) =>
 
 builder.Services.Configure<FormOptions>(options =>
 {
-	options.ValueLengthLimit = MaxValue;
-	options.BufferBodyLengthLimit = MaxValue;
-	options.KeyLengthLimit = MaxValue;
+	options.ValueLengthLimit = Int32.MaxValue;
+	options.BufferBodyLengthLimit = Int32.MaxValue;
+	options.KeyLengthLimit = Int32.MaxValue;
 	options.MultipartBodyLengthLimit = Int64.MaxValue;
 });
 

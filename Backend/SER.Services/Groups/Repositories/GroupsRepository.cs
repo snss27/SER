@@ -14,7 +14,7 @@ namespace SER.Services.Groups.Repositories;
 
 public class GroupsRepository(MainConnector connector) : BaseRepository(connector), IGroupsRepository
 {
-	public async Task<Result> Save(GroupBlank blank)
+	public async Task<OperationResult> Save(GroupBlank blank)
 	{
 		Query query = _connector.CreateQuery(Sql.Groups_Save);
 		{
@@ -33,10 +33,10 @@ public class GroupsRepository(MainConnector connector) : BaseRepository(connecto
 
 		await session.Execute(query);
 
-		return Result.Success();
+		return OperationResult.Success();
 	}
 
-	public async Task<Result> Remove(ID id)
+	public async Task<OperationResult> Remove(ID id)
 	{
 		Query query = _connector.CreateQuery(Sql.Groups_Remove);
 		{
@@ -48,7 +48,7 @@ public class GroupsRepository(MainConnector connector) : BaseRepository(connecto
 
 		await session.Execute(query);
 
-		return Result.Success();
+		return OperationResult.Success();
 	}
 
 	public async Task<Group?> Get(ID id)

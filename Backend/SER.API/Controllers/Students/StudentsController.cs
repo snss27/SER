@@ -10,13 +10,13 @@ namespace SER.API.Controllers.Students;
 public class StudentsController(IStudentsService studentsService) : ControllerBase
 {
 	[HttpPost("save")]
-	public async Task<Result> Save([FromForm] StudentBlank blank)
+	public async Task<OperationResult> Save([FromForm] StudentBlank blank)
 	{
 		return await studentsService.Save(blank);
 	}
 
 	[HttpPost("remove")]
-	public async Task<Result> Remove([FromBody] ID id)
+	public async Task<OperationResult> Remove([FromBody] ID id)
 	{
 		return await studentsService.Remove(id);
 	}

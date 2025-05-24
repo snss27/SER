@@ -13,21 +13,21 @@ public class EducationLevelsService(
 	IGroupsRepository groupsRepository
 	) : IEducationLevelsService
 {
-	public async Task<Result> Save(EducationLevelBlank blank)
+	public async Task<OperationResult> Save(EducationLevelBlank blank)
 	{
 		if (blank.Type is null)
 		{
-			return Result.Fail("Укажите тип уровня образования");
+			return OperationResult.Fail("Укажите тип уровня образования");
 		}
 
 		if (String.IsNullOrWhiteSpace(blank.Name))
 		{
-			return Result.Fail("Укажите наименование уровня образования");
+			return OperationResult.Fail("Укажите наименование уровня образования");
 		}
 
 		if (String.IsNullOrWhiteSpace(blank.Code))
 		{
-			return Result.Fail("Укажите код уровня образования");
+			return OperationResult.Fail("Укажите код уровня образования");
 		}
 
 		blank.Id ??= ID.New();
@@ -35,10 +35,10 @@ public class EducationLevelsService(
 		return await educationLevelsRepository.Save(blank);
 	}
 
-	public async Task<Result> Remove(ID id)
+	public async Task<OperationResult> Remove(ID id)
 	{
 		Group[] groups = await groupsRepository.GetByEducationLevelId(id);
-		if (groups.Length > 0) return Result.Fail("Невозможно удалить, т.к. существуют группы с данным уровнем образования");
+		if (groups.Length > 0) return OperationResult.Fail("Невозможно удалить, т.к. существуют группы с данным уровнем образования");
 
 		return await educationLevelsRepository.Remove(id);
 	}

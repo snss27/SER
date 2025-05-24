@@ -3,7 +3,7 @@ using SER.Tools.Types.IDs;
 using SER.Tools.Types.Results;
 
 namespace SER.Domain.Files;
-public class UploadFileResult : Result
+public class UploadFileResult : OperationResult
 {
 	public ID[] NotSavedFileIds { get; }
 	public ID[] NotRemovedFileIds { get; }

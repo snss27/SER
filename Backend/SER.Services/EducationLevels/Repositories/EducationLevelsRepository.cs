@@ -14,7 +14,7 @@ namespace SER.Services.EducationLevels.Repositories;
 
 public class EducationLevelsRepository(MainConnector connector) : BaseRepository(connector), IEducationLevelsRepository
 {
-	public async Task<Result> Save(EducationLevelBlank blank)
+	public async Task<OperationResult> Save(EducationLevelBlank blank)
 	{
 		Query query = _connector.CreateQuery(Sql.EducationLevels_Save);
 		{
@@ -30,7 +30,7 @@ public class EducationLevelsRepository(MainConnector connector) : BaseRepository
 
 		await session.Execute(query);
 
-		return Result.Success();
+		return OperationResult.Success();
 	}
 
 	public async Task<EducationLevel?> Get(ID id)
@@ -83,7 +83,7 @@ public class EducationLevelsRepository(MainConnector connector) : BaseRepository
 		return (await session.GetArray<EducationLevelDB>(query)).ToEducationLevels();
 	}
 
-	public async Task<Result> Remove(ID id)
+	public async Task<OperationResult> Remove(ID id)
 	{
 		Query query = _connector.CreateQuery(Sql.EducationLevels_Remove);
 		{
@@ -95,6 +95,6 @@ public class EducationLevelsRepository(MainConnector connector) : BaseRepository
 
 		await transaction.Execute(query);
 
-		return Result.Success();
+		return OperationResult.Success();
 	}
 }

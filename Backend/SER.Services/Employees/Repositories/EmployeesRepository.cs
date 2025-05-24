@@ -14,7 +14,7 @@ namespace SER.Services.Employees.Repositories;
 
 public class EmployeesRepository(MainConnector connector) : BaseRepository(connector), IEmployeesRepository
 {
-	public async Task<Result> Save(EmployeeBlank blank)
+	public async Task<OperationResult> Save(EmployeeBlank blank)
 	{
 		Query query = _connector.CreateQuery(Sql.Employees_Save);
 		{
@@ -29,7 +29,7 @@ public class EmployeesRepository(MainConnector connector) : BaseRepository(conne
 
 		await session.Execute(query);
 
-		return Result.Success();
+		return OperationResult.Success();
 	}
 
 	public async Task<Employee?> Get(ID id)
@@ -82,7 +82,7 @@ public class EmployeesRepository(MainConnector connector) : BaseRepository(conne
 		return (await session.GetArray<EmployeeDB>(query)).ToEmployees();
 	}
 
-	public async Task<Result> Remove(ID id)
+	public async Task<OperationResult> Remove(ID id)
 	{
 		Query query = _connector.CreateQuery(Sql.Employees_Remove);
 		{
@@ -95,7 +95,7 @@ public class EmployeesRepository(MainConnector connector) : BaseRepository(conne
 		await transaction.Execute(query);
 		await RemoveFromGroups(id, transaction);
 
-		return Result.Success();
+		return OperationResult.Success();
 	}
 
 	private async Task RemoveFromGroups(ID curatorId, IAsyncTransactionSession transaction)

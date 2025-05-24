@@ -13,7 +13,7 @@ using static SER.Tools.Utils.NumberUtils;
 namespace SER.Services.Clusters.Repositories;
 public class ClustersRepository(MainConnector connector) : BaseRepository(connector), IClustersRepository
 {
-	public async Task<Result> Save(ClusterBlank blank)
+	public async Task<OperationResult> Save(ClusterBlank blank)
 	{
 		Query query = _connector.CreateQuery(Sql.Clusters_Save);
 		{
@@ -26,10 +26,10 @@ public class ClustersRepository(MainConnector connector) : BaseRepository(connec
 
 		await session.Execute(query);
 
-		return Result.Success();
+		return OperationResult.Success();
 	}
 
-	public async Task<Result> Remove(ID id)
+	public async Task<OperationResult> Remove(ID id)
 	{
 		Query query = _connector.CreateQuery(Sql.Clusters_Remove);
 		{
@@ -43,7 +43,7 @@ public class ClustersRepository(MainConnector connector) : BaseRepository(connec
 
 		await RemoveFromGroups(id, transaction);
 
-		return Result.Success();
+		return OperationResult.Success();
 	}
 
 	private async Task RemoveFromGroups(ID clusterId, IAsyncTransactionSession transaction)

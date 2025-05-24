@@ -5,8 +5,8 @@ using SER.Tools.Types.Results;
 namespace SER.Domain.Services;
 public interface IGroupsService
 {
-	public Task<Result> Save(GroupBlank blank);
-	public Task<Result> Remove(ID id);
+	public Task<OperationResult> Save(GroupBlank blank);
+	public Task<OperationResult> Remove(ID id);
 	public Task<GroupDto?> Get(ID id);
 	public Task<GroupDto[]> Get(ID[] ids);
 	public Task<GroupDto[]> GetPage(Int32 page, Int32 pageSize);

@@ -12,36 +12,36 @@ namespace SER.Services.Enterprises;
 public class EnterprisesService(IEnterprisesRepository enterprisesRepository, IWorkPlacesRepository workPlacesRepository) : IEnterprisesService
 {
 	//TODO Нужна ли регулярка на адрес, чтобы иметь одинаковый формат
-	public async Task<Result> Save(EnterpriseBlank blank)
+	public async Task<OperationResult> Save(EnterpriseBlank blank)
 	{
 		if (String.IsNullOrWhiteSpace(blank.Name))
 		{
-			return Result.Fail("Укажите наименование организации");
+			return OperationResult.Fail("Укажите наименование организации");
 		}
 
 		if (!String.IsNullOrWhiteSpace(blank.INN) && !Regexs.EnterpriseInnRegex.IsMatch(blank.INN))
 		{
-			return Result.Fail("Инн должен содержать 10 цифр");
+			return OperationResult.Fail("Инн должен содержать 10 цифр");
 		}
 
 		if (!String.IsNullOrWhiteSpace(blank.KPP) && !Regexs.KppRegex.IsMatch(blank.KPP))
 		{
-			return Result.Fail("КПП должен содержать 9 цифр");
+			return OperationResult.Fail("КПП должен содержать 9 цифр");
 		}
 
 		if (!String.IsNullOrWhiteSpace(blank.ORGN) && !Regexs.OrgnRegex.IsMatch(blank.ORGN))
 		{
-			return Result.Fail("ОРГН должен содержать 13 цифр");
+			return OperationResult.Fail("ОРГН должен содержать 13 цифр");
 		}
 
 		if (!String.IsNullOrWhiteSpace(blank.Phone) && !Regexs.PhoneRegex.IsMatch(blank.Phone))
 		{
-			return Result.Fail("Неверно указан номер телефона (скорее всего не полностью)");
+			return OperationResult.Fail("Неверно указан номер телефона (скорее всего не полностью)");
 		}
 
 		if (!String.IsNullOrWhiteSpace(blank.Mail) && !Regexs.MailRegex.IsMatch(blank.Mail))
 		{
-			return Result.Fail("Неверно указана электронная почта (скорее всего не полностью)");
+			return OperationResult.Fail("Неверно указана электронная почта (скорее всего не полностью)");
 		}
 
 		if(blank.IsOPK is null) throw new ArgumentNullException(nameof(blank.IsOPK));
@@ -51,12 +51,12 @@ public class EnterprisesService(IEnterprisesRepository enterprisesRepository, IW
 		return await enterprisesRepository.Save(blank);
 	}
 
-	public async Task<Result> Remove(ID id)
+	public async Task<OperationResult> Remove(ID id)
 	{
 		WorkPlace[] workPlaces = await workPlacesRepository.GetByEnterpriseId(id);
 		if(workPlaces.Length > 0)
 		{
-			return Result.Fail("Невозможно удалить, т.к. есть места работы с данной огранизацией");
+			return OperationResult.Fail("Невозможно удалить, т.к. есть места работы с данной огранизацией");
 		}
 
 		return await enterprisesRepository.Remove(id);

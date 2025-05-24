@@ -10,13 +10,13 @@ namespace SER.API.Controllers.Employees;
 public class EmployeesController(IEmployeesService employeesService) : ControllerBase
 {
 	[HttpPost("save")]
-	public async Task<Result> Save([FromBody] EmployeeBlank blank)
+	public async Task<OperationResult> Save([FromBody] EmployeeBlank blank)
 	{
 		return await employeesService.Save(blank);
 	}
 
 	[HttpPost("remove")]
-	public async Task<Result> Remove([FromBody] ID id)
+	public async Task<OperationResult> Remove([FromBody] ID id)
 	{
 		return await employeesService.Remove(id);
 	}

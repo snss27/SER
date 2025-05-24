@@ -35,12 +35,12 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\SER.Configurator\SER.Configurator.csproj" />
+		<ProjectReference Include="..\SER.Database\SER.Database.csproj" />
 		<ProjectReference Include="..\SER.Domain\SER.Domain.csproj" />
 		<ProjectReference Include="..\SER.Tools\SER.Tools.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="AdditionalQualifications\Repositories\Queries\Students\" />
 	  <Folder Include="Clusters\Repositories\Queries\Groups\" />
 	  <Folder Include="Enterprises\Repositories\Queries\Students\" />
 	  <Folder Include="WorkPlaces\Repositories\Queries\WorkPlaces\" />

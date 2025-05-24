@@ -13,7 +13,7 @@ using static SER.Tools.Utils.NumberUtils;
 namespace SER.Services.Enterprises.Repositories;
 public class EnterprisesRepository(MainConnector connector) : BaseRepository(connector), IEnterprisesRepository
 {
-	public async Task<Result> Save(EnterpriseBlank blank)
+	public async Task<OperationResult> Save(EnterpriseBlank blank)
 	{
 		Query query = _connector.CreateQuery(Sql.Enterprises_Save);
 		{
@@ -35,10 +35,10 @@ public class EnterprisesRepository(MainConnector connector) : BaseRepository(con
 
 		await session.Execute(query);
 
-		return Result.Success();
+		return OperationResult.Success();
 	}
 
-	public async Task<Result> Remove(ID id)
+	public async Task<OperationResult> Remove(ID id)
 	{
 		Query query = _connector.CreateQuery(Sql.Enterprises_Remove);
 		{
@@ -51,10 +51,10 @@ public class EnterprisesRepository(MainConnector connector) : BaseRepository(con
 		await transaction.Execute(query);
 		await RemoveFromStudentTargetAgreementEnterprises(id, transaction);
 
-		return Result.Success();
+		return OperationResult.Success();
 	}
 
-	private async Task<Result> RemoveFromStudentTargetAgreementEnterprises(ID enterpriseId, IAsyncTransactionSession transaction)
+	private async Task<OperationResult> RemoveFromStudentTargetAgreementEnterprises(ID enterpriseId, IAsyncTransactionSession transaction)
 	{
 		Query query = _connector.CreateQuery(Sql.Students_RemoveTargetAgreementEnterprise);
 		{
@@ -64,7 +64,7 @@ public class EnterprisesRepository(MainConnector connector) : BaseRepository(con
 
 		await transaction.Execute(query);
 
-		return Result.Success();
+		return OperationResult.Success();
 	}
 
 	public async Task<Enterprise?> Get(ID id)

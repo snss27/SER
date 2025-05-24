@@ -13,7 +13,7 @@ namespace SER.Services.Students.Repositories;
 
 public class StudentsRepository(MainConnector connector) : BaseRepository(connector), IStudentsRepository
 {
-	public async Task<Result> Save(StudentBlank blank, ID? currentWorkplaceId, ID[] prevWorkplaceIds, String[] passportFileUrls, String? targetAgreementFileUrl, String? armySunpoenaFileUrl, String[] otherFileUrls)
+	public async Task<OperationResult> Save(StudentBlank blank, ID? currentWorkplaceId, ID[] prevWorkplaceIds, String[] passportFileUrls, String? targetAgreementFileUrl, String? armySunpoenaFileUrl, String[] otherFileUrls)
 	{
 		Query query = _connector.CreateQuery(Sql.Students_Save);
 		{
@@ -56,10 +56,10 @@ public class StudentsRepository(MainConnector connector) : BaseRepository(connec
 		await using IAsyncSeparatelySession session = await _connector.CreateAsyncSession();
 		await session.Execute(query);
 
-		return Result.Success();
+		return OperationResult.Success();
 	}
 
-	public async Task<Result> Remove(ID id)
+	public async Task<OperationResult> Remove(ID id)
 	{
 		Query query = _connector.CreateQuery(Sql.Students_Remove);
 		{
@@ -70,7 +70,7 @@ public class StudentsRepository(MainConnector connector) : BaseRepository(connec
 		await using IAsyncSeparatelySession session = await _connector.CreateAsyncSession();
 		await session.Execute(query);
 
-		return Result.Success();
+		return OperationResult.Success();
 	}
 
 	public async Task<Student?> Get(ID id)

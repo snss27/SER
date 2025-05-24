@@ -6,8 +6,8 @@ namespace SER.Services.Students.Repositories;
 
 public interface IStudentsRepository
 {
-	Task<Result> Save(StudentBlank blank, ID? currentWorkplaceId, ID[] prevWorkplaceIds, String[] passportFileUrls, String? targetAgreementFileUrl, String? armySunpoenaFileUrl, String[] otherFileUrls);
-	Task<Result> Remove(ID id);
+	Task<OperationResult> Save(StudentBlank blank, ID? currentWorkplaceId, ID[] prevWorkplaceIds, String[] passportFileUrls, String? targetAgreementFileUrl, String? armySunpoenaFileUrl, String[] otherFileUrls);
+	Task<OperationResult> Remove(ID id);
 	Task<Student?> Get(ID id);
 	Task<Student[]> GetPage(int page, int pageSize);
 	Task<Student[]> GetByGroupId(ID groupId);

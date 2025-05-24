@@ -8,16 +8,16 @@ namespace SER.Services.Employees;
 
 public class EmployeesService(IEmployeesRepository employeesRepository) : IEmployeesService
 {
-	public async Task<Result> Save(EmployeeBlank blank)
+	public async Task<OperationResult> Save(EmployeeBlank blank)
 	{
 		if (String.IsNullOrWhiteSpace(blank.Name))
 		{
-			return Result.Fail("Укажите имя сотрудника");
+			return OperationResult.Fail("Укажите имя сотрудника");
 		}
 
 		if (String.IsNullOrWhiteSpace(blank.SecondName))
 		{
-			return Result.Fail("Укажите фамилию сотрудника");
+			return OperationResult.Fail("Укажите фамилию сотрудника");
 		}
 
 		blank.Id ??= ID.New();
@@ -25,7 +25,7 @@ public class EmployeesService(IEmployeesRepository employeesRepository) : IEmplo
 		return await employeesRepository.Save(blank);
 	}
 
-	public async Task<Result> Remove(ID id)
+	public async Task<OperationResult> Remove(ID id)
 	{
 		return await employeesRepository.Remove(id);
 	}
