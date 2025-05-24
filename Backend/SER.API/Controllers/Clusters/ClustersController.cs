@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
+using SER.API.Models.Clusters;
+using SER.API.Models.Clusters.Converters;
 using SER.Domain.Clusters;
-using SER.Domain.Employees;
 using SER.Domain.Services;
-using SER.Services.Employees;
 using SER.Tools.Types.IDs;
 using SER.Tools.Types.Results;
 
@@ -24,20 +24,23 @@ public class ClustersController(IClustersService clustersService) : ControllerBa
 	}
 
 	[HttpGet("get")]
-	public async Task<Cluster?> Get([FromQuery] ID id)
+	public async Task<ClusterDto?> Get([FromQuery] ID id)
 	{
-		return await clustersService.Get(id);
+		Cluster? cluster = await clustersService.Get(id);
+		return cluster?.ToDto();
 	}
 
 	[HttpGet("get_page")]
-	public async Task<Cluster[]> GetPage([FromQuery] Int32 page, [FromQuery] Int32 pageSize)
+	public async Task<ClusterDto[]> GetPage([FromQuery] Int32 page, [FromQuery] Int32 pageSize)
 	{
-		return await clustersService.GetPage(page, pageSize);
+		Cluster[] clusters = await clustersService.GetPage(page, pageSize);
+		return [.. clusters.Select(c => c.ToDto())];
 	}
 
 	[HttpGet("get_by_search_text")]
-	public async Task<Cluster[]> GetBySearchText([FromQuery] String searchText)
+	public async Task<ClusterDto[]> GetBySearchText([FromQuery] String searchText)
 	{
-		return await clustersService.Get(searchText);
+		Cluster[] clusters = await clustersService.Get(searchText);
+		return [.. clusters.Select(c => c.ToDto())];
 	}
 }

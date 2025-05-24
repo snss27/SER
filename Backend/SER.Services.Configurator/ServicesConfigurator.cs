@@ -2,7 +2,6 @@ using Microsoft.Extensions.DependencyInjection;
 using SER.Domain.Services;
 using SER.Services.AdditionalQualifications;
 using SER.Services.Clusters;
-using SER.Services.Clusters.Repositories;
 using SER.Services.EducationLevels;
 using SER.Services.EducationLevels.Repositories;
 using SER.Services.Employees;
@@ -43,7 +42,6 @@ public static class ServicesConfigurator
 		services.AddSingleton<IGroupsRepository, GroupsRepository>();
 		services.AddSingleton<IEmployeesRepository, EmployeesRepository>();
 		services.AddSingleton<IEnterprisesRepository, EnterprisesRepository>();
-		services.AddSingleton<IClustersRepository, ClustersRepository>();
 		services.AddSingleton<IWorkPlacesRepository, WorkPlacesRepository>();
 
 		#endregion

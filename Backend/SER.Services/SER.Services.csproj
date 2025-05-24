@@ -41,7 +41,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Clusters\Repositories\Queries\Groups\" />
 	  <Folder Include="Enterprises\Repositories\Queries\Students\" />
 	  <Folder Include="WorkPlaces\Repositories\Queries\WorkPlaces\" />
 	</ItemGroup>

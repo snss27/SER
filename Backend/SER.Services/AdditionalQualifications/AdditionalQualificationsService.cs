@@ -19,9 +19,9 @@ public class AdditionalQualificationsService(SERDbContext dbContext) : IAddition
 
 		AdditionalQualification additionalQualification = result.Value;
 
-		Boolean isNewQualification = blank.Id is null;
+		Boolean isNew = blank.Id is null;
 
-		if (isNewQualification)
+		if (isNew)
 		{
 			AdditionalQualificationEntity entity = additionalQualification.ToEntity();
 			dbContext.Add(entity);
