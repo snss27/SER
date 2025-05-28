@@ -6,4 +6,9 @@ public static class AdditionalQualificationsConverters
 	{
 		return new AdditionalQualificationDto(additionalQualification.Id, additionalQualification.Name, additionalQualification.Code, additionalQualification.StudyTime);
 	}
+
+	public static AdditionalQualification ToDomain(this AdditionalQualificationDto dto)
+	{
+		return AdditionalQualification.Create(dto.Id, dto.Name, dto.Code, dto.StudyTime).Value;
+	}
 }

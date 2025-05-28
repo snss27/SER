@@ -5,7 +5,6 @@ import { useReducer } from "react"
 import Button from "../shared/buttons/button"
 import { AsyncAutocomplete } from "../shared/inputs/asyncAutocomplete"
 import DatePicker from "../shared/inputs/datePicker"
-import { FilesInput } from "../shared/inputs/filesInput"
 import TextInput from "../shared/inputs/textInput"
 
 interface Props {
@@ -70,17 +69,17 @@ export const WorkplaceEditor: React.FC<Props> = ({ workplace, onSave, onClose })
                 }
             />
 
-            <FilesInput
+            {/* <FilesInput
                 label="Файлы выписки из трудовой книжки"
-                maxFilesCount={editedWorkplace.workbookExtractFile.maxFiles}
-                urls={editedWorkplace.workbookExtractFile.fileUrls}
-                files={editedWorkplace.workbookExtractFile.files}
+                maxFilesCount={editedWorkplace.workbookExtractFiles.maxFiles}
+                urls={editedWorkplace.workbookExtractFiles.fileUrls}
+                files={editedWorkplace.workbookExtractFiles.files}
                 onFilesChange={(files) =>
                     dispatch({
                         type: "CHANGE_WORKBOOK_EXTRACT_FILE",
                         payload: {
-                            workbookExtractFile:
-                                editedWorkplace.workbookExtractFile.withChangedFiles(files),
+                            workbookExtractFiles:
+                                editedWorkplace.workbookExtractFiles.withChangedFiles(files),
                         },
                     })
                 }
@@ -88,12 +87,12 @@ export const WorkplaceEditor: React.FC<Props> = ({ workplace, onSave, onClose })
                     dispatch({
                         type: "CHANGE_WORKBOOK_EXTRACT_FILE",
                         payload: {
-                            workbookExtractFile:
-                                editedWorkplace.workbookExtractFile.withChangedUrls(urls),
+                            workbookExtractFiles:
+                                editedWorkplace.workbookExtractFiles.withChangedUrls(urls),
                         },
                     })
                 }
-            />
+            /> */}
 
             <Box sx={{ display: "flex", gap: 2, justifyContent: "flex-end" }}>
                 <Button text="Отмена" onClick={onClose} />

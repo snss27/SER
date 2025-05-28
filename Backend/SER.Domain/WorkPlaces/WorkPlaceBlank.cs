@@ -1,14 +1,14 @@
 using SER.Domain.Enterprises;
 using SER.Tools.Types.IDs;
-using SER.Tools.Types.Types;
 
 namespace SER.Domain.Workplaces;
 public class WorkPlaceBlank
 {
-	public ID? Id {  get; set; }
-	public Enterprise? Enterprise { get; set; }
-	public String? Post {  get; set; }
-	public BlankFiles WorkBookExtractFile { get; set; }
-	public DateTime? StartDate { get; set; }
-	public DateTime? FinishDate { get; set; }
+	public ID? Id {  get; init; }
+	public EnterpriseDto? Enterprise { get; init; }
+	public String? Post {  get; init; }
+	public String[] WorkBookExtractFiles { get; init; } = default!;
+	public DateTime? StartDate { get; init; }
+	public DateTime? FinishDate { get; init; }
+	public Boolean? IsCurrent { get; init; }
 }

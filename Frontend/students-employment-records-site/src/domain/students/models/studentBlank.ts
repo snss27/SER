@@ -2,7 +2,6 @@ import { AdditionalQualification } from "@/domain/additionalQualifications/model
 import { Enterprise } from "@/domain/enterprises/models/enterprise"
 import { Group } from "@/domain/groups/models/group"
 import { WorkplaceBlank } from "@/domain/workplaces/models/workplaceBlank"
-import { BlankFiles } from "@/tools/blankFiles"
 import { Gender } from "../enums/gender"
 import { SocialStatus } from "../enums/socialStatus"
 import { StudentStatus } from "../enums/studentStatus"
@@ -15,6 +14,7 @@ export interface StudentBlank {
     gender: Gender
     phoneNumber: string | null
     representativePhoneNumber: string | null
+    representativeAlias: string | null
     birthDate: Date | null
     snils: string | null
     socialStatuses: SocialStatus[]
@@ -29,7 +29,7 @@ export interface StudentBlank {
     passportNumber: string | null
     passportIssuedBy: string | null
     passportIssuedDate: Date | null
-    passportFiles: BlankFiles
+    passportFiles: string[]
 
     currentWorkplace: WorkplaceBlank | null
     prevWorkplaces: WorkplaceBlank[]
@@ -37,15 +37,16 @@ export interface StudentBlank {
     additionalQualifications: AdditionalQualification[]
 
     isTargetAgreement: boolean
+    targetAgreementNumber: string | null
     targetAgreementDate: Date | null
     targetAgreementEnterprise: Enterprise | null
-    targetAgreementFile: BlankFiles
+    targetAgreementFiles: string[]
 
     mustServeInArmy: boolean
-    armySubpoenaFile: BlankFiles
+    armySubpoenaFiles: string[]
     armyCallDate: Date | null
 
-    otherFiles: BlankFiles
+    otherFiles: string[]
 }
 
 export namespace StudentBlank {
@@ -59,6 +60,7 @@ export namespace StudentBlank {
             gender: Gender.Male,
             phoneNumber: null,
             representativePhoneNumber: null,
+            representativeAlias: null,
             birthDate: null,
             snils: null,
             socialStatuses: [],
@@ -73,7 +75,7 @@ export namespace StudentBlank {
             passportNumber: null,
             passportIssuedBy: null,
             passportIssuedDate: null,
-            passportFiles: BlankFiles.create(5),
+            passportFiles: [],
 
             currentWorkplace: null,
             prevWorkplaces: [],
@@ -81,15 +83,16 @@ export namespace StudentBlank {
             additionalQualifications: [],
 
             isTargetAgreement: false,
+            targetAgreementNumber: null,
             targetAgreementDate: null,
             targetAgreementEnterprise: null,
-            targetAgreementFile: BlankFiles.create(1),
+            targetAgreementFiles: [],
 
             mustServeInArmy: false,
-            armySubpoenaFile: BlankFiles.create(1),
+            armySubpoenaFiles: [],
             armyCallDate: null,
 
-            otherFiles: BlankFiles.create(10),
+            otherFiles: [],
         }
     }
 
@@ -118,6 +121,9 @@ export namespace StudentBlank {
                     ...state,
                     representativePhoneNumber: action.payload.representativePhoneNumber,
                 }
+
+            case "CHANGE_REPRESENTATIVE_ALIAS":
+                return { ...state, representativeAlias: action.payload.representativeAlias }
 
             case "CHANGE_BIRTH_DATE":
                 return { ...state, birthDate: action.payload.birthDate }
@@ -189,6 +195,9 @@ export namespace StudentBlank {
             case "CHANGE_IS_TARGET_AGREEMENT":
                 return { ...state, isTargetAgreement: action.payload.isTargetAgreement }
 
+            case "CHANGE_TARGET_AGREEMENT_NUMBER":
+                return { ...state, targetAgreementNumber: action.payload.targetAgreementNumber }
+
             case "CHANGE_TARGET_AGREEMENT_DATE":
                 return { ...state, targetAgreementDate: action.payload.targetAgreementDate }
 
@@ -199,13 +208,13 @@ export namespace StudentBlank {
                 }
 
             case "CHANGE_TARGET_AGREEMENT_FILE":
-                return { ...state, targetAgreementFile: action.payload.targetAgreementFile }
+                return { ...state, targetAgreementFiles: action.payload.targetAgreementFiles }
 
             case "CHANGE_MUST_SERVE_IN_ARMY":
                 return { ...state, mustServeInArmy: action.payload.mustServeInArmy }
 
             case "CHANGE_ARMY_SUBPOENA_FILE":
-                return { ...state, armySubpoenaFile: action.payload.armySubpoenaFile }
+                return { ...state, armySubpoenaFiles: action.payload.armySubpoenaFiles }
 
             case "CHANGE_ARMY_CALL_DATE":
                 return { ...state, armyCallDate: action.payload.armyCallDate }
@@ -247,6 +256,10 @@ export type StudentAction =
     | {
           type: "CHANGE_REPRESENTATIVE_PHONE_NUMBER"
           payload: { representativePhoneNumber: string | null }
+      }
+    | {
+          type: "CHANGE_REPRESENTATIVE_ALIAS"
+          payload: { representativeAlias: string | null }
       }
     | {
           type: "CHANGE_BIRTH_DATE"
@@ -302,7 +315,7 @@ export type StudentAction =
       }
     | {
           type: "CHANGE_PASSPORT_FILES"
-          payload: { passportFiles: BlankFiles }
+          payload: { passportFiles: string[] }
       }
     | {
           type: "CHANGE_CURRENT_WORKPLACE"
@@ -321,6 +334,10 @@ export type StudentAction =
           payload: { isTargetAgreement: boolean }
       }
     | {
+          type: "CHANGE_TARGET_AGREEMENT_NUMBER"
+          payload: { targetAgreementNumber: string | null }
+      }
+    | {
           type: "CHANGE_TARGET_AGREEMENT_DATE"
           payload: { targetAgreementDate: Date | null }
       }
@@ -330,7 +347,7 @@ export type StudentAction =
       }
     | {
           type: "CHANGE_TARGET_AGREEMENT_FILE"
-          payload: { targetAgreementFile: BlankFiles }
+          payload: { targetAgreementFiles: string[] }
       }
     | {
           type: "CHANGE_MUST_SERVE_IN_ARMY"
@@ -338,7 +355,7 @@ export type StudentAction =
       }
     | {
           type: "CHANGE_ARMY_SUBPOENA_FILE"
-          payload: { armySubpoenaFile: BlankFiles }
+          payload: { armySubpoenaFiles: string[] }
       }
     | {
           type: "CHANGE_ARMY_CALL_DATE"
@@ -346,5 +363,5 @@ export type StudentAction =
       }
     | {
           type: "CHANGE_OTHER_FILES"
-          payload: { otherFiles: BlankFiles }
+          payload: { otherFiles: string[] }
       }

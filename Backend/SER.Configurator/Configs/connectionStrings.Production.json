@@ -1,6 +1,0 @@
-{
-	"ConnectionStrings": {
-		"Main": "Server=localhost;Username=postgres;Database=postgres;Port=5432;Password=postgres;"
-	},
-  "Environment": "Development"
-}

@@ -33,7 +33,6 @@ public class ClustersService(SERDbContext dbContext) : IClustersService
 			if(entity is null) return OperationResult.Fail("Кластер не найден");
 
 			entity.ApplyChanges(cluster);
-			dbContext.Update(entity);
 		}
 
 		await dbContext.SaveChangesAsync();

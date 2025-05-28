@@ -3,5 +3,6 @@ public enum StudentStatus
 {
 	Active = 1,
 	Expelled = 2,
-	Finished = 3
+	Finished = 3,
+	AcademicLeave = 4
 }

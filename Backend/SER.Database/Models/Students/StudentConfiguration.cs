@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.Extensions.DependencyInjection;
 using SER.Database.Models.ConfigurationTools;
 using SER.Domain.Students.Enums;
 
@@ -41,6 +42,10 @@ public class StudentConfiguration : IEntityTypeConfiguration<StudentEntity>
 		builder.Property(x => x.RepresentativePhoneNumber)
 			.HasMaxLength(200)
 			.HasColumnName("representative_phone_number");
+
+		builder.Property(x => x.RepresentativeAlias)
+			.HasMaxLength(200)
+			.HasColumnName("representative_alias");
 
 		builder.Property(x => x.IsOnPaidStudy)
 			.IsRequired()
@@ -86,7 +91,7 @@ public class StudentConfiguration : IEntityTypeConfiguration<StudentEntity>
 			.HasColumnType("varchar[]");
 
 		builder.HasMany(x => x.WorkPlaces)
-			.WithOne(x => x.Student)
+			.WithOne()
 			.HasForeignKey(x => x.StudentId)
 			.HasConstraintName("fk_workplace_student")
 			.OnDelete(DeleteBehavior.Cascade);
@@ -94,6 +99,10 @@ public class StudentConfiguration : IEntityTypeConfiguration<StudentEntity>
 		builder.Property(x => x.IsTargetAgreement)
 			.IsRequired()
 			.HasColumnName("is_target_agreement");
+
+		builder.Property(x => x.TargetAgreementNumer)
+			.HasMaxLength(200)
+			.HasColumnName("target_agreement_number");
 
 		builder.Property(x => x.TargetAgreementFiles)
 			.IsRequired()
@@ -157,5 +166,8 @@ public class StudentConfiguration : IEntityTypeConfiguration<StudentEntity>
 			.IsRequired()
 			.HasColumnName("other_files")
 			.HasColumnType("varchar[]");
+
+		builder.HasMany(x => x.AdditionalQualifications)
+			.WithMany();
 	}
 }

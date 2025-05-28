@@ -4,49 +4,49 @@ using SER.Domain.Groups;
 using SER.Domain.Students.Enums;
 using SER.Domain.Workplaces;
 using SER.Tools.Types.IDs;
-using SER.Tools.Types.Types;
 
 namespace SER.Domain.Students;
 
 public class StudentBlank
 {
-	public ID? Id { get; set; }
-	public String? Name { get; set; }
-	public String? SecondName { get; set; }
-	public String? LastName { get; set; }
-	public StudentStatus Status { get; set; }
-	public Gender Gender { get; set; }
-	public String? PhoneNumber { get; set; }
-	public String? RepresentativePhoneNumber { get; set; }
-	public DateTime? BirthDate { get; set; }
-	public String? Snils { get; set; }
-	public SocialStatus[] SocialStatuses { get; set; }
-	public String? Address { get; set; }
-	public String? Mail { get; set; }
-	public String? Inn { get; set; }
-	public GroupDto? Group { get; set; }
-	public Boolean IsForeignCitizen { get; set; }
-	public Boolean IsOnPaidStudy { get; set; }
+	public ID? Id { get; init; }
+	public String? Name { get; init; }
+	public String? SecondName { get; init; }
+	public String? LastName { get; init; }
+	public StudentStatus? Status { get; init; }
+	public Gender? Gender { get; init; }
+	public String? PhoneNumber { get; init; }
+	public String? RepresentativePhoneNumber { get; init; }
+	public String? RepresentativeAlias { get; init; }
+	public DateTime? BirthDate { get; init; }
+	public String? Snils { get; init; }
+	public SocialStatus[] SocialStatuses { get; init; } = [];
+	public String? Address { get; init; }
+	public String? Mail { get; init; }
+	public String? Inn { get; init; }
+	public GroupDto? Group { get; init; }
+	public Boolean IsForeignCitizen { get; init; }
+	public Boolean IsOnPaidStudy { get; init; }
 
-	public String? PassportSeries { get; set; }
-	public String? PassportNumber { get; set; }
-	public String? PassportIssuedBy { get; set; }
-	public DateTime? PassportIssuedDate { get; set; }
-	public BlankFiles PassportFiles { get; set; }
+	public String? PassportSeries { get; init; }
+	public String? PassportNumber { get; init; }
+	public String? PassportIssuedBy { get; init; }
+	public DateTime? PassportIssuedDate { get; init; }
+	public String[] PassportFiles { get; init; } = [];
 
-	public WorkPlaceBlank? CurrentWorkplace { get; set; }
-	public WorkPlaceBlank[] PrevWorkplaces { get; set; }
+	public WorkPlaceBlank[] WorkPlaces { get; init; } = [];
 
-	public AdditionalQualification[] AdditionalQualifications { get; set; }
+	public AdditionalQualificationDto[] AdditionalQualifications { get; init; } = [];
 
-	public Boolean IsTargetAgreement { get; set; }
-	public DateTime? TargetAgreementDate { get; set; }
-	public Enterprise? TargetAgreementEnterprise { get; set; }
-	public BlankFiles TargetAgreementFile { get; set; }
+	public Boolean? IsTargetAgreement { get; init; }
+	public String? TargetAgreementNumber { get; init; }
+	public DateTime? TargetAgreementDate { get; init; }
+	public EnterpriseDto? TargetAgreementEnterprise { get; init; }
+	public String[] TargetAgreementFiles { get; init; } = [];
 
-	public Boolean MustServeInArmy { get; set; }
-	public	BlankFiles ArmySubpoenaFile { get; set; }
-	public DateTime? ArmyCallDate { get; set; }
+	public Boolean? MustServeInArmy { get; init; }
+	public String[] ArmySubpoenaFiles { get; init; } = [];
+	public DateTime? ArmyCallDate { get; init; }
 
-	public BlankFiles OtherFiles { get; set; }
+	public String[] OtherFiles { get; init; } = [];
 }

@@ -13,6 +13,5 @@ public class WorkPlaceEntity : BaseEntity
 	public DateTime? StartDate { get; set; }
 	public DateTime? FinishDate { get; set; }
 	public ID StudentId { get; set; }
-	public StudentEntity Student { get; set; } = default!;
 	public Boolean IsCurrent { get; set; }
 }

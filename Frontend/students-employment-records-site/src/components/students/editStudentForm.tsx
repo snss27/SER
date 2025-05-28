@@ -15,7 +15,7 @@ import Button from "../shared/buttons/button"
 import CheckBox from "../shared/buttons/checkBox"
 import { AsyncAutocomplete } from "../shared/inputs/asyncAutocomplete"
 import DatePicker from "../shared/inputs/datePicker"
-import { FilesInput } from "../shared/inputs/filesInput"
+import FilesInput from "../shared/inputs/filesInput"
 import { AddressInput } from "../shared/inputs/maskedInputs/addressInput"
 import { HumanInnInput } from "../shared/inputs/maskedInputs/humanInnInput"
 import { MailInput } from "../shared/inputs/maskedInputs/mailInput"
@@ -107,6 +107,17 @@ export const EditStudentForm: React.FC<Props> = ({ initialStudentBlank }) => {
                     dispatch({
                         type: "CHANGE_REPRESENTATIVE_PHONE_NUMBER",
                         payload: { representativePhoneNumber },
+                    })
+                }
+            />
+
+            <TextInput
+                value={studentBlank.representativeAlias}
+                label="Как обратится к представителю"
+                onChange={(representativeAlias) =>
+                    dispatch({
+                        type: "CHANGE_REPRESENTATIVE_ALIAS",
+                        payload: { representativeAlias },
                     })
                 }
             />
@@ -214,6 +225,13 @@ export const EditStudentForm: React.FC<Props> = ({ initialStudentBlank }) => {
             />
 
             <FilesInput
+                files={studentBlank.passportFiles}
+                maxFiles={5}
+                onChange={() => {}}
+                onUpload={() => new Promise((resolve, reject) => resolve(["123"]))}
+            />
+
+            {/* <FilesInput
                 label="Файлы паспорта"
                 maxFilesCount={studentBlank.passportFiles.maxFiles}
                 urls={studentBlank.passportFiles.fileUrls}
@@ -234,7 +252,7 @@ export const EditStudentForm: React.FC<Props> = ({ initialStudentBlank }) => {
                         },
                     })
                 }
-            />
+            /> */}
 
             <EditStudentWorkplaces studentBlank={studentBlank} dispatch={dispatch} />
 
@@ -266,6 +284,17 @@ export const EditStudentForm: React.FC<Props> = ({ initialStudentBlank }) => {
 
                 <Collapse in={studentBlank.isTargetAgreement}>
                     <Stack direction="column" gap={2}>
+                        <TextInput
+                            value={studentBlank.targetAgreementNumber}
+                            label="Номер целевого договора"
+                            onChange={(targetAgreementNumber) =>
+                                dispatch({
+                                    type: "CHANGE_TARGET_AGREEMENT_NUMBER",
+                                    payload: { targetAgreementNumber },
+                                })
+                            }
+                        />
+
                         <DatePicker
                             value={studentBlank.targetAgreementDate}
                             label="Дата заключение договора"
@@ -290,7 +319,7 @@ export const EditStudentForm: React.FC<Props> = ({ initialStudentBlank }) => {
                             }
                         />
 
-                        <FilesInput
+                        {/* <FilesInput
                             label="Файлы целевого обучения"
                             maxFilesCount={studentBlank.targetAgreementFile.maxFiles}
                             files={studentBlank.targetAgreementFile.files}
@@ -299,7 +328,7 @@ export const EditStudentForm: React.FC<Props> = ({ initialStudentBlank }) => {
                                 dispatch({
                                     type: "CHANGE_TARGET_AGREEMENT_FILE",
                                     payload: {
-                                        targetAgreementFile:
+                                        targetAgreementFiles:
                                             studentBlank.targetAgreementFile.withChangedFiles(
                                                 files
                                             ),
@@ -310,12 +339,12 @@ export const EditStudentForm: React.FC<Props> = ({ initialStudentBlank }) => {
                                 dispatch({
                                     type: "CHANGE_TARGET_AGREEMENT_FILE",
                                     payload: {
-                                        targetAgreementFile:
+                                        targetAgreementFiles:
                                             studentBlank.targetAgreementFile.withChangedUrls(urls),
                                     },
                                 })
                             }
-                        />
+                        /> */}
                     </Stack>
                 </Collapse>
             </Box>
@@ -345,7 +374,7 @@ export const EditStudentForm: React.FC<Props> = ({ initialStudentBlank }) => {
                             }
                         />
 
-                        <FilesInput
+                        {/* <FilesInput
                             label="Файлы повестки"
                             maxFilesCount={studentBlank.armySubpoenaFile.maxFiles}
                             files={studentBlank.armySubpoenaFile.files}
@@ -354,7 +383,7 @@ export const EditStudentForm: React.FC<Props> = ({ initialStudentBlank }) => {
                                 dispatch({
                                     type: "CHANGE_ARMY_SUBPOENA_FILE",
                                     payload: {
-                                        armySubpoenaFile:
+                                        armySubpoenaFiles:
                                             studentBlank.armySubpoenaFile.withChangedFiles(files),
                                     },
                                 })
@@ -363,17 +392,17 @@ export const EditStudentForm: React.FC<Props> = ({ initialStudentBlank }) => {
                                 dispatch({
                                     type: "CHANGE_ARMY_SUBPOENA_FILE",
                                     payload: {
-                                        armySubpoenaFile:
+                                        armySubpoenaFiles:
                                             studentBlank.armySubpoenaFile.withChangedUrls(urls),
                                     },
                                 })
                             }
-                        />
+                        /> */}
                     </Stack>
                 </Collapse>
             </Box>
 
-            <FilesInput
+            {/* <FilesInput
                 label="Прочие файлы"
                 maxFilesCount={studentBlank.otherFiles.maxFiles}
                 files={studentBlank.otherFiles.files}
@@ -390,7 +419,7 @@ export const EditStudentForm: React.FC<Props> = ({ initialStudentBlank }) => {
                         payload: { otherFiles: studentBlank.otherFiles.withChangedUrls(urls) },
                     })
                 }
-            />
+            /> */}
 
             <Box className="edit-form-footer">
                 <Button

@@ -6,7 +6,7 @@ export class Workplace {
         public readonly id: string,
         public readonly enterprise: Enterprise,
         public readonly post: string | null,
-        public readonly workBookExtractFile: string | null,
+        public readonly workBookExtractFiles: string[],
         public readonly startDate: Date | null,
         public readonly finishDate: Date | null
     ) {}
@@ -24,7 +24,7 @@ export class Workplace {
             any.id,
             enterprise,
             any.post,
-            any.workBookExtractFile,
+            any.workBookExtractFiles,
             startDate,
             finishDate
         )

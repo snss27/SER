@@ -29,14 +29,7 @@ public class SERDbContext(DbContextOptions<SERDbContext> options) : DbContext(op
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
-		modelBuilder.ApplyConfiguration(new AdditionalQualificationConfiguration());
-		modelBuilder.ApplyConfiguration(new ClusterConfiguration());
-		modelBuilder.ApplyConfiguration(new EducationLevelConfiguration());
-		modelBuilder.ApplyConfiguration(new EmployeeConfiguration());
-		modelBuilder.ApplyConfiguration(new EnterpriseConfiguration());
-		modelBuilder.ApplyConfiguration(new GroupConfiguration());
-		modelBuilder.ApplyConfiguration(new StudentConfiguration());
-		modelBuilder.ApplyConfiguration(new WorkPlaceConfiguration());
+		modelBuilder.ApplyConfigurationsFromAssembly(typeof(SERDbContext).Assembly);
 
 		base.OnModelCreating(modelBuilder);
 	}

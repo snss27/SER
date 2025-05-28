@@ -1,76 +1,30 @@
-using Microsoft.AspNetCore.ResponseCompression;
-using PMS.Domain;
-using SER.Configurator.Extensions;
-using SER.Tools.Binders;
-using SER.Tools.Json;
-using SER.Services.Configurator;
-using Microsoft.AspNetCore.Http.Features;
 using DotNetEnv;
 using SER.Database;
+using SER.Services.Configurator;
+using SER.Startup;
+using SER.Tools.Binders;
 
-Env.Load();
+Env.TraversePath().Load();
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-builder.Host.ConfigureWeb((context, serviceCollection) => 
+IServiceCollection services = builder.Services;
+services.AddSERDbContext(builder.Configuration);
+services.Initialize();
+services.AddHttps();
+services.AddResponseCompressionProviders();
+services.AddControllers(options =>
 {
-    serviceCollection.Initialize();
-});
+	options.ModelBinderProviders.Insert(0, new IDModelBinderProvider());
+}).AddJson();
 
-builder.Services.Configure<FormOptions>(options =>
-{
-	options.ValueLengthLimit = Int32.MaxValue;
-	options.BufferBodyLengthLimit = Int32.MaxValue;
-	options.KeyLengthLimit = Int32.MaxValue;
-	options.MultipartBodyLengthLimit = Int64.MaxValue;
-});
+WebApplication app = builder.Build();
+app.UseRequestBuffering();
+app.UseHttps();
+app.UseResponseCompression();
+app.UseRouting();
+String domain = Environment.GetEnvironmentVariable("API_DOMAIN") ?? throw new ArgumentNullException(nameof(domain));
+app.UseCors(domain);
+app.UseDefaultEndpoints();
 
-builder.Services.AddSERDbContext(builder.Configuration);
-
-builder.Services.AddResponseCompression(options =>
-{
-    options.EnableForHttps = true;
-    options.Providers.Add<GzipCompressionProvider>();
-    options.Providers.Add<BrotliCompressionProvider>();
-});
-
-builder.Services.AddControllers(mvcOptions =>
-    {
-        mvcOptions.ModelBinderProviders.Insert(0, new IDModelBinderProvider());
-    })
-    .AddJsonOptions(options =>
-    {
-        options.JsonSerializerOptions
-            .AddJsonSettings()
-            .ApplyToolsConverters()
-            .ApplyAnyTypeConverters(DomainAssembly.Itself);
-    });
-
-builder.Services.AddCors(options =>
-{
-	options.AddDefaultPolicy(builder =>
-	{
-		builder
-			.AllowAnyOrigin()
-			.AllowAnyMethod()
-			.AllowAnyHeader();
-	});
-});
-
-WebApplication application = builder.Build();
-
-if (application.Environment.IsDevelopment())
-    application.UseDeveloperExceptionPage();
-
-application
-    .UseResponseCompression()
-    .UseHttpsRedirection()
-	.UseCors()
-	.UseRouting()
-	.UseStaticFiles()
-    .UseEndpoints(endpoints =>
-    {
-        endpoints.MapControllers();
-    });
-
-application.Run();
+app.Run();

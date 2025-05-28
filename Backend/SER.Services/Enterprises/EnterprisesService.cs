@@ -17,6 +17,7 @@ public class EnterprisesService(SERDbContext dbContext) : IEnterprisesService
 	public async Task<OperationResult> Save(EnterpriseBlank blank)
 	{
 		Result<Enterprise, Error> result = Enterprise.Create(blank.Id, blank.Name, blank.LegalAddress, blank.ActualAddress, blank.Address, blank.INN, blank.KPP, blank.ORGN, blank.Phone, blank.Mail, blank.IsOPK);
+		if (result.IsFailure) return OperationResult.Fail(result.Error);
 
 		Enterprise enterprise = result.Value;
 

@@ -28,6 +28,7 @@ public class GroupsService(SERDbContext dbContext) : IGroupsService
 		Cluster? cluster = blank.Cluster?.ToDomain();
 
 		Result<Group, Error> result = Group.Create(blank.Id, blank.Number, blank.StructuralUnit, educationLevel, blank.EnrollmentYear, curator, blank.HasCluster, cluster);
+		if (result.IsFailure) return OperationResult.Fail(result.Error);
 
 		Group group = result.Value;
 

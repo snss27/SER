@@ -1,4 +1,3 @@
-using SER.Tools.Json.Converters;
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
@@ -18,7 +17,7 @@ public class TextJsonSerializer : IJsonSerializer
 
 		JsonConverter[] Converters =
 		{
-			new IDJsonConverter(), new DateOnlyJsonConverter(), new TimeOnlyJsonConverter()
+			new IDJsonConverter()
 		};
 
 		foreach (JsonConverter converter in Converters)

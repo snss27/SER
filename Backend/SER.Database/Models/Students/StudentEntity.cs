@@ -1,7 +1,9 @@
+using SER.Database.Models.AdditionalQualifications;
 using SER.Database.Models.ConfigurationTools;
 using SER.Database.Models.Enterprises;
 using SER.Database.Models.Groups;
 using SER.Database.Models.WorkPlaces;
+using SER.Domain.AdditionalQualifications;
 using SER.Domain.Students.Enums;
 using SER.Tools.Types.IDs;
 
@@ -15,6 +17,7 @@ public class StudentEntity : BaseEntity
 	public DateTime? BirthDate { get; set; }
 	public String? PhoneNumber { get; set; }
 	public String? RepresentativePhoneNumber { get; set; }
+	public String? RepresentativeAlias { get; set; }
 	public Boolean IsOnPaidStudy { get; set; }
 	public String? Snils { get; set; }
 	public ID GroupId { get; set; }
@@ -25,7 +28,9 @@ public class StudentEntity : BaseEntity
 	public DateTime? PassportIssuedDate { get; set; }
 	public List<String> PassportFiles { get; set; } = default!;
 	public List<WorkPlaceEntity> WorkPlaces { get; set; } = default!;
+	public List<AdditionalQualificationEntity> AdditionalQualifications { get; set; } = default!;
 	public Boolean IsTargetAgreement { get; set; }
+	public String? TargetAgreementNumer { get; set; }
 	public List<String> TargetAgreementFiles { get; set; } = default!;
 	public DateTime? TargetAgreementDate { get; set; }
 	public ID? TargetAgreementEnterpriseId { get; set; }

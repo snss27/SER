@@ -2,12 +2,10 @@ using SER.Database.Models.Groups;
 using SER.Domain.Clusters;
 using SER.Domain.EducationLevels;
 using SER.Domain.Employees;
-using SER.Domain.Enterprises;
 using SER.Domain.Groups;
 using SER.Services.Clusters.Converters;
 using SER.Services.EducationLevels.Converters;
 using SER.Services.Employees.Converters;
-using SER.Services.Groups.Models;
 
 namespace SER.Services.Groups.Converters;
 

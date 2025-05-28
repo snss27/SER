@@ -54,7 +54,8 @@ public class AdditionalQualificationsService(SERDbContext dbContext) : IAddition
 
 	public async Task<AdditionalQualification?> Get(ID id)
 	{
-		AdditionalQualificationEntity? entity = await dbContext.AdditionalQualifications.FirstOrDefaultAsync(aq => aq.Id == id);
+		AdditionalQualificationEntity? entity = await dbContext.AdditionalQualifications
+			.FirstOrDefaultAsync(aq => aq.Id == id);
 		return entity?.ToDomain();
 	}
 

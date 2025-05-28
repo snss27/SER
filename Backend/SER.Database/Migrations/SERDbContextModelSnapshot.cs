@@ -23,6 +23,21 @@ namespace SER.Database.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("AdditionalQualificationEntityStudentEntity", b =>
+                {
+                    b.Property<byte[]>("AdditionalQualificationsId")
+                        .HasColumnType("bytea");
+
+                    b.Property<byte[]>("StudentEntityId")
+                        .HasColumnType("bytea");
+
+                    b.HasKey("AdditionalQualificationsId", "StudentEntityId");
+
+                    b.HasIndex("StudentEntityId");
+
+                    b.ToTable("AdditionalQualificationEntityStudentEntity");
+                });
+
             modelBuilder.Entity("SER.Database.Models.AdditionalQualifications.AdditionalQualificationEntity", b =>
                 {
                     b.Property<byte[]>("Id")
@@ -397,6 +412,11 @@ namespace SER.Database.Migrations
                         .HasColumnType("character varying(200)")
                         .HasColumnName("phone_number");
 
+                    b.Property<string>("RepresentativeAlias")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)")
+                        .HasColumnName("representative_alias");
+
                     b.Property<string>("RepresentativePhoneNumber")
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)")
@@ -434,6 +454,11 @@ namespace SER.Database.Migrations
                         .IsRequired()
                         .HasColumnType("varchar[]")
                         .HasColumnName("target_agreement_files");
+
+                    b.Property<string>("TargetAgreementNumer")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)")
+                        .HasColumnName("target_agreement_number");
 
                     b.HasKey("Id");
 
@@ -499,6 +524,21 @@ namespace SER.Database.Migrations
                     b.ToTable("work_places", (string)null);
                 });
 
+            modelBuilder.Entity("AdditionalQualificationEntityStudentEntity", b =>
+                {
+                    b.HasOne("SER.Database.Models.AdditionalQualifications.AdditionalQualificationEntity", null)
+                        .WithMany()
+                        .HasForeignKey("AdditionalQualificationsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SER.Database.Models.Students.StudentEntity", null)
+                        .WithMany()
+                        .HasForeignKey("StudentEntityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("SER.Database.Models.Groups.GroupEntity", b =>
                 {
                     b.HasOne("SER.Database.Models.Clusters.ClusterEntity", "Cluster")
@@ -556,7 +596,7 @@ namespace SER.Database.Migrations
                         .IsRequired()
                         .HasConstraintName("fk_workplace_enterprise");
 
-                    b.HasOne("SER.Database.Models.Students.StudentEntity", "Student")
+                    b.HasOne("SER.Database.Models.Students.StudentEntity", null)
                         .WithMany("WorkPlaces")
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -564,8 +604,6 @@ namespace SER.Database.Migrations
                         .HasConstraintName("fk_workplace_student");
 
                     b.Navigation("Enterprise");
-
-                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("SER.Database.Models.Students.StudentEntity", b =>

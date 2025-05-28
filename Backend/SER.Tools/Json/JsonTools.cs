@@ -13,9 +13,7 @@ public static class JsonTools
 
 	private static readonly JsonConverter[] Converters =
 	{
-		new IDJsonConverter(),
-		new DateOnlyJsonConverter(),
-		new TimeOnlyJsonConverter()
+		new IDJsonConverter()
 	};
 
 	public static JsonSerializerOptions AddJsonSettings(this JsonSerializerOptions options)
@@ -53,11 +51,6 @@ public static class JsonTools
 	public static T? Deserialize<T>(this String @string)
 	{
 		if (@string is null) return default;
-		return JsonSerializer.Deserialize<T>(@string, new JsonSerializerOptions
-		{
-			DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
-			PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-			
-		});
+		return JsonSerializer.Deserialize<T>(@string, Options);
 	}
 }

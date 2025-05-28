@@ -10,9 +10,9 @@ public record GroupDto(
 	ID Id,
 	String Number,
 	StructuralUnit StructuralUnit,
-	EducationLevel EducationLevel,
+	EducationLevelDto EducationLevel,
 	Int32 EnrollmentYear,
-	Employee? Curator,
+	EmployeeDto? Curator,
 	Boolean HasCluster,
-	Cluster? Cluster
+	ClusterDto? Cluster
 );

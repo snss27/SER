@@ -1,11 +1,10 @@
 import { Enterprise } from "@/domain/enterprises/models/enterprise"
-import { BlankFiles } from "@/tools/blankFiles"
 import { Workplace } from "./workplace"
 export interface WorkplaceBlank {
     id: string | null
     enterprise: Enterprise | null
     post: string | null
-    workbookExtractFile: BlankFiles
+    workbookExtractFiles: string[]
     startDate: Date | null
     finishDate: Date | null
 
@@ -18,7 +17,7 @@ export namespace WorkplaceBlank {
             id: null,
             enterprise: null,
             post: null,
-            workbookExtractFile: BlankFiles.create(1),
+            workbookExtractFiles: [],
             startDate: null,
             finishDate: null,
 
@@ -27,14 +26,11 @@ export namespace WorkplaceBlank {
     }
 
     export function create(workPlace: Workplace): WorkplaceBlank {
-        const workbookExtractFile = workPlace.workBookExtractFile
-            ? BlankFiles.fromUrl(workPlace.workBookExtractFile)
-            : BlankFiles.create(1)
         return {
             id: workPlace.id,
             enterprise: workPlace.enterprise,
             post: workPlace.post,
-            workbookExtractFile,
+            workbookExtractFiles: workPlace.workBookExtractFiles,
             startDate: workPlace.startDate,
             finishDate: workPlace.finishDate,
 
@@ -50,8 +46,8 @@ export namespace WorkplaceBlank {
             case "CHANGE_POST":
                 return { ...state, post: action.payload.post }
 
-            case "CHANGE_WORKBOOK_EXTRACT_FILE":
-                return { ...state, workbookExtractFile: action.payload.workbookExtractFile }
+            case "CHANGE_WORKBOOK_EXTRACT_FILES":
+                return { ...state, workbookExtractFiles: action.payload.workbookExtractFiles }
 
             case "CHANGE_START_DATE":
                 return { ...state, startDate: action.payload.startDate }
@@ -75,8 +71,8 @@ type Action =
           payload: { post: string | null }
       }
     | {
-          type: "CHANGE_WORKBOOK_EXTRACT_FILE"
-          payload: { workbookExtractFile: BlankFiles }
+          type: "CHANGE_WORKBOOK_EXTRACT_FILES"
+          payload: { workbookExtractFiles: string[] }
       }
     | {
           type: "CHANGE_START_DATE"

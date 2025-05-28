@@ -59,16 +59,6 @@ public class Group
 			return new Error("Укажите, относится ли группа к кластеру");
 		}
 
-		if (hasCluster.Value && cluster is null)
-		{
-			return new Error("Укажите кластер группы");
-		}
-
-		if (!hasCluster.Value)
-		{
-			cluster = null;
-		}
-
 		ID _id = id ?? ID.New();
 
 		return new Group(_id, number, structuralUnit.Value, educationLevel, enrollmentYear.Value, curator, hasCluster.Value, cluster);
