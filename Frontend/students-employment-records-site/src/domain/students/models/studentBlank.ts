@@ -207,13 +207,13 @@ export namespace StudentBlank {
                     targetAgreementEnterprise: action.payload.targetAgreementEnterprise,
                 }
 
-            case "CHANGE_TARGET_AGREEMENT_FILE":
+            case "CHANGE_TARGET_AGREEMENT_FILES":
                 return { ...state, targetAgreementFiles: action.payload.targetAgreementFiles }
 
             case "CHANGE_MUST_SERVE_IN_ARMY":
                 return { ...state, mustServeInArmy: action.payload.mustServeInArmy }
 
-            case "CHANGE_ARMY_SUBPOENA_FILE":
+            case "CHANGE_ARMY_SUBPOENA_FILES":
                 return { ...state, armySubpoenaFiles: action.payload.armySubpoenaFiles }
 
             case "CHANGE_ARMY_CALL_DATE":
@@ -346,7 +346,7 @@ export type StudentAction =
           payload: { targetAgreementEnterprise: Enterprise | null }
       }
     | {
-          type: "CHANGE_TARGET_AGREEMENT_FILE"
+          type: "CHANGE_TARGET_AGREEMENT_FILES"
           payload: { targetAgreementFiles: string[] }
       }
     | {
@@ -354,7 +354,7 @@ export type StudentAction =
           payload: { mustServeInArmy: boolean }
       }
     | {
-          type: "CHANGE_ARMY_SUBPOENA_FILE"
+          type: "CHANGE_ARMY_SUBPOENA_FILES"
           payload: { armySubpoenaFiles: string[] }
       }
     | {

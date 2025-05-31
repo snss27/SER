@@ -1,9 +1,10 @@
 export class HttpClient {
-    private static host = "https://localhost:44377/api"
-    private static fileStorageHost = ""
+    private static apiHost = process.env.NEXT_PUBLIC_API_URL
+    private static fileStorageHost = process.env.NEXT_PUBLIC_FILE_STORAGE_URL
+    private static fileStorageSecretKey = process.env.NEXT_PUBLIC_FILE_STORAGE_SECRET_KEY
 
     public static async getJsonAsync(url: string, params?: any): Promise<any> {
-        const fullUrl = `${this.host}${url}${HttpClient.toQueryString(params)}`
+        const fullUrl = `${this.apiHost}${url}${HttpClient.toQueryString(params)}`
 
         const response = await HttpClient.httpHandler(
             await fetch(fullUrl, {
@@ -22,7 +23,7 @@ export class HttpClient {
         data: any = null,
         params: any = null
     ): Promise<any> {
-        const fullUrl = `${this.host}${url}${
+        const fullUrl = `${this.apiHost}${url}${
             params != null ? HttpClient.toQueryString(params) : ""
         }`
 
@@ -37,16 +38,44 @@ export class HttpClient {
         return await response.json()
     }
 
-    public static async postFormDataAsync(url: string, data: FormData): Promise<string> {
-        const response = await HttpClient.httpHandler(
-            await fetch(`${this.fileStorageHost}${url}`, {
+    public static async uploadFilesAsync(files: File[], folder: string): Promise<string[]> {
+        const keyword = this.fileStorageSecretKey
+
+        const uploadTasks = files.map((file) => {
+            const filePath = folder
+                ? `${folder}/${Date.now()}_${file.name}`
+                : `${Date.now()}_${file.name}`
+            const query = this.toQueryString({ path: filePath, keyword })
+            const formData = new FormData()
+            formData.append("file", file)
+
+            return fetch(`${this.fileStorageHost}/upload${query}`, {
                 method: "POST",
-                credentials: "same-origin",
-                headers: { Enctype: "multipart/form-data" },
-                body: data,
+                body: formData,
+            }).then((response) => {
+                if (!response.ok) throw new Error(`Upload failed for ${file.name}`)
+                return `${this.fileStorageHost}/${filePath}`
             })
-        )
-        return await response.json()
+        })
+
+        return Promise.all(uploadTasks)
+    }
+
+    public static async deleteFileAsync(url: string): Promise<void> {
+        const keyword = this.fileStorageSecretKey
+        const host = this.fileStorageHost
+        const path = url.replace(`${host}/`, "")
+
+        const query = this.toQueryString({ path, keyword })
+
+        const response = await fetch(`${host}/delete${query}`, {
+            method: "DELETE",
+        })
+
+        if (!response.ok) {
+            const errorText = await response.text()
+            throw new Error(`Ошибка удаления: ${errorText}`)
+        }
     }
 
     private static toQueryString(obj: any) {
@@ -91,7 +120,7 @@ export class HttpClient {
     private static httpHandler(response: Response): Promise<Response> {
         if (response.redirected) {
             window.location.href = response.url
-            return Promise.reject()
+            return Promise.reject(new Error("Redirected"))
         }
 
         if (response.ok) return Promise.resolve(response)

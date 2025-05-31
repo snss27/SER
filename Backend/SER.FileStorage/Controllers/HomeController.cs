@@ -9,14 +9,14 @@ public class HomeController : ControllerBase
 	private const String _invalidOperation = "Error";
 	private const String _fileStorageUploadFolder = "Files";
 
-	private static readonly String Keyword = Environment.GetEnvironmentVariable("ENCRYPTION_KEY") ?? throw new InvalidOperationException("ENCRYPTION_KEY not set.");
+	private static readonly String Keyword = Environment.GetEnvironmentVariable("FILE_STORAGE_KEYWORD") ?? throw new InvalidOperationException("ENCRYPTION_KEY not set.");
 	private static readonly String RootPath = Path.GetFullPath(_fileStorageUploadFolder).TrimEnd(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar;
 
 	private static Boolean IsValidKeyword(String keyword) => !String.IsNullOrEmpty(keyword) && Keyword == keyword;
 	private static Boolean IsPathInsideRoot(String path) => Path.GetFullPath(path).StartsWith(RootPath, StringComparison.OrdinalIgnoreCase);
 
 	[HttpPost("/upload")]
-	public async Task<IActionResult> Upload([FromQuery] String path, [FromQuery] String keyword)
+	public async Task<IActionResult> Upload([FromQuery] String path, [FromQuery] String keyword, [FromForm] IFormFile file)
 	{
 		try
 		{
@@ -34,8 +34,7 @@ public class HomeController : ControllerBase
 				Directory.CreateDirectory(directory);
 
 			await using FileStream fileStream = new(fullPath, FileMode.Create);
-
-			await Request.Body.CopyToAsync(fileStream);
+			await file.CopyToAsync(fileStream);
 
 			String domain = Environment.GetEnvironmentVariable("FILE_STORAGE_DOMAIN") ?? throw new InvalidOperationException("FILE_STORAGE_DOMAIN not set.");
 			String urlPath = path.Replace('\\', '/');

@@ -9,7 +9,7 @@ public static class AddDbContextExtensions
 	{
 		return services.AddDbContext<SERDbContext>(options =>
 		{
-			options.UseNpgsql(configuration.GetConnectionString(nameof(SERDbContext)));
+			options.UseNpgsql(Environment.GetEnvironmentVariable("SER_CONNECTION_STRING"));
 		});
 	}
 }

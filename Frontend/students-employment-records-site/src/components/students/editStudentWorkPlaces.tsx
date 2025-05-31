@@ -27,7 +27,6 @@ export function EditStudentWorkplaces({ studentBlank, dispatch }: Props) {
 
         if (editMode.type === "current") {
             if (editMode.isNew && studentBlank.currentWorkplace) {
-                // Переносим старое в предыдущие
                 dispatch({
                     type: "CHANGE_PREV_WORKPLACES",
                     payload: {
@@ -38,14 +37,12 @@ export function EditStudentWorkplaces({ studentBlank, dispatch }: Props) {
                     },
                 })
             }
-            // Устанавливаем новое текущее
             dispatch({
                 type: "CHANGE_CURRENT_WORKPLACE",
                 payload: { currentWorkplace: updated },
             })
         } else {
             if (editMode.isNew) {
-                // Добавляем новое в предыдущие
                 dispatch({
                     type: "CHANGE_PREV_WORKPLACES",
                     payload: {
@@ -53,7 +50,6 @@ export function EditStudentWorkplaces({ studentBlank, dispatch }: Props) {
                     },
                 })
             } else {
-                // Обновляем существующее
                 const updatedList = studentBlank.prevWorkplaces.map((w) =>
                     w.clientId === updated.clientId ? updated : w
                 )

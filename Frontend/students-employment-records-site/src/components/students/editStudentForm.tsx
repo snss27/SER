@@ -225,34 +225,14 @@ export const EditStudentForm: React.FC<Props> = ({ initialStudentBlank }) => {
             />
 
             <FilesInput
+                label="Файлы паспорта"
                 files={studentBlank.passportFiles}
                 maxFiles={5}
-                onChange={() => {}}
-                onUpload={() => new Promise((resolve, reject) => resolve(["123"]))}
+                folder="Passport"
+                onChange={(passportFiles) =>
+                    dispatch({ type: "CHANGE_PASSPORT_FILES", payload: { passportFiles } })
+                }
             />
-
-            {/* <FilesInput
-                label="Файлы паспорта"
-                maxFilesCount={studentBlank.passportFiles.maxFiles}
-                urls={studentBlank.passportFiles.fileUrls}
-                files={studentBlank.passportFiles.files}
-                onFilesChange={(files) =>
-                    dispatch({
-                        type: "CHANGE_PASSPORT_FILES",
-                        payload: {
-                            passportFiles: studentBlank.passportFiles.withChangedFiles(files),
-                        },
-                    })
-                }
-                onUrlsChange={(urls) =>
-                    dispatch({
-                        type: "CHANGE_PASSPORT_FILES",
-                        payload: {
-                            passportFiles: studentBlank.passportFiles.withChangedUrls(urls),
-                        },
-                    })
-                }
-            /> */}
 
             <EditStudentWorkplaces studentBlank={studentBlank} dispatch={dispatch} />
 
@@ -319,32 +299,18 @@ export const EditStudentForm: React.FC<Props> = ({ initialStudentBlank }) => {
                             }
                         />
 
-                        {/* <FilesInput
+                        <FilesInput
                             label="Файлы целевого обучения"
-                            maxFilesCount={studentBlank.targetAgreementFile.maxFiles}
-                            files={studentBlank.targetAgreementFile.files}
-                            urls={studentBlank.targetAgreementFile.fileUrls}
-                            onFilesChange={(files) =>
+                            folder="TargetAgreement"
+                            maxFiles={5}
+                            files={studentBlank.targetAgreementFiles}
+                            onChange={(targetAgreementFiles) =>
                                 dispatch({
-                                    type: "CHANGE_TARGET_AGREEMENT_FILE",
-                                    payload: {
-                                        targetAgreementFiles:
-                                            studentBlank.targetAgreementFile.withChangedFiles(
-                                                files
-                                            ),
-                                    },
+                                    type: "CHANGE_TARGET_AGREEMENT_FILES",
+                                    payload: { targetAgreementFiles },
                                 })
                             }
-                            onUrlsChange={(urls) =>
-                                dispatch({
-                                    type: "CHANGE_TARGET_AGREEMENT_FILE",
-                                    payload: {
-                                        targetAgreementFiles:
-                                            studentBlank.targetAgreementFile.withChangedUrls(urls),
-                                    },
-                                })
-                            }
-                        /> */}
+                        />
                     </Stack>
                 </Collapse>
             </Box>
@@ -374,52 +340,31 @@ export const EditStudentForm: React.FC<Props> = ({ initialStudentBlank }) => {
                             }
                         />
 
-                        {/* <FilesInput
+                        <FilesInput
                             label="Файлы повестки"
-                            maxFilesCount={studentBlank.armySubpoenaFile.maxFiles}
-                            files={studentBlank.armySubpoenaFile.files}
-                            urls={studentBlank.armySubpoenaFile.fileUrls}
-                            onFilesChange={(files) =>
+                            folder="ArmySubpoena"
+                            files={studentBlank.armySubpoenaFiles}
+                            maxFiles={5}
+                            onChange={(armySubpoenaFiles) =>
                                 dispatch({
-                                    type: "CHANGE_ARMY_SUBPOENA_FILE",
-                                    payload: {
-                                        armySubpoenaFiles:
-                                            studentBlank.armySubpoenaFile.withChangedFiles(files),
-                                    },
+                                    type: "CHANGE_ARMY_SUBPOENA_FILES",
+                                    payload: { armySubpoenaFiles },
                                 })
                             }
-                            onUrlsChange={(urls) =>
-                                dispatch({
-                                    type: "CHANGE_ARMY_SUBPOENA_FILE",
-                                    payload: {
-                                        armySubpoenaFiles:
-                                            studentBlank.armySubpoenaFile.withChangedUrls(urls),
-                                    },
-                                })
-                            }
-                        /> */}
+                        />
                     </Stack>
                 </Collapse>
             </Box>
 
-            {/* <FilesInput
+            <FilesInput
                 label="Прочие файлы"
-                maxFilesCount={studentBlank.otherFiles.maxFiles}
-                files={studentBlank.otherFiles.files}
-                urls={studentBlank.otherFiles.fileUrls}
-                onFilesChange={(files) =>
-                    dispatch({
-                        type: "CHANGE_OTHER_FILES",
-                        payload: { otherFiles: studentBlank.otherFiles.withChangedFiles(files) },
-                    })
+                folder="OtherFiles"
+                files={studentBlank.otherFiles}
+                maxFiles={10}
+                onChange={(otherFiles) =>
+                    dispatch({ type: "CHANGE_OTHER_FILES", payload: { otherFiles } })
                 }
-                onUrlsChange={(urls) =>
-                    dispatch({
-                        type: "CHANGE_OTHER_FILES",
-                        payload: { otherFiles: studentBlank.otherFiles.withChangedUrls(urls) },
-                    })
-                }
-            /> */}
+            />
 
             <Box className="edit-form-footer">
                 <Button

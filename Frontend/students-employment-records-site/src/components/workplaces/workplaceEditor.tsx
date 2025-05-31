@@ -5,6 +5,7 @@ import { useReducer } from "react"
 import Button from "../shared/buttons/button"
 import { AsyncAutocomplete } from "../shared/inputs/asyncAutocomplete"
 import DatePicker from "../shared/inputs/datePicker"
+import FilesInput from "../shared/inputs/filesInput"
 import TextInput from "../shared/inputs/textInput"
 
 interface Props {
@@ -69,30 +70,18 @@ export const WorkplaceEditor: React.FC<Props> = ({ workplace, onSave, onClose })
                 }
             />
 
-            {/* <FilesInput
+            <FilesInput
                 label="Файлы выписки из трудовой книжки"
-                maxFilesCount={editedWorkplace.workbookExtractFiles.maxFiles}
-                urls={editedWorkplace.workbookExtractFiles.fileUrls}
-                files={editedWorkplace.workbookExtractFiles.files}
-                onFilesChange={(files) =>
+                files={editedWorkplace.workbookExtractFiles}
+                folder="WorkBookExtract"
+                maxFiles={5}
+                onChange={(workbookExtractFiles) =>
                     dispatch({
-                        type: "CHANGE_WORKBOOK_EXTRACT_FILE",
-                        payload: {
-                            workbookExtractFiles:
-                                editedWorkplace.workbookExtractFiles.withChangedFiles(files),
-                        },
+                        type: "CHANGE_WORKBOOK_EXTRACT_FILES",
+                        payload: { workbookExtractFiles },
                     })
                 }
-                onUrlsChange={(urls) =>
-                    dispatch({
-                        type: "CHANGE_WORKBOOK_EXTRACT_FILE",
-                        payload: {
-                            workbookExtractFiles:
-                                editedWorkplace.workbookExtractFiles.withChangedUrls(urls),
-                        },
-                    })
-                }
-            /> */}
+            />
 
             <Box sx={{ display: "flex", gap: 2, justifyContent: "flex-end" }}>
                 <Button text="Отмена" onClick={onClose} />
