@@ -2,11 +2,8 @@ using SER.Domain.AdditionalQualifications;
 using SER.Domain.Enterprises;
 using SER.Domain.Groups;
 using SER.Domain.Students.Enums;
-using SER.Domain.Workplaces;
 using SER.Domain.WorkPlaces;
 using SER.Tools.Types.IDs;
-using System;
-using System.Reflection;
 
 namespace SER.Domain.Students;
 
@@ -15,7 +12,7 @@ public record StudentDto(
 	String Name,
 	String SecondName,
 	String? LastName,
-	Genders Gender,
+	Gender Gender,
 	DateTime? BirthDate,
 	String? PhoneNumber,
 	String? RepresentativePhoneNumber,
@@ -30,14 +27,14 @@ public record StudentDto(
 	String[] PassportFiles,
 	WorkPlaceDto[] PrevWorkplaces,
 	WorkPlaceDto? CurrentWorkplace,
-	AdditionalQualification[] AdditionalQualifications,
+	AdditionalQualificationDto[] AdditionalQualifications,
 	Boolean IsTargetAgreement,
 	String? TargetAgreementNumber,
-	String? TargetAgreementFile,
+	String[] TargetAgreementFiles,
 	DateTime? TargetAgreementDate,
-	Enterprise? TargetAgreementEnterprise,
+	EnterpriseDto? TargetAgreementEnterprise,
 	Boolean MustServeInArmy,
-	String? ArmySubpoenaFile,
+	String[] ArmySubpoenaFiles,
 	DateTime? ArmyCallDate,
 	SocialStatus[] SocialStatuses,
 	StudentStatus Status,

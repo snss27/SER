@@ -4,9 +4,9 @@ using SER.Tools.Types.IDs;
 namespace SER.Domain.WorkPlaces;
 public record WorkPlaceDto(
 	ID Id,
-	Enterprise Enterprise,
+	EnterpriseDto Enterprise,
 	String? Post,
-	String? WorkBookExtractFile,
+	String[] WorkBookExtractFiles,
 	DateTime? StartDate,
 	DateTime? FinishDate
 );

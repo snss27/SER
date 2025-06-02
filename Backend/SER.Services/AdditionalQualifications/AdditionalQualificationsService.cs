@@ -1,53 +1,95 @@
+using CSharpFunctionalExtensions;
+using Microsoft.EntityFrameworkCore;
+using SER.Database;
+using SER.Database.Models.AdditionalQualifications;
 using SER.Domain.AdditionalQualifications;
 using SER.Domain.Services;
-using SER.Services.AdditionalQualifications.Repositories;
+using SER.Services.AdditionalQualifications.Converters;
 using SER.Tools.Types.IDs;
 using SER.Tools.Types.Results;
-
+using static SER.Tools.Utils.NumberUtils;
 namespace SER.Services.AdditionalQualifications;
 
-public class AdditionalQualificationsService(IAdditionalQualificationsRepository additionalQualificationsRepository)
-	: IAdditionalQualificationsService
+public class AdditionalQualificationsService(SERDbContext dbContext) : IAdditionalQualificationsService
 {
-	public async Task<Result> Save(AdditionalQualificationBlank blank)
+	public async Task<OperationResult> Save(AdditionalQualificationBlank blank)
 	{
-		if (String.IsNullOrWhiteSpace(blank.Name))
+		Result<AdditionalQualification, Error> result = AdditionalQualification.Create(blank.Id, blank.Name, blank.Code, blank.StudyTime);
+		if (result.IsFailure) return OperationResult.Fail(result.Error);
+
+		AdditionalQualification additionalQualification = result.Value;
+
+		Boolean isNew = blank.Id is null;
+
+		if (isNew)
 		{
-			return Result.Fail("Укажите наименование квалификации");
+			AdditionalQualificationEntity entity = additionalQualification.ToEntity();
+			await dbContext.AddAsync(entity);
+		}
+		else
+		{
+			AdditionalQualificationEntity? entity = await dbContext.AdditionalQualifications.FirstOrDefaultAsync(aq => aq.Id == additionalQualification.Id);
+
+			if (entity is null) return OperationResult.Fail("Квалификация не найдена");
+
+			entity.ApplyChanges(additionalQualification);
+			dbContext.Update(entity);
 		}
 
-		if (String.IsNullOrWhiteSpace(blank.Code))
-		{
-			return Result.Fail("Укажите код");
-		}
-
-		blank.Id ??= ID.New();
-
-		return await additionalQualificationsRepository.Save(blank);
+		await dbContext.SaveChangesAsync();
+		return OperationResult.Success();
 	}
 
-	public async Task<Result> Remove(ID id)
+	public async Task<OperationResult> Remove(ID id)
 	{
-		return await additionalQualificationsRepository.Remove(id);
+		AdditionalQualificationEntity? entity = await dbContext.AdditionalQualifications.FirstOrDefaultAsync(aq => aq.Id == id);
+
+		if (entity is null) return OperationResult.Fail("Квалификация не найдена");
+
+		dbContext.Remove(entity);
+		await dbContext.SaveChangesAsync();
+
+		return OperationResult.Success();
 	}
 
 	public async Task<AdditionalQualification?> Get(ID id)
 	{
-		return await additionalQualificationsRepository.Get(id);
+		AdditionalQualificationEntity? entity = await dbContext.AdditionalQualifications
+			.FirstOrDefaultAsync(aq => aq.Id == id);
+		return entity?.ToDomain();
 	}
 
 	public async Task<AdditionalQualification[]> Get(ID[] ids)
 	{
-		return await additionalQualificationsRepository.Get(ids);
+		List<AdditionalQualificationEntity> entities = await dbContext.AdditionalQualifications
+			.Where(aq => ids.Contains(aq.Id))
+			.ToListAsync();
+
+		return [.. entities.Select(e => e.ToDomain())];
 	}
 
+	//TASK Возвращать totalCount для клиента
 	public async Task<AdditionalQualification[]> GetPage(Int32 page, Int32 pageSize)
 	{
-		return await additionalQualificationsRepository.GetPage(page, pageSize);
+		(Int32 offset, Int32 limit) = NormalizeRange(page, pageSize);
+
+		List<AdditionalQualificationEntity> entities = await dbContext.AdditionalQualifications
+			.OrderByDescending(aq => aq.CreatedDateTimeUtc)
+			.ThenByDescending(aq => aq.ModifiedDateTimeUtc)
+			.Skip(offset)
+			.Take(limit)
+			.ToListAsync();
+
+		return [.. entities.Select(e => e.ToDomain())];
 	}
 
 	public async Task<AdditionalQualification[]> GetBySearchText(String searchText)
 	{
-		return await additionalQualificationsRepository.GetBySearchText(searchText);
+		List<AdditionalQualificationEntity> entities = await dbContext.AdditionalQualifications
+			.Where(aq => EF.Functions.ILike(aq.Name, $"%{searchText}%") || EF.Functions.ILike(aq.Code, $"%{searchText}%"))
+			.OrderBy(aq => aq.Name)
+			.ToListAsync();
+
+		return [.. entities.Select(e => e.ToDomain())];
 	}
 }

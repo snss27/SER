@@ -8,12 +8,12 @@ namespace SER.Domain.Groups;
 
 public class GroupBlank
 {
-	public ID? Id { get; set; }
-	public String? Number { get; set; }
-	public StructuralUnits? StructuralUnit { get; set; }
-	public EducationLevel? EducationLevel { get; set; }
-	public Int32? EnrollmentYear { get; set; }
-	public Employee? Curator { get; set; }
-	public Boolean HasCluster { get; set; }
-	public Cluster? Cluster { get; set; }
+	public ID? Id { get; init; }
+	public String? Number { get; init; }
+	public StructuralUnit? StructuralUnit { get; init; }
+	public EducationLevelDto? EducationLevel { get; init; }
+	public Int32? EnrollmentYear { get; init; }
+	public EmployeeDto? Curator { get; init; }
+	public Boolean? HasCluster { get; init; }
+	public ClusterDto? Cluster { get; init; }
 }

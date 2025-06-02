@@ -2,6 +2,7 @@
 *.refsignored
 *.cache
 *.user
+*.env
 .suo
 .vs/
 .idea/
@@ -22,3 +23,4 @@ packages/*
 node_modules
 /.vscode/
 /publish
+Files/

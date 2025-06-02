@@ -3,8 +3,8 @@ using SER.Tools.Types.IDs;
 namespace SER.Domain.AdditionalQualifications;
 public class AdditionalQualificationBlank
 {
-	public ID? Id { get; set; }
-	public String? Name { get; set; }
-	public String? Code { get; set; }
-	public String? StudyTime { get; set; }
+	public ID? Id { get; init; }
+	public String? Name { get; init; }
+	public String? Code { get; init; }
+	public String? StudyTime { get; init; }
 }

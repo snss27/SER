@@ -1,16 +1,10 @@
 <Project>
 
 	<PropertyGroup>
-		<OutputPath>$(MSBuildThisFileDirectory)bin\$(MSBuildProjectName)\$(Configuration)\</OutputPath>
-		<BaseIntermediateOutputPath>$(MSBuildThisFileDirectory)obj\$(MSBuildProjectName)\$(Configuration)\</BaseIntermediateOutputPath>
-		<DisableDefaultOutputPath>true</DisableDefaultOutputPath>
-		<DisableDefaultIntermediateOutputPath>true</DisableDefaultIntermediateOutputPath>
 		<TargetFramework>net8.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<LangVersion>12</LangVersion>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
 		<OutputType>Library</OutputType>
 		<AssemblyVersion>3.0</AssemblyVersion>
 		<FileVersion>3.0</FileVersion>
@@ -33,6 +27,6 @@
 		<WarningLevel>4</WarningLevel>
 		<Optimize>False</Optimize>
 		<DebugType>portable</DebugType>
-	</PropertyGroup> 
+	</PropertyGroup>
 
 </Project>

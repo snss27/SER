@@ -5,7 +5,7 @@ import { useReducer } from "react"
 import Button from "../shared/buttons/button"
 import { AsyncAutocomplete } from "../shared/inputs/asyncAutocomplete"
 import DatePicker from "../shared/inputs/datePicker"
-import { FilesInput } from "../shared/inputs/filesInput"
+import FilesInput from "../shared/inputs/filesInput"
 import TextInput from "../shared/inputs/textInput"
 
 interface Props {
@@ -72,25 +72,13 @@ export const WorkplaceEditor: React.FC<Props> = ({ workplace, onSave, onClose })
 
             <FilesInput
                 label="Файлы выписки из трудовой книжки"
-                maxFilesCount={editedWorkplace.workbookExtractFile.maxFiles}
-                urls={editedWorkplace.workbookExtractFile.fileUrls}
-                files={editedWorkplace.workbookExtractFile.files}
-                onFilesChange={(files) =>
+                files={editedWorkplace.workbookExtractFiles}
+                folder="WorkBookExtract"
+                maxFiles={5}
+                onChange={(workbookExtractFiles) =>
                     dispatch({
-                        type: "CHANGE_WORKBOOK_EXTRACT_FILE",
-                        payload: {
-                            workbookExtractFile:
-                                editedWorkplace.workbookExtractFile.withChangedFiles(files),
-                        },
-                    })
-                }
-                onUrlsChange={(urls) =>
-                    dispatch({
-                        type: "CHANGE_WORKBOOK_EXTRACT_FILE",
-                        payload: {
-                            workbookExtractFile:
-                                editedWorkplace.workbookExtractFile.withChangedUrls(urls),
-                        },
+                        type: "CHANGE_WORKBOOK_EXTRACT_FILES",
+                        payload: { workbookExtractFiles },
                     })
                 }
             />

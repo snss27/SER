@@ -1,197 +1,151 @@
+using CSharpFunctionalExtensions;
+using Microsoft.EntityFrameworkCore;
+using SER.Database;
+using SER.Database.Models.AdditionalQualifications;
+using SER.Database.Models.Students;
+using SER.Database.Models.WorkPlaces;
 using SER.Domain.AdditionalQualifications;
+using SER.Domain.AdditionalQualifications.Converters;
 using SER.Domain.Enterprises;
+using SER.Domain.Enterprises.Converters;
 using SER.Domain.Groups;
+using SER.Domain.Groups.Converters;
 using SER.Domain.Services;
 using SER.Domain.Students;
-using SER.Domain.Students.Converters;
-using SER.Domain.WorkPlaces;
-using SER.Services.Students.Repositories;
+using SER.Domain.Workplaces;
+using SER.Services.AdditionalQualifications.Converters;
+using SER.Services.Students.Extensions;
+using SER.Services.WorkPlaces.Extensions;
 using SER.Tools.Types.IDs;
 using SER.Tools.Types.Results;
-using SER.Tools.Utils;
+using static SER.Tools.Utils.NumberUtils;
 
 namespace SER.Services.Students;
 
-public class StudentsService(IStudentsRepository studentsRepository, IWorkPlacesSevice workPlacesSevice, IFilesService filesService, IGroupsService groupsService, IAdditionalQualificationsService additionalQualificationsService, IEnterprisesService enterprisesService) : IStudentsService
+public class StudentsService(SERDbContext dbContext) : IStudentsService
 {
 
-	public async Task<Result> Save(StudentBlank blank)
+	public async Task<OperationResult> Save(StudentBlank blank)
 	{
-		if (String.IsNullOrWhiteSpace(blank.Name))
+		Group? group = blank.Group?.ToDomain();
+		if (group is null) return OperationResult.Fail("Укажите группу студента");
+
+		Enterprise? targetAgreementEnterprise = blank.TargetAgreementEnterprise?.ToDomain();
+
+		ID[] additionalQualificationIds = [.. blank.AdditionalQualifications.Select(aq => aq.Id)];
+		List<AdditionalQualificationEntity> additionalQualificationEntities = await dbContext.AdditionalQualifications
+			.Where(aq => additionalQualificationIds.Contains(aq.Id))
+			.ToListAsync();
+
+		AdditionalQualification[] additionalQualifications = [.. additionalQualificationEntities.Select(aq => aq.ToDomain())];
+
+		List<WorkPlace> workPlaces = [];
+		foreach(WorkPlaceBlank workPlaceBlank in blank.WorkPlaces)
 		{
-			return Result.Fail("Укажите имя студента");
+			Enterprise? enterprise = workPlaceBlank.Enterprise?.ToDomain();
+			Result<WorkPlace, Error> createWorkPlaceResult = WorkPlace.Create(workPlaceBlank.Id, enterprise, workPlaceBlank.Post, workPlaceBlank.WorkBookExtractFiles, workPlaceBlank.StartDate, workPlaceBlank.FinishDate, workPlaceBlank.IsCurrent);
+			if (createWorkPlaceResult.IsFailure) return OperationResult.Fail(createWorkPlaceResult.Error);
+			workPlaces.Add(createWorkPlaceResult.Value);
+		}
+ 
+		Result<Student, Error> result = Student.Create(blank.Id, blank.Name, blank.SecondName, blank.LastName, blank.Gender, blank.BirthDate, blank.PhoneNumber, blank.RepresentativePhoneNumber, blank.RepresentativeAlias, blank.IsOnPaidStudy, blank.Snils, group, blank.PassportNumber, blank.PassportSeries, blank.PassportIssuedBy, blank.PassportIssuedDate, blank.PassportFiles, [.. workPlaces], additionalQualifications, blank.IsTargetAgreement, blank.TargetAgreementNumber, targetAgreementEnterprise, blank.TargetAgreementDate, blank.TargetAgreementFiles, blank.MustServeInArmy, blank.ArmyCallDate, blank.ArmySubpoenaFiles, blank.SocialStatuses, blank.Status, blank.Address, blank.IsForeignCitizen, blank.Inn, blank.Mail, blank.OtherFiles);
+		if (result.IsFailure) return OperationResult.Fail(result.Error);
+		Student student = result.Value;
+
+		Boolean isNew = blank.Id is null;
+
+		if (isNew)
+		{
+			StudentEntity entity = student.ToEntity(additionalQualificationEntities);
+			entity.WorkPlaces = [.. workPlaces.Select(wp => wp.ToEntity(entity.Id))];
+			await dbContext.AddAsync(entity);
+		}
+		else
+		{
+			StudentEntity? entity = await dbContext.Students
+				.Include(s => s.AdditionalQualifications)
+				.Include(s => s.WorkPlaces)
+				.FirstOrDefaultAsync(s => s.Id == student.Id);
+			if (entity is null) return OperationResult.Fail("Студент не найден");
+
+			HashSet<ID> existingWorkPlaceIds = [.. entity.WorkPlaces.Select(wp => wp.Id)];
+			HashSet<ID> newWorkPlaceIds = [.. workPlaces.Select(wp => wp.Id)];
+
+			foreach (WorkPlaceEntity wp in entity.WorkPlaces.Where(wp => !newWorkPlaceIds.Contains(wp.Id)).ToList())
+			{
+				dbContext.Remove(wp);
+			}
+
+			foreach (WorkPlace wp in workPlaces)
+			{
+				WorkPlaceEntity? existingWorkPlace = entity.WorkPlaces.FirstOrDefault(w => w.Id == wp.Id);
+				if (existingWorkPlace != null)
+				{
+					existingWorkPlace.ApplyChanges(wp);
+				}
+				else
+				{
+					entity.WorkPlaces.Add(wp.ToEntity(entity.Id));
+				}
+			}
+
+			entity.ApplyChanges(student, additionalQualificationEntities);
 		}
 
-		if (String.IsNullOrWhiteSpace(blank.SecondName))
-		{
-			return Result.Fail("Укажите фамилию студента");
-		}
-
-		if (!String.IsNullOrWhiteSpace(blank.PhoneNumber) && !Regexs.PhoneRegex.IsMatch(blank.PhoneNumber))
-		{
-			return Result.Fail("Неверно указан номер телефона (скорее всего не полностью)");
-		}
-
-		if (!String.IsNullOrWhiteSpace(blank.RepresentativePhoneNumber) &&
-			!Regexs.PhoneRegex.IsMatch(blank.RepresentativePhoneNumber))
-		{
-			return Result.Fail("Неверно указан номер телефона представителя (скорее всего не полностью)");
-		}
-
-		if (!String.IsNullOrWhiteSpace(blank.Snils) && !Regexs.SnilsRegex.IsMatch(blank.Snils))
-		{
-			return Result.Fail("Неверно указан снилс");
-		}
-
-		if (!String.IsNullOrWhiteSpace(blank.Mail) && !Regexs.MailRegex.IsMatch(blank.Mail))
-		{
-			return Result.Fail("Неверно указана электронная почта");
-		}
-
-		if (!String.IsNullOrWhiteSpace(blank.Inn) && !Regexs.HumanInnRegex.IsMatch(blank.Inn))
-		{
-			return Result.Fail("Неверный формат ИНН");
-		}
-
-		if (blank.Group is null)
-		{
-			return Result.Fail("Укажите группу студента");
-		}
-
-		if (!String.IsNullOrWhiteSpace(blank.PassportSeries) && !Regexs.PassportSeriesRegex.IsMatch(blank.PassportSeries))
-		{
-			return Result.Fail("Серия паспорта должна содержать 4 цифры");
-		}
-
-		if (!String.IsNullOrWhiteSpace(blank.PassportNumber) && !Regexs.PassportNumberRegex.IsMatch(blank.PassportNumber))
-		{
-			return Result.Fail("Номер паспорта должен содержать 6 цифр");
-		}
-
-		String[] passportFileUrls = filesService.SavePassportFiles(blank.PassportFiles, blank.Group.Number, blank.Name + blank.SecondName);
-
-		ID? currentWorkpalceId = default;
-
-		if (blank.CurrentWorkplace is not null)
-		{
-			DataResult<ID> currentWorkPlaceSaveResult = await workPlacesSevice.Save(blank.CurrentWorkplace, blank.Group.Number, blank.Name + blank.SecondName);
-
-			if (!currentWorkPlaceSaveResult.IsSuccess) return Result.Fail(currentWorkPlaceSaveResult.Errors[0].Message);
-
-			currentWorkpalceId = currentWorkPlaceSaveResult.Data;
-		}
-
-		ID[] prevWorkpalceIds = [];
-
-		DataResult<ID[]> prevWorkPlacesSaveResult = await workPlacesSevice.Save(blank.PrevWorkplaces, blank.Group.Number, blank.Name + blank.SecondName);
-
-		if (!prevWorkPlacesSaveResult.IsSuccess) return Result.Fail(prevWorkPlacesSaveResult.Errors[0].Message);
-
-		prevWorkpalceIds = prevWorkPlacesSaveResult.Data ?? [];
-
-		if (!blank.IsTargetAgreement)
-		{
-			blank.TargetAgreementNumber = null;
-			blank.TargetAgreementDate = null;
-			blank.TargetAgreementEnterprise = null;
-		}
-
-		String? targetAgreementFileUrl = default;
-
-		if(blank.IsTargetAgreement)
-		{
-			String[] targetAgreementFiles = filesService.SaveTargetAfreementFiles(blank.TargetAgreementFile, blank.Group.Number, blank.Name + blank.SecondName);
-			targetAgreementFileUrl = targetAgreementFiles.FirstOrDefault();
-		}
-
-		if (!blank.MustServeInArmy)
-		{
-			blank.ArmyCallDate = null;
-		}
-
-		String? armySubpoenaFileUrl = default;
-
-		if (blank.MustServeInArmy)
-		{
-			String[] armySubpoenaFiles = filesService.SaveArmySubpoenaFiles(blank.ArmySubpoenaFile, blank.Group.Number, blank.Name + blank.SecondName);
-			armySubpoenaFileUrl = armySubpoenaFiles.FirstOrDefault();
-		}
-
-		String[] otherFileUrls = filesService.SaveOtherFiles(blank.OtherFiles, blank.Group.Number, blank.Name + blank.SecondName);
-
-		blank.Id ??= ID.New();
-		return await studentsRepository.Save(blank, currentWorkpalceId, prevWorkpalceIds, passportFileUrls, targetAgreementFileUrl, armySubpoenaFileUrl, otherFileUrls);
+		await dbContext.SaveChangesAsync();
+		return OperationResult.Success();
 	}
 
-	public async Task<Result> Remove(ID id)
+	public async Task<OperationResult> Remove(ID id)
 	{
-		return await studentsRepository.Remove(id);
+		StudentEntity? entity = await dbContext.Students.FirstOrDefaultAsync(s => s.Id == id);
+		if (entity is null) return OperationResult.Fail("Студент не найден");
+
+		dbContext.Remove(entity);
+		await dbContext.SaveChangesAsync();
+
+		return OperationResult.Success();
 	}
 
-	public async Task<StudentDto?> Get(ID id)
+	public async Task<Student?> Get(ID id)
 	{
-		Student? student = await studentsRepository.Get(id);
+		StudentEntity? entity = await dbContext.Students
+			.Include(s => s.Group)
+				.ThenInclude(g => g.EducationLevel)
+			.Include(s => s.Group)
+				.ThenInclude(g => g.Curator)
+			.Include(s => s.Group)
+				.ThenInclude(g => g.Cluster)
+			.Include(s => s.WorkPlaces)
+				.ThenInclude(wp => wp.Enterprise)
+			.Include(s => s.AdditionalQualifications)
+			.Include(s => s.TargetAgreementEnterprise)
+			.FirstOrDefaultAsync(s => s.Id == id);
 
-		if(student is null) return null;
-
-		Task<GroupDto?> groupTask = groupsService.Get(student.GroupId);
-		Task<WorkPlaceDto?> currentWorkPlaceTask = student.CurrentWorkpalceId.HasValue
-			? workPlacesSevice.Get(student.CurrentWorkpalceId.Value)
-			: Task.FromResult<WorkPlaceDto?>(null);
-		Task<WorkPlaceDto[]> prevWorkPlacesTask = workPlacesSevice.Get(student.PrevWorkpalceIds);
-		Task<AdditionalQualification[]> additionalQualificationsTask = additionalQualificationsService.Get(student.AdditionalQualifications);
-		Task<Enterprise?> targetAgreementEnterpriseTask = student.TargetAgreementEnterpriseId.HasValue
-			? enterprisesService.Get(student.TargetAgreementEnterpriseId.Value)
-			: Task.FromResult<Enterprise?>(null);
-
-		await Task.WhenAll(groupTask, currentWorkPlaceTask, prevWorkPlacesTask, additionalQualificationsTask, targetAgreementEnterpriseTask);
-
-		GroupDto group = await groupTask ?? throw new NullReferenceException("Группа у студента не может отсутствовать");
-		WorkPlaceDto? currentWorkPlace = await currentWorkPlaceTask;
-		WorkPlaceDto[] prevWorkPlaces = await prevWorkPlacesTask;
-		AdditionalQualification[] additionalQualifications = await additionalQualificationsTask;
-		Enterprise? targetAgreementEnterprise = await targetAgreementEnterpriseTask;
-
-		return student.ToStudentDto(group, currentWorkPlace, prevWorkPlaces, additionalQualifications, targetAgreementEnterprise);
+		return entity?.ToDomain();
 	}
 
-	public async Task<StudentDto[]> GetPage(int page, int pageSize)
+	public async Task<Student[]> GetPage(Int32 page, Int32 pageSize)
 	{
-		Student[] students = await studentsRepository.GetPage(page, pageSize);
+		(Int32 offset, Int32 limit) = NormalizeRange(page, pageSize);
 
-		return await StudentDtos(students);
-	}
+		List<StudentEntity> entities = await dbContext.Students
+			.Include(s => s.Group)
+				.ThenInclude(g => g.EducationLevel)
+			.Include(s => s.Group)
+				.ThenInclude(g => g.Curator)       
+			.Include(s => s.Group)
+				.ThenInclude(g => g.Cluster)
+			.Include(s => s.WorkPlaces)
+				.ThenInclude(wp => wp.Enterprise)
+			.Include(s => s.AdditionalQualifications)
+			.Include(s => s.TargetAgreementEnterprise)
+			.OrderByDescending(e => e.CreatedDateTimeUtc)
+			.ThenByDescending(e => e.ModifiedDateTimeUtc)
+			.Skip(offset)
+			.Take(limit)
+			.ToListAsync();
 
-	public async Task<Student[]> GetByGroupId(ID groupId)
-	{
-		return await studentsRepository.GetByGroupId(groupId);
-	}
-
-	private async Task<StudentDto[]> StudentDtos(Student[] students)
-	{
-		ID[] groupIds = students.Select(student => student.GroupId).ToArray();
-		Task<GroupDto[]> groupsTask = groupsService.Get(groupIds);
-
-		ID[] currentWorkPlaceIds = students.Where(s => s.CurrentWorkpalceId.HasValue).Select(s => s.CurrentWorkpalceId.Value).Distinct().ToArray();
-		Task<WorkPlaceDto[]> currentWorkPlacesTask = workPlacesSevice.Get(currentWorkPlaceIds);
-
-		ID[] prevWorkPlaceIds = students.SelectMany(s => s.PrevWorkpalceIds).Distinct().ToArray();
-		Task<WorkPlaceDto[]> prevWorkPlacesTask = workPlacesSevice.Get(prevWorkPlaceIds);
-
-		ID[] additionalQualificationIds = students.SelectMany(s => s.AdditionalQualifications).Distinct().ToArray();
-		Task<AdditionalQualification[]> additionalQualificationsTask = additionalQualificationsService.Get(additionalQualificationIds);
-
-		ID[] targetAgreementEnterpriseIds = students.Where(s => s.TargetAgreementEnterpriseId.HasValue).Select(s => s.TargetAgreementEnterpriseId.Value).Distinct().ToArray();
-		Task<Enterprise[]> targetArgreementEnterprisesTask = enterprisesService.Get(targetAgreementEnterpriseIds);
-
-		await Task.WhenAll(groupsTask, currentWorkPlacesTask, prevWorkPlacesTask, additionalQualificationsTask, targetArgreementEnterprisesTask);
-
-		GroupDto[] groups = await groupsTask;
-		WorkPlaceDto[] currentWorkPlaces = await currentWorkPlacesTask;
-		WorkPlaceDto[] prevWorkPlaces = await prevWorkPlacesTask;
-		AdditionalQualification[] additionalQualifications = await additionalQualificationsTask;
-		Enterprise[] targetAgreementEnterprises = await targetArgreementEnterprisesTask;
-
-		return students.ToStudentDtos(groups, currentWorkPlaces, prevWorkPlaces, additionalQualifications, targetAgreementEnterprises);
+		return [.. entities.Select(e => e.ToDomain())];
 	}
 }

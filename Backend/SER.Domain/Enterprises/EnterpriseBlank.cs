@@ -3,15 +3,15 @@ using SER.Tools.Types.IDs;
 namespace SER.Domain.Enterprises;
 public class EnterpriseBlank
 {
-	public ID? Id { get; set; }
-	public String? Name { get; set; }
-	public String? LegalAddress { get; set; }
-	public String? ActualAddress { get; set; }
-	public String? Address { get; set; }
-	public String? INN {  get; set; }
-	public String? KPP { get; set; }
-	public String? ORGN { get; set; }
-	public String? Phone {  get; set; }
-	public String? Mail { get; set; }
-	public Boolean? IsOPK { get; set; }
+	public ID? Id { get; init; }
+	public String? Name { get; init; }
+	public String? LegalAddress { get; init; }
+	public String? ActualAddress { get; init; }
+	public String? Address { get; init; }
+	public String? INN {  get; init; }
+	public String? KPP { get; init; }
+	public String? ORGN { get; init; }
+	public String? Phone {  get; init; }
+	public String? Mail { get; init; }
+	public Boolean? IsOPK { get; init; }
 }

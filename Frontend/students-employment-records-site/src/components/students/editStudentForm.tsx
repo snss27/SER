@@ -15,7 +15,7 @@ import Button from "../shared/buttons/button"
 import CheckBox from "../shared/buttons/checkBox"
 import { AsyncAutocomplete } from "../shared/inputs/asyncAutocomplete"
 import DatePicker from "../shared/inputs/datePicker"
-import { FilesInput } from "../shared/inputs/filesInput"
+import FilesInput from "../shared/inputs/filesInput"
 import { AddressInput } from "../shared/inputs/maskedInputs/addressInput"
 import { HumanInnInput } from "../shared/inputs/maskedInputs/humanInnInput"
 import { MailInput } from "../shared/inputs/maskedInputs/mailInput"
@@ -226,24 +226,11 @@ export const EditStudentForm: React.FC<Props> = ({ initialStudentBlank }) => {
 
             <FilesInput
                 label="Файлы паспорта"
-                maxFilesCount={studentBlank.passportFiles.maxFiles}
-                urls={studentBlank.passportFiles.fileUrls}
-                files={studentBlank.passportFiles.files}
-                onFilesChange={(files) =>
-                    dispatch({
-                        type: "CHANGE_PASSPORT_FILES",
-                        payload: {
-                            passportFiles: studentBlank.passportFiles.withChangedFiles(files),
-                        },
-                    })
-                }
-                onUrlsChange={(urls) =>
-                    dispatch({
-                        type: "CHANGE_PASSPORT_FILES",
-                        payload: {
-                            passportFiles: studentBlank.passportFiles.withChangedUrls(urls),
-                        },
-                    })
+                files={studentBlank.passportFiles}
+                maxFiles={5}
+                folder="Passport"
+                onChange={(passportFiles) =>
+                    dispatch({ type: "CHANGE_PASSPORT_FILES", payload: { passportFiles } })
                 }
             />
 
@@ -279,7 +266,7 @@ export const EditStudentForm: React.FC<Props> = ({ initialStudentBlank }) => {
                     <Stack direction="column" gap={2}>
                         <TextInput
                             value={studentBlank.targetAgreementNumber}
-                            label="Номер договора"
+                            label="Номер целевого договора"
                             onChange={(targetAgreementNumber) =>
                                 dispatch({
                                     type: "CHANGE_TARGET_AGREEMENT_NUMBER",
@@ -314,27 +301,13 @@ export const EditStudentForm: React.FC<Props> = ({ initialStudentBlank }) => {
 
                         <FilesInput
                             label="Файлы целевого обучения"
-                            maxFilesCount={studentBlank.targetAgreementFile.maxFiles}
-                            files={studentBlank.targetAgreementFile.files}
-                            urls={studentBlank.targetAgreementFile.fileUrls}
-                            onFilesChange={(files) =>
+                            folder="TargetAgreement"
+                            maxFiles={5}
+                            files={studentBlank.targetAgreementFiles}
+                            onChange={(targetAgreementFiles) =>
                                 dispatch({
-                                    type: "CHANGE_TARGET_AGREEMENT_FILE",
-                                    payload: {
-                                        targetAgreementFile:
-                                            studentBlank.targetAgreementFile.withChangedFiles(
-                                                files
-                                            ),
-                                    },
-                                })
-                            }
-                            onUrlsChange={(urls) =>
-                                dispatch({
-                                    type: "CHANGE_TARGET_AGREEMENT_FILE",
-                                    payload: {
-                                        targetAgreementFile:
-                                            studentBlank.targetAgreementFile.withChangedUrls(urls),
-                                    },
+                                    type: "CHANGE_TARGET_AGREEMENT_FILES",
+                                    payload: { targetAgreementFiles },
                                 })
                             }
                         />
@@ -369,25 +342,13 @@ export const EditStudentForm: React.FC<Props> = ({ initialStudentBlank }) => {
 
                         <FilesInput
                             label="Файлы повестки"
-                            maxFilesCount={studentBlank.armySubpoenaFile.maxFiles}
-                            files={studentBlank.armySubpoenaFile.files}
-                            urls={studentBlank.armySubpoenaFile.fileUrls}
-                            onFilesChange={(files) =>
+                            folder="ArmySubpoena"
+                            files={studentBlank.armySubpoenaFiles}
+                            maxFiles={5}
+                            onChange={(armySubpoenaFiles) =>
                                 dispatch({
-                                    type: "CHANGE_ARMY_SUBPOENA_FILE",
-                                    payload: {
-                                        armySubpoenaFile:
-                                            studentBlank.armySubpoenaFile.withChangedFiles(files),
-                                    },
-                                })
-                            }
-                            onUrlsChange={(urls) =>
-                                dispatch({
-                                    type: "CHANGE_ARMY_SUBPOENA_FILE",
-                                    payload: {
-                                        armySubpoenaFile:
-                                            studentBlank.armySubpoenaFile.withChangedUrls(urls),
-                                    },
+                                    type: "CHANGE_ARMY_SUBPOENA_FILES",
+                                    payload: { armySubpoenaFiles },
                                 })
                             }
                         />
@@ -397,20 +358,11 @@ export const EditStudentForm: React.FC<Props> = ({ initialStudentBlank }) => {
 
             <FilesInput
                 label="Прочие файлы"
-                maxFilesCount={studentBlank.otherFiles.maxFiles}
-                files={studentBlank.otherFiles.files}
-                urls={studentBlank.otherFiles.fileUrls}
-                onFilesChange={(files) =>
-                    dispatch({
-                        type: "CHANGE_OTHER_FILES",
-                        payload: { otherFiles: studentBlank.otherFiles.withChangedFiles(files) },
-                    })
-                }
-                onUrlsChange={(urls) =>
-                    dispatch({
-                        type: "CHANGE_OTHER_FILES",
-                        payload: { otherFiles: studentBlank.otherFiles.withChangedUrls(urls) },
-                    })
+                folder="OtherFiles"
+                files={studentBlank.otherFiles}
+                maxFiles={10}
+                onChange={(otherFiles) =>
+                    dispatch({ type: "CHANGE_OTHER_FILES", payload: { otherFiles } })
                 }
             />
 

@@ -9,10 +9,10 @@ namespace SER.Domain.Groups;
 public record GroupDto(
 	ID Id,
 	String Number,
-	StructuralUnits StructuralUnit,
-	EducationLevel EducationLevel,
+	StructuralUnit StructuralUnit,
+	EducationLevelDto EducationLevel,
 	Int32 EnrollmentYear,
-	Employee? Curator,
+	EmployeeDto? Curator,
 	Boolean HasCluster,
-	Cluster? Cluster
+	ClusterDto? Cluster
 );

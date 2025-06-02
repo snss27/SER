@@ -3,7 +3,6 @@ import { Enterprise } from "@/domain/enterprises/models/enterprise"
 import { Group } from "@/domain/groups/models/group"
 import { Workplace } from "@/domain/workplaces/models/workplace"
 import { WorkplaceBlank } from "@/domain/workplaces/models/workplaceBlank"
-import { BlankFiles } from "@/tools/blankFiles"
 import { Gender } from "../enums/gender"
 import { SocialStatus } from "../enums/socialStatus"
 import { StudentStatus } from "../enums/studentStatus"
@@ -33,11 +32,11 @@ export class Student {
         public readonly additionalQualifications: AdditionalQualification[],
         public readonly isTargetAgreement: boolean,
         public readonly targetAgreementNumber: string | null,
-        public readonly targetAgreementFile: string | null,
+        public readonly targetAgreementFiles: string[],
         public readonly targetAgreementDate: Date | null,
         public readonly targetAgreementEnterprise: Enterprise | null,
         public readonly mustServeInArmy: boolean,
-        public readonly armySubpoenaFile: string | null,
+        public readonly armySubpoenaFiles: string[],
         public readonly armyCallDate: Date | null,
         public readonly socialStatuses: SocialStatus[],
         public readonly status: StudentStatus,
@@ -54,9 +53,9 @@ export class Student {
 
     public toBlank(): StudentBlank {
         const currentWorkplace = this.currentWorkplace
-            ? WorkplaceBlank.create(this.currentWorkplace)
+            ? WorkplaceBlank.create(this.currentWorkplace, true)
             : null
-        const prevWorkplaces = this.prevWorkplaces.map(WorkplaceBlank.create)
+        const prevWorkplaces = this.prevWorkplaces.map((pwp) => WorkplaceBlank.create(pwp, false))
         return {
             id: this.id,
             name: this.name,
@@ -74,21 +73,16 @@ export class Student {
             passportSeries: this.passportSeries,
             passportIssuedBy: this.passportIssuedBy,
             passportIssuedDate: this.passportIssuedDate,
-            passportFiles: BlankFiles.fromUrls(this.passportFiles, 5),
-            prevWorkplaces,
-            currentWorkplace,
+            passportFiles: this.passportFiles,
+            workPlaces: currentWorkplace ? [currentWorkplace, ...prevWorkplaces] : prevWorkplaces,
             additionalQualifications: this.additionalQualifications,
             isTargetAgreement: this.isTargetAgreement,
             targetAgreementNumber: this.targetAgreementNumber,
-            targetAgreementFile: this.targetAgreementFile
-                ? BlankFiles.fromUrl(this.targetAgreementFile)
-                : BlankFiles.create(1),
+            targetAgreementFiles: this.targetAgreementFiles,
             targetAgreementDate: this.targetAgreementDate,
             targetAgreementEnterprise: this.targetAgreementEnterprise,
             mustServeInArmy: this.mustServeInArmy,
-            armySubpoenaFile: this.armySubpoenaFile
-                ? BlankFiles.fromUrl(this.armySubpoenaFile)
-                : BlankFiles.create(1),
+            armySubpoenaFiles: this.armySubpoenaFiles,
             armyCallDate: this.armyCallDate,
             socialStatuses: this.socialStatuses,
             status: this.status,
@@ -96,7 +90,7 @@ export class Student {
             isForeignCitizen: this.isForeignCitizen,
             inn: this.inn,
             mail: this.mail,
-            otherFiles: BlankFiles.fromUrls(this.otherFiles, 10),
+            otherFiles: this.otherFiles,
         }
     }
 
@@ -142,11 +136,11 @@ export class Student {
             additionalQualifications,
             any.isTargetAgreement,
             any.targetAgreementNumber,
-            any.targetAgreementFile,
+            any.targetAgreementFiles,
             targetAgreementDate,
             targetAgreementEnterprise,
             any.mustServeInArmy,
-            any.armySubpoenaFile,
+            any.armySubpoenaFiles,
             armyCallDate,
             any.socialStatuses,
             any.status,

@@ -27,7 +27,7 @@ export class Enterprise {
             any.orgn,
             any.phone,
             any.mail,
-            any.isOPK
+            any.isOpk
         )
     }
 

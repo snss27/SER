@@ -6,13 +6,13 @@ export class Workplace {
         public readonly id: string,
         public readonly enterprise: Enterprise,
         public readonly post: string | null,
-        public readonly workBookExtractFile: string | null,
+        public readonly workBookExtractFiles: string[],
         public readonly startDate: Date | null,
         public readonly finishDate: Date | null
     ) {}
 
-    public toBlank(): WorkplaceBlank {
-        return WorkplaceBlank.create(this)
+    public toBlank(isCurrent: boolean): WorkplaceBlank {
+        return WorkplaceBlank.create(this, isCurrent)
     }
 
     public static fromAny(any: any): Workplace {
@@ -24,7 +24,7 @@ export class Workplace {
             any.id,
             enterprise,
             any.post,
-            any.workBookExtractFile,
+            any.workBookExtractFiles,
             startDate,
             finishDate
         )

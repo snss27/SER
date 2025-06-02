@@ -2,7 +2,6 @@ import { AdditionalQualification } from "@/domain/additionalQualifications/model
 import { Enterprise } from "@/domain/enterprises/models/enterprise"
 import { Group } from "@/domain/groups/models/group"
 import { WorkplaceBlank } from "@/domain/workplaces/models/workplaceBlank"
-import { BlankFiles } from "@/tools/blankFiles"
 import { Gender } from "../enums/gender"
 import { SocialStatus } from "../enums/socialStatus"
 import { StudentStatus } from "../enums/studentStatus"
@@ -30,10 +29,9 @@ export interface StudentBlank {
     passportNumber: string | null
     passportIssuedBy: string | null
     passportIssuedDate: Date | null
-    passportFiles: BlankFiles
+    passportFiles: string[]
 
-    currentWorkplace: WorkplaceBlank | null
-    prevWorkplaces: WorkplaceBlank[]
+    workPlaces: WorkplaceBlank[]
 
     additionalQualifications: AdditionalQualification[]
 
@@ -41,13 +39,13 @@ export interface StudentBlank {
     targetAgreementNumber: string | null
     targetAgreementDate: Date | null
     targetAgreementEnterprise: Enterprise | null
-    targetAgreementFile: BlankFiles
+    targetAgreementFiles: string[]
 
     mustServeInArmy: boolean
-    armySubpoenaFile: BlankFiles
+    armySubpoenaFiles: string[]
     armyCallDate: Date | null
 
-    otherFiles: BlankFiles
+    otherFiles: string[]
 }
 
 export namespace StudentBlank {
@@ -76,24 +74,22 @@ export namespace StudentBlank {
             passportNumber: null,
             passportIssuedBy: null,
             passportIssuedDate: null,
-            passportFiles: BlankFiles.create(5),
+            passportFiles: [],
 
-            currentWorkplace: null,
-            prevWorkplaces: [],
-
+            workPlaces: [],
             additionalQualifications: [],
 
             isTargetAgreement: false,
             targetAgreementNumber: null,
             targetAgreementDate: null,
             targetAgreementEnterprise: null,
-            targetAgreementFile: BlankFiles.create(1),
+            targetAgreementFiles: [],
 
             mustServeInArmy: false,
-            armySubpoenaFile: BlankFiles.create(1),
+            armySubpoenaFiles: [],
             armyCallDate: null,
 
-            otherFiles: BlankFiles.create(10),
+            otherFiles: [],
         }
     }
 
@@ -181,11 +177,8 @@ export namespace StudentBlank {
             case "CHANGE_PASSPORT_FILES":
                 return { ...state, passportFiles: action.payload.passportFiles }
 
-            case "CHANGE_CURRENT_WORKPLACE":
-                return { ...state, currentWorkplace: action.payload.currentWorkplace }
-
-            case "CHANGE_PREV_WORKPLACES":
-                return { ...state, prevWorkplaces: action.payload.prevWorkplaces }
+            case "CHANGE_WORKPLACES":
+                return { ...state, workPlaces: action.payload.workPlaces }
 
             case "CHANGE_ADDITIONAL_QUALIFICATIONS":
                 return {
@@ -208,14 +201,14 @@ export namespace StudentBlank {
                     targetAgreementEnterprise: action.payload.targetAgreementEnterprise,
                 }
 
-            case "CHANGE_TARGET_AGREEMENT_FILE":
-                return { ...state, targetAgreementFile: action.payload.targetAgreementFile }
+            case "CHANGE_TARGET_AGREEMENT_FILES":
+                return { ...state, targetAgreementFiles: action.payload.targetAgreementFiles }
 
             case "CHANGE_MUST_SERVE_IN_ARMY":
                 return { ...state, mustServeInArmy: action.payload.mustServeInArmy }
 
-            case "CHANGE_ARMY_SUBPOENA_FILE":
-                return { ...state, armySubpoenaFile: action.payload.armySubpoenaFile }
+            case "CHANGE_ARMY_SUBPOENA_FILES":
+                return { ...state, armySubpoenaFiles: action.payload.armySubpoenaFiles }
 
             case "CHANGE_ARMY_CALL_DATE":
                 return { ...state, armyCallDate: action.payload.armyCallDate }
@@ -316,15 +309,11 @@ export type StudentAction =
       }
     | {
           type: "CHANGE_PASSPORT_FILES"
-          payload: { passportFiles: BlankFiles }
+          payload: { passportFiles: string[] }
       }
     | {
-          type: "CHANGE_CURRENT_WORKPLACE"
-          payload: { currentWorkplace: WorkplaceBlank | null }
-      }
-    | {
-          type: "CHANGE_PREV_WORKPLACES"
-          payload: { prevWorkplaces: WorkplaceBlank[] }
+          type: "CHANGE_WORKPLACES"
+          payload: { workPlaces: WorkplaceBlank[] }
       }
     | {
           type: "CHANGE_ADDITIONAL_QUALIFICATIONS"
@@ -347,16 +336,16 @@ export type StudentAction =
           payload: { targetAgreementEnterprise: Enterprise | null }
       }
     | {
-          type: "CHANGE_TARGET_AGREEMENT_FILE"
-          payload: { targetAgreementFile: BlankFiles }
+          type: "CHANGE_TARGET_AGREEMENT_FILES"
+          payload: { targetAgreementFiles: string[] }
       }
     | {
           type: "CHANGE_MUST_SERVE_IN_ARMY"
           payload: { mustServeInArmy: boolean }
       }
     | {
-          type: "CHANGE_ARMY_SUBPOENA_FILE"
-          payload: { armySubpoenaFile: BlankFiles }
+          type: "CHANGE_ARMY_SUBPOENA_FILES"
+          payload: { armySubpoenaFiles: string[] }
       }
     | {
           type: "CHANGE_ARMY_CALL_DATE"
@@ -364,5 +353,5 @@ export type StudentAction =
       }
     | {
           type: "CHANGE_OTHER_FILES"
-          payload: { otherFiles: BlankFiles }
+          payload: { otherFiles: string[] }
       }

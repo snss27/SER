@@ -1,13 +1,10 @@
-import { BlankFiles } from "@/tools/blankFiles"
-
-const CACHED_FILES: Map<string, string> = new Map()
-const CONTENT_TYPES_TO_CACHE = ["image/jpeg", "image/png", "image/jpg", "application/pdf"]
-
 export class HttpClient {
-    private static host = "https://localhost:44377/api"
+    private static apiHost = process.env.NEXT_PUBLIC_API_URL
+    private static fileStorageHost = process.env.NEXT_PUBLIC_FILE_STORAGE_URL
+    private static fileStorageSecretKey = process.env.NEXT_PUBLIC_FILE_STORAGE_SECRET_KEY
 
     public static async getJsonAsync(url: string, params?: any): Promise<any> {
-        const fullUrl = `${this.host}${url}${HttpClient.toQueryString(params)}`
+        const fullUrl = `${this.apiHost}${url}${HttpClient.toQueryString(params)}`
 
         const response = await HttpClient.httpHandler(
             await fetch(fullUrl, {
@@ -26,7 +23,7 @@ export class HttpClient {
         data: any = null,
         params: any = null
     ): Promise<any> {
-        const fullUrl = `${this.host}${url}${
+        const fullUrl = `${this.apiHost}${url}${
             params != null ? HttpClient.toQueryString(params) : ""
         }`
 
@@ -34,123 +31,56 @@ export class HttpClient {
             await fetch(fullUrl, {
                 method: "POST",
                 headers: HttpClient.headers,
-                body: JSON.stringify(data),
+                body: JSON.stringify(this.convertDatesWithOffset(data)),
             })
         )
 
         return await response.json()
     }
 
-    public static async postFormDataAsync(
-        url: string,
-        data: any,
-        params: any = null
-    ): Promise<any> {
-        const fullUrl = `${this.host}${url}${
-            params != null ? HttpClient.toQueryString(params) : ""
-        }`
+    public static async uploadFilesAsync(files: File[], folder: string): Promise<string[]> {
+        const keyword = this.fileStorageSecretKey
 
-        const formData = new FormData()
-        this.appendToFormData(formData, data)
+        const uploadTasks = files.map((file) => {
+            const filePath = folder
+                ? `${folder}/${Date.now()}_${file.name}`
+                : `${Date.now()}_${file.name}`
+            const query = this.toQueryString({ path: filePath, keyword })
+            const formData = new FormData()
+            formData.append("file", file)
 
-        const response = await HttpClient.httpHandler(
-            await fetch(fullUrl, {
+            return fetch(`${this.fileStorageHost}/upload${query}`, {
                 method: "POST",
-                headers: {
-                    "X-Requested-With": "XMLHttpRequest",
-                    Accept: "application/json",
-                },
                 body: formData,
+            }).then((response) => {
+                if (!response.ok) throw new Error(`Upload failed for ${file.name}`)
+                return `${this.fileStorageHost}/${filePath}`
             })
-        )
+        })
 
-        return await response.json()
+        return Promise.all(uploadTasks)
     }
 
-    private static appendToFormData(formData: FormData, data: any, prefix = "") {
-        if (data === null || data === undefined) return
+    public static async deleteFileAsync(url: string): Promise<void> {
+        const keyword = this.fileStorageSecretKey
+        const host = this.fileStorageHost
+        const path = url.replace(`${host}/`, "")
 
-        if (data instanceof File) {
-            formData.append(prefix || "file", data)
-        } else if (data instanceof BlankFiles) {
-            formData.append(`${prefix}.MaxFiles`, data.maxFiles.toString())
+        const query = this.toQueryString({ path, keyword })
 
-            if (data.files && data.files.length > 0) {
-                data.files.forEach((file: File) => {
-                    formData.append(`${prefix}.Files`, file)
-                })
-            }
+        const response = await fetch(`${host}/delete${query}`, {
+            method: "DELETE",
+        })
 
-            if (data.fileUrls && data.fileUrls.length > 0) {
-                data.fileUrls.forEach((url: string) => {
-                    formData.append(`${prefix}.FileUrls`, url)
-                })
-            }
-        } else if (data instanceof Date) {
-            const hours = data.getHours()
-            data.setHours(hours + 3)
-            formData.append(prefix, data.toISOString()) // 👈 добавлено
-        } else if (Array.isArray(data)) {
-            if (data.length === 0) {
-                formData.append(`${prefix}[0]`, "")
-            } else {
-                data.forEach((item, index) => {
-                    const newPrefix = prefix ? `${prefix}[${index}]` : `[${index}]`
-                    this.appendToFormData(formData, item, newPrefix)
-                })
-            }
-        } else if (typeof data === "object") {
-            Object.entries(data).forEach(([key, value]) => {
-                const newPrefix = prefix ? `${prefix}.${key}` : key
-                this.appendToFormData(formData, value, newPrefix)
-            })
-        } else {
-            formData.append(prefix, String(data))
+        if (!response.ok) {
+            const errorText = await response.text()
+            throw new Error(`Ошибка удаления: ${errorText}`)
         }
-    }
-
-    private static checkForFiles(obj: any): boolean {
-        if (!obj) return false
-        if (obj instanceof File) return true
-        if (Array.isArray(obj)) {
-            return obj.some((item) => this.checkForFiles(item))
-        }
-        if (typeof obj === "object") {
-            return Object.values(obj).some((value) => this.checkForFiles(value))
-        }
-        return false
-    }
-
-    public static async getFileWithCache(
-        fileUrl: string,
-        params: any = null
-    ): Promise<string | null> {
-        const fullUrl = `${this.host}${fileUrl}${
-            params != null ? HttpClient.toQueryString(params) : ""
-        }`
-
-        let blobUrl = CACHED_FILES.get(fullUrl) ?? null
-        if (blobUrl == null) {
-            const response = await HttpClient.httpFileHandler(
-                await fetch(fullUrl, {
-                    method: "GET",
-                    headers: HttpClient.headers,
-                    cache: "force-cache",
-                })
-            )
-            if (response == null) return null
-
-            const blob = await response.blob()
-            blobUrl = URL.createObjectURL(blob)
-
-            if (CONTENT_TYPES_TO_CACHE.includes(blob.type)) CACHED_FILES.set(fullUrl, blobUrl)
-        }
-
-        return blobUrl ?? null
     }
 
     private static toQueryString(obj: any) {
         if (obj == null) return ""
+        obj = this.convertDatesWithOffset(obj)
 
         const parameters = []
 
@@ -178,6 +108,27 @@ export class HttpClient {
         return "?" + parameters.join("&")
     }
 
+    private static convertDatesWithOffset(obj: any): any {
+        if (obj instanceof Date) {
+            const adjusted = new Date(obj.getTime() + 3 * 60 * 60 * 1000)
+            return adjusted.toISOString()
+        }
+
+        if (Array.isArray(obj)) {
+            return obj.map((item) => this.convertDatesWithOffset(item))
+        }
+
+        if (obj !== null && typeof obj === "object") {
+            const newObj: any = {}
+            for (const key in obj) {
+                newObj[key] = this.convertDatesWithOffset(obj[key])
+            }
+            return newObj
+        }
+
+        return obj
+    }
+
     private static get headers(): Headers {
         const headers: Headers = new Headers()
 
@@ -188,27 +139,10 @@ export class HttpClient {
         return headers
     }
 
-    private static httpFileHandler(response: Response): Promise<Response | null> {
-        if (response.redirected) {
-            window.location.href = response.url
-            return Promise.reject()
-        }
-
-        if (response.ok) return Promise.resolve(response)
-        if (response.status == 404) return Promise.resolve(null)
-
-        switch (response.status) {
-            case 403:
-                return Promise.reject(new Error("Forbidden"))
-        }
-
-        return Promise.reject(`${response.status} - unknown status code`)
-    }
-
     private static httpHandler(response: Response): Promise<Response> {
         if (response.redirected) {
             window.location.href = response.url
-            return Promise.reject()
+            return Promise.reject(new Error("Redirected"))
         }
 
         if (response.ok) return Promise.resolve(response)

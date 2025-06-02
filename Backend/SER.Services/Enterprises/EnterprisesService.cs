@@ -1,84 +1,100 @@
+using CSharpFunctionalExtensions;
+using Microsoft.EntityFrameworkCore;
+using SER.Database;
+using SER.Database.Models.Enterprises;
 using SER.Domain.Enterprises;
 using SER.Domain.Services;
-using SER.Domain.Workplaces;
-using SER.Services.Enterprises.Repositories;
-using SER.Services.WorkPlaces.Repositories;
+using SER.Services.Employees.Converters;
+using SER.Services.Enterprises.Converters;
 using SER.Tools.Types.IDs;
 using SER.Tools.Types.Results;
-using SER.Tools.Utils;
+using static SER.Tools.Utils.NumberUtils;
 
 namespace SER.Services.Enterprises;
 
-public class EnterprisesService(IEnterprisesRepository enterprisesRepository, IWorkPlacesRepository workPlacesRepository) : IEnterprisesService
+public class EnterprisesService(SERDbContext dbContext) : IEnterprisesService
 {
-	//TODO Нужна ли регулярка на адрес, чтобы иметь одинаковый формат
-	public async Task<Result> Save(EnterpriseBlank blank)
+	public async Task<OperationResult> Save(EnterpriseBlank blank)
 	{
-		if (String.IsNullOrWhiteSpace(blank.Name))
+		Result<Enterprise, Error> result = Enterprise.Create(blank.Id, blank.Name, blank.LegalAddress, blank.ActualAddress, blank.Address, blank.INN, blank.KPP, blank.ORGN, blank.Phone, blank.Mail, blank.IsOPK);
+		if (result.IsFailure) return OperationResult.Fail(result.Error);
+
+		Enterprise enterprise = result.Value;
+
+		Boolean isNew = blank.Id is null;
+
+		if (isNew)
 		{
-			return Result.Fail("Укажите наименование организации");
+			EnterpriseEntity entity = enterprise.ToEntity();
+			await dbContext.AddAsync(entity);
+		}
+		else
+		{
+			EnterpriseEntity? entity = await dbContext.Enterprises.FirstOrDefaultAsync(e => e.Id == enterprise.Id);
+			if (entity is null) return OperationResult.Fail("Предприятие не найдено");
+
+			entity.ApplyChanges(enterprise);
+			dbContext.Update(entity);
 		}
 
-		if (!String.IsNullOrWhiteSpace(blank.INN) && !Regexs.EnterpriseInnRegex.IsMatch(blank.INN))
-		{
-			return Result.Fail("Инн должен содержать 10 цифр");
-		}
-
-		if (!String.IsNullOrWhiteSpace(blank.KPP) && !Regexs.KppRegex.IsMatch(blank.KPP))
-		{
-			return Result.Fail("КПП должен содержать 9 цифр");
-		}
-
-		if (!String.IsNullOrWhiteSpace(blank.ORGN) && !Regexs.OrgnRegex.IsMatch(blank.ORGN))
-		{
-			return Result.Fail("ОРГН должен содержать 13 цифр");
-		}
-
-		if (!String.IsNullOrWhiteSpace(blank.Phone) && !Regexs.PhoneRegex.IsMatch(blank.Phone))
-		{
-			return Result.Fail("Неверно указан номер телефона (скорее всего не полностью)");
-		}
-
-		if (!String.IsNullOrWhiteSpace(blank.Mail) && !Regexs.MailRegex.IsMatch(blank.Mail))
-		{
-			return Result.Fail("Неверно указана электронная почта (скорее всего не полностью)");
-		}
-
-		if(blank.IsOPK is null) throw new ArgumentNullException(nameof(blank.IsOPK));
-
-		blank.Id ??= ID.New();
-
-		return await enterprisesRepository.Save(blank);
+		await dbContext.SaveChangesAsync();
+		return OperationResult.Success();
 	}
 
-	public async Task<Result> Remove(ID id)
+	public async Task<OperationResult> Remove(ID id)
 	{
-		WorkPlace[] workPlaces = await workPlacesRepository.GetByEnterpriseId(id);
-		if(workPlaces.Length > 0)
+		Boolean hasWokPlaces = await dbContext.WorkPlaces.AnyAsync(wp => wp.EnterpriseId == id);
+		if(hasWokPlaces)
 		{
-			return Result.Fail("Невозможно удалить, т.к. есть места работы с данной огранизацией");
+			return OperationResult.Fail("Невозможно удалить, т.к. есть места работы с данной огранизацией");
 		}
 
-		return await enterprisesRepository.Remove(id);
+		EnterpriseEntity? entity = await dbContext.Enterprises.FirstOrDefaultAsync(e => e.Id == id);
+		if (entity is null) return OperationResult.Fail("Организация не найдена");
+
+		dbContext.Remove(entity);
+		await dbContext.SaveChangesAsync();
+
+		return OperationResult.Success();
 	}
 
 	public async Task<Enterprise?> Get(ID id)
 	{
-		return await enterprisesRepository.Get(id);
+		EnterpriseEntity? entity = await dbContext.Enterprises.FirstOrDefaultAsync(e => e.Id == id);
+		return entity?.ToDomain();
 	}
 
 	public async Task<Enterprise[]> Get(ID[] ids)
 	{
-		return await enterprisesRepository.Get(ids);
+		List<EnterpriseEntity> entities = await dbContext.Enterprises
+			.Where(el => ids.Contains(el.Id))
+			.ToListAsync();
+
+		return [.. entities.Select(e => e.ToDomain())];
 	}
 
+	//TASK Возвращать totalCount для клиента
 	public async Task<Enterprise[]> GetPage(Int32 page, Int32 pageSize)
 	{
-		return await enterprisesRepository.GetPage(page, pageSize);
+		(Int32 offset, Int32 limit) = NormalizeRange(page, pageSize);
+
+		List<EnterpriseEntity> entities = await dbContext.Enterprises
+			.OrderByDescending(e => e.CreatedDateTimeUtc)
+			.ThenByDescending(e => e.ModifiedDateTimeUtc)
+			.Skip(offset)
+			.Take(limit)
+			.ToListAsync();
+
+		return [.. entities.Select(e => e.ToDomain())];
 	}
 
 	public async Task<Enterprise[]> GetBySearchText(String searchText)
 	{
-		return await enterprisesRepository.GetBySearchText(searchText);
+		List<EnterpriseEntity> entites = await dbContext.Enterprises
+			.Where(e => EF.Functions.ILike(e.Name, $"%{searchText}%"))
+			.OrderBy(e => e.Name)
+			.ToListAsync();
+
+		return [.. entites.Select(el => el.ToDomain())];
 	}
 }
