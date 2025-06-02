@@ -1,4 +1,7 @@
 import PageUrls from "@/constants/pageUrls"
+import { PAGE_SIZE } from "@/constants/pagination"
+import { EducationLevelsProvider } from "@/domain/educationLevels/educationLevelsProvider"
+import { EducationLevelTypes } from "@/domain/educationLevels/enums/EducationLevelTypes"
 import useDialog from "@/hooks/useDialog/useDialog"
 import useLazyLoad from "@/hooks/useLazyLoad"
 import useNotifications from "@/hooks/useNotifications"
@@ -12,12 +15,10 @@ import {
     TableRow,
 } from "@mui/material"
 import { useRouter } from "next/router"
+import React from "react"
 import { IconType } from "../shared/buttons"
 import IconButton from "../shared/buttons/iconButtons"
 import ConfirmModal from "../shared/modals/confirmModal"
-import React from "react"
-import { EducationLevelsProvider } from "@/domain/educationLevels/educationLevelsProvider"
-import { EducationLevelTypes } from "@/domain/educationLevels/enums/EducationLevelTypes"
 
 export const EducationLevelsTable: React.FC = () => {
     const navigator = useRouter()
@@ -25,9 +26,14 @@ export const EducationLevelsTable: React.FC = () => {
     const {
         values: educationLevels,
         lastElementRef,
-        updateValues,
-    } = useLazyLoad({ paginationFunction: EducationLevelsProvider.getPage })
+        isLoading,
+        refresh,
+    } = useLazyLoad({ load: loadEducationLevels })
     const confirmDialog = useDialog(ConfirmModal)
+
+    async function loadEducationLevels(page: number) {
+        return await EducationLevelsProvider.getPage(page, PAGE_SIZE)
+    }
 
     async function handleEditButton(id: string) {
         await navigator.push(`${PageUrls.EditEducationLevel}/${id}`)
@@ -45,7 +51,7 @@ export const EducationLevelsTable: React.FC = () => {
         const result = await EducationLevelsProvider.remove(id)
         if (!result.isSuccess) return showError(result.getErrorsString)
 
-        await updateValues()
+        refresh()
 
         return showSuccess("Уровень образования успешно удалён")
     }

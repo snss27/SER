@@ -5,6 +5,7 @@ using SER.Database.Models.Clusters;
 using SER.Domain.Clusters;
 using SER.Domain.Services;
 using SER.Services.Clusters.Converters;
+using SER.Tools.Types;
 using SER.Tools.Types.IDs;
 using SER.Tools.Types.Results;
 using static SER.Tools.Utils.NumberUtils;
@@ -66,19 +67,22 @@ public class ClustersService(SERDbContext dbContext) : IClustersService
 		return [.. entities.Select(c => c.ToDomain())];
 	}
 
-	//TASK Возвращать totalCount для клиента
-	public async Task<Cluster[]> GetPage(Int32 page, Int32 pageSize)
+	public async Task<PagedResult<Cluster>> GetPage(Int32 page, Int32 pageSize)
 	{
 		(Int32 offset, Int32 limit) = NormalizeRange(page, pageSize);
 
-		List<ClusterEntity> entiteies = await dbContext.Clusters
+		IQueryable<ClusterEntity> query = dbContext.Clusters.AsNoTracking();
+
+		Int32 totalRows = await query.CountAsync();
+
+		List<ClusterEntity> entiteies = await query
 			.OrderByDescending(c => c.CreatedDateTimeUtc)
 			.ThenByDescending(c => c.ModifiedDateTimeUtc)
 			.Skip(offset)
 			.Take(limit)
 			.ToListAsync();
 
-		return [.. entiteies.Select(c => c.ToDomain())];
+		return PagedResult.Create(entiteies.Select(c => c.ToDomain()), totalRows);
 	}
 
 	public async Task<Cluster[]> Get(String searchText)

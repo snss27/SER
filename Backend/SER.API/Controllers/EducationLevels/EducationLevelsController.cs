@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using SER.Domain.EducationLevels;
 using SER.Domain.EducationLevels.Converters;
 using SER.Domain.Services;
+using SER.Tools.Types;
 using SER.Tools.Types.IDs;
 using SER.Tools.Types.Results;
 
@@ -30,10 +31,14 @@ public class EducationLevelsController(IEducationLevelsService educationLevelsSe
 	}
 
 	[HttpGet("get_page")]
-	public async Task<EducationLevelDto[]> GetPage([FromQuery] Int32 page, [FromQuery] Int32 pageSize)
+	public async Task<PagedResult<EducationLevelDto>> GetPage([FromQuery] Int32 page, [FromQuery] Int32 pageSize)
 	{
-		EducationLevel[] educationsLevels = await educationLevelsService.GetPage(page, pageSize);
-		return [.. educationsLevels.Select(el => el.ToDto())];
+		PagedResult<EducationLevel> educationsLevelsPage = await educationLevelsService.GetPage(page, pageSize);
+
+		return PagedResult.Create(
+			educationsLevelsPage.Values.Select(el => el.ToDto()),
+			educationsLevelsPage.TotalRows
+		);
 	}
 
 	[HttpGet("get_by_search_text")]

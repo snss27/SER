@@ -16,6 +16,7 @@ using SER.Domain.Workplaces;
 using SER.Services.AdditionalQualifications.Converters;
 using SER.Services.Students.Extensions;
 using SER.Services.WorkPlaces.Extensions;
+using SER.Tools.Types;
 using SER.Tools.Types.IDs;
 using SER.Tools.Types.Results;
 using static SER.Tools.Utils.NumberUtils;
@@ -125,27 +126,32 @@ public class StudentsService(SERDbContext dbContext) : IStudentsService
 		return entity?.ToDomain();
 	}
 
-	public async Task<Student[]> GetPage(Int32 page, Int32 pageSize)
+	public async Task<PagedResult<Student>> GetPage(Int32 page, Int32 pageSize)
 	{
 		(Int32 offset, Int32 limit) = NormalizeRange(page, pageSize);
 
-		List<StudentEntity> entities = await dbContext.Students
+		IQueryable<StudentEntity> query = dbContext.Students
+			.AsNoTracking()
 			.Include(s => s.Group)
 				.ThenInclude(g => g.EducationLevel)
 			.Include(s => s.Group)
-				.ThenInclude(g => g.Curator)       
+				.ThenInclude(g => g.Curator)
 			.Include(s => s.Group)
 				.ThenInclude(g => g.Cluster)
 			.Include(s => s.WorkPlaces)
 				.ThenInclude(wp => wp.Enterprise)
 			.Include(s => s.AdditionalQualifications)
-			.Include(s => s.TargetAgreementEnterprise)
+			.Include(s => s.TargetAgreementEnterprise);
+
+		Int32 totalRows = await query.CountAsync();
+
+		List<StudentEntity> entities = await query
 			.OrderByDescending(e => e.CreatedDateTimeUtc)
 			.ThenByDescending(e => e.ModifiedDateTimeUtc)
 			.Skip(offset)
 			.Take(limit)
 			.ToListAsync();
 
-		return [.. entities.Select(e => e.ToDomain())];
+		return PagedResult.Create(entities.Select(e => e.ToDomain()), totalRows);
 	}
 }

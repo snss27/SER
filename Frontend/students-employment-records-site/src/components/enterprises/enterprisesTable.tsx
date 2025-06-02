@@ -1,4 +1,5 @@
 import PageUrls from "@/constants/pageUrls"
+import { PAGE_SIZE } from "@/constants/pagination"
 import { EnterprisesProvider } from "@/domain/enterprises/enterprisesProvider"
 import useDialog from "@/hooks/useDialog/useDialog"
 import useLazyLoad from "@/hooks/useLazyLoad"
@@ -23,10 +24,15 @@ export const EnterprisesTable: React.FC = () => {
     const { showError, showSuccess } = useNotifications()
     const {
         values: enterprises,
+        isLoading,
         lastElementRef,
-        updateValues,
-    } = useLazyLoad({ paginationFunction: EnterprisesProvider.getPage })
+        refresh,
+    } = useLazyLoad({ load: loadEnterprises })
     const confirmDialog = useDialog(ConfirmModal)
+
+    async function loadEnterprises(page: number) {
+        return await EnterprisesProvider.getPage(page, PAGE_SIZE)
+    }
 
     async function handleEditButton(id: string) {
         await navigator.push(`${PageUrls.EditEnterprise}/${id}`)
@@ -44,7 +50,7 @@ export const EnterprisesTable: React.FC = () => {
         const result = await EnterprisesProvider.remove(id)
         if (!result.isSuccess) return showError(result.getErrorsString)
 
-        await updateValues()
+        refresh()
 
         return showSuccess("Организация успешно удалена")
     }

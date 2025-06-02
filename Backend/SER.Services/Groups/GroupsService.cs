@@ -12,6 +12,7 @@ using SER.Domain.Groups;
 using SER.Domain.Services;
 using SER.Services.Enterprises.Converters;
 using SER.Services.Groups.Converters;
+using SER.Tools.Types;
 using SER.Tools.Types.IDs;
 using SER.Tools.Types.Results;
 using static SER.Tools.Utils.NumberUtils;
@@ -93,21 +94,26 @@ public class GroupsService(SERDbContext dbContext) : IGroupsService
 		return [.. entities.Select(e => e.ToDomain())];
 	}
 
-	public async Task<Group[]> GetPage(Int32 page, Int32 pageSize)
+	public async Task<PagedResult<Group>> GetPage(Int32 page, Int32 pageSize)
 	{
 		(Int32 offset, Int32 limit) = NormalizeRange(page, pageSize);
 
-		List<GroupEntity> entities = await dbContext.Groups
+		IQueryable<GroupEntity> query = dbContext.Groups
+			.AsNoTracking()
 			.Include(g => g.EducationLevel)
 			.Include(g => g.Curator)
-			.Include(g => g.Cluster)
+			.Include(g => g.Cluster);
+
+		Int32 totalRows = await query.CountAsync();
+
+		List<GroupEntity> entities = await query
 			.OrderByDescending(e => e.CreatedDateTimeUtc)
 			.ThenByDescending(e => e.ModifiedDateTimeUtc)
 			.Skip(offset)
 			.Take(limit)
 			.ToListAsync();
 
-		return [.. entities.Select(e => e.ToDomain())];
+		return PagedResult.Create(entities.Select(e => e.ToDomain()), totalRows);
 	}
 
 	public async Task<Group[]> GetBySearchText(String searchText)

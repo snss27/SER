@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using SER.Domain.Groups;
 using SER.Domain.Groups.Converters;
 using SER.Domain.Services;
+using SER.Tools.Types;
 using SER.Tools.Types.IDs;
 using SER.Tools.Types.Results;
 
@@ -30,10 +31,13 @@ public class GroupsController(IGroupsService groupsService) : ControllerBase
 	}
 
 	[HttpGet("get_page")]
-	public async Task<GroupDto[]> GetPage(Int32 page, Int32 pageSize)
+	public async Task<PagedResult<GroupDto>> GetPage(Int32 page, Int32 pageSize)
 	{
-		Group[] groups = await groupsService.GetPage(page, pageSize);
-		return [.. groups.Select(group => group.ToDto())];
+		PagedResult<Group> groupsPage = await groupsService.GetPage(page, pageSize);
+		return PagedResult.Create(
+			groupsPage.Values.Select(g => g.ToDto()),
+			groupsPage.TotalRows
+		);
 	}
 
 	[HttpGet("get_by_search_text")]

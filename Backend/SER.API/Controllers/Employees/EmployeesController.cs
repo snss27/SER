@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using SER.Domain.Employees;
 using SER.Domain.Employees.Converters;
 using SER.Domain.Services;
+using SER.Tools.Types;
 using SER.Tools.Types.IDs;
 using SER.Tools.Types.Results;
 
@@ -30,10 +31,13 @@ public class EmployeesController(IEmployeesService employeesService) : Controlle
 	}
 
 	[HttpGet("get_page")]
-	public async Task<EmployeeDto[]> GetPage([FromQuery] Int32 page, [FromQuery] Int32 pageSize)
+	public async Task<PagedResult<EmployeeDto>> GetPage([FromQuery] Int32 page, [FromQuery] Int32 pageSize)
 	{
-		Employee[] employees = await employeesService.GetPage(page, pageSize);
-		return [.. employees.Select(e => e.ToDto())];	
+		PagedResult<Employee> employeesPage = await employeesService.GetPage(page, pageSize);
+		return PagedResult.Create(
+			employeesPage.Values.Select(e => e.ToDto()),
+			employeesPage.TotalRows
+		);
 	}
 
 	[HttpGet("get_by_search_text")]

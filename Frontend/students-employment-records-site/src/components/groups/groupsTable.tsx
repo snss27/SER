@@ -1,5 +1,7 @@
 import PageUrls from "@/constants/pageUrls"
+import { PAGE_SIZE } from "@/constants/pagination"
 import { StructuralUnits } from "@/domain/groups/enums/structuralUnits"
+import { GroupsProvider } from "@/domain/groups/groupsProvider"
 import useDialog from "@/hooks/useDialog/useDialog"
 import useLazyLoad from "@/hooks/useLazyLoad"
 import useNotifications from "@/hooks/useNotifications"
@@ -13,21 +15,20 @@ import {
     TableRow,
 } from "@mui/material"
 import { useRouter } from "next/router"
+import React from "react"
 import { IconType } from "../shared/buttons"
 import IconButton from "../shared/buttons/iconButtons"
 import ConfirmModal from "../shared/modals/confirmModal"
-import React from "react"
-import { GroupsProvider } from "@/domain/groups/groupsProvider"
 
 export const GroupsTable: React.FC = () => {
     const navigator = useRouter()
     const { showError, showSuccess } = useNotifications()
-    const {
-        values: groups,
-        lastElementRef,
-        updateValues,
-    } = useLazyLoad({ paginationFunction: GroupsProvider.getPage })
+    const { values: groups, isLoading, lastElementRef, refresh } = useLazyLoad({ load: loadGroups })
     const confirmDialog = useDialog(ConfirmModal)
+
+    async function loadGroups(page: number) {
+        return await GroupsProvider.getPage(page, PAGE_SIZE)
+    }
 
     async function handleEditButton(id: string) {
         await navigator.push(`${PageUrls.EditGroup}/${id}`)
@@ -45,7 +46,7 @@ export const GroupsTable: React.FC = () => {
         const result = await GroupsProvider.remove(id)
         if (!result.isSuccess) return showError(result.getErrorsString)
 
-        await updateValues()
+        refresh()
 
         return showSuccess("Группа успешно удалена")
     }

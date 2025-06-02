@@ -4,6 +4,7 @@ using SER.Domain.Services;
 using SER.Tools.Types.IDs;
 using SER.Tools.Types.Results;
 using SER.Domain.Clusters.Converters;
+using SER.Tools.Types;
 
 namespace SER.API.Controllers.Clusters;
 
@@ -30,10 +31,13 @@ public class ClustersController(IClustersService clustersService) : ControllerBa
 	}
 
 	[HttpGet("get_page")]
-	public async Task<ClusterDto[]> GetPage([FromQuery] Int32 page, [FromQuery] Int32 pageSize)
+	public async Task<PagedResult<ClusterDto>> GetPage([FromQuery] Int32 page, [FromQuery] Int32 pageSize)
 	{
-		Cluster[] clusters = await clustersService.GetPage(page, pageSize);
-		return [.. clusters.Select(c => c.ToDto())];
+		PagedResult<Cluster> clustersPage = await clustersService.GetPage(page, pageSize);
+		return PagedResult.Create(
+			clustersPage.Values.Select(c => c.ToDto()),
+			clustersPage.TotalRows
+		);
 	}
 
 	[HttpGet("get_by_search_text")]

@@ -1,4 +1,5 @@
 import { Enterprise } from "@/domain/enterprises/models/enterprise"
+import { Page } from "@/tools/page"
 import { Result } from "@/tools/result"
 import HttpClient from "../httpClient"
 import { EnterpriseBlank } from "./models/enterpriseBlank"
@@ -19,9 +20,9 @@ export class EnterprisesProvider {
         return result ? Enterprise.fromAny(result) : null
     }
 
-    public static async getPage(page: number, pageSize: number): Promise<Enterprise[]> {
+    public static async getPage(page: number, pageSize: number): Promise<Page<Enterprise>> {
         const result = await HttpClient.getJsonAsync("/enterprises/get_page", { page, pageSize })
-        return (result as any[]).map(Enterprise.fromAny)
+        return Page.fromAny(result, Enterprise.fromAny)
     }
 
     public static async getBySearchText(searchText: string): Promise<Enterprise[]> {

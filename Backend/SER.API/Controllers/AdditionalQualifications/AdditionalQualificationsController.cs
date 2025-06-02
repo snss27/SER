@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using SER.Domain.AdditionalQualifications;
 using SER.Domain.AdditionalQualifications.Converters;
 using SER.Domain.Services;
+using SER.Tools.Types;
 using SER.Tools.Types.IDs;
 using SER.Tools.Types.Results;
 
@@ -30,10 +31,13 @@ public class AdditionalQualificationsController(IAdditionalQualificationsService
 	}
 
 	[HttpGet("get_page")]
-	public async Task<AdditionalQualificationDto[]> GetPage([FromQuery] Int32 page, [FromQuery] Int32 pageSize)
+	public async Task<PagedResult<AdditionalQualificationDto>> GetPage([FromQuery] Int32 page, [FromQuery] Int32 pageSize)
 	{
-		AdditionalQualification[] additionalQualifications = await additionalQualificationsService.GetPage(page, pageSize);
-		return [..additionalQualifications.Select(aq => aq.ToDto())];
+		PagedResult<AdditionalQualification> additionalQualificationsPage = await additionalQualificationsService.GetPage(page, pageSize);
+		return PagedResult.Create(
+			additionalQualificationsPage.Values.Select(aq => aq.ToDto()),
+			additionalQualificationsPage.TotalRows
+		);
 	}
 
 	[HttpGet("get_by_search_text")]

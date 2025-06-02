@@ -5,6 +5,7 @@ using SER.Database.Models.EducationLevels;
 using SER.Domain.EducationLevels;
 using SER.Domain.Services;
 using SER.Services.EducationLevels.Converters;
+using SER.Tools.Types;
 using SER.Tools.Types.IDs;
 using SER.Tools.Types.Results;
 using static SER.Tools.Utils.NumberUtils;
@@ -71,19 +72,22 @@ public class EducationLevelsService(SERDbContext dbContext) : IEducationLevelsSe
 		return [.. entities.Select(el => el.ToDomain())];
 	}
 
-	//TASK Возвращать totalCount для клиента
-	public async Task<EducationLevel[]> GetPage(Int32 page, Int32 pageSize)
+	public async Task<PagedResult<EducationLevel>> GetPage(Int32 page, Int32 pageSize)
 	{
 		(Int32 offset, Int32 limit) = NormalizeRange(page, pageSize);
 
-		List<EducationLevelEntity> entities = await dbContext.EducationLevels
+		IQueryable<EducationLevelEntity> query = dbContext.EducationLevels.AsNoTracking();
+
+		Int32 totalRows = await query.CountAsync();
+
+		List<EducationLevelEntity> entities = await query
 			.OrderByDescending(el => el.CreatedDateTimeUtc)
 			.ThenByDescending(el => el.ModifiedDateTimeUtc)
 			.Skip(offset)
 			.Take(limit)
 			.ToListAsync();
 
-		return [.. entities.Select(el => el.ToDomain())];
+		return PagedResult.Create(entities.Select(el => el.ToDomain()), totalRows);
 	}
 
 	public async Task<EducationLevel[]> Get(String searchText)

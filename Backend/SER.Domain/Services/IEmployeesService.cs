@@ -1,4 +1,5 @@
 using SER.Domain.Employees;
+using SER.Tools.Types;
 using SER.Tools.Types.IDs;
 using SER.Tools.Types.Results;
 
@@ -10,6 +11,6 @@ public interface IEmployeesService
 	public Task<OperationResult> Remove(ID id);
 	public Task<Employee?> Get(ID id);
 	public Task<Employee[]> Get(ID[] ids);
-	public Task<Employee[]> GetPage(Int32 page, Int32 pageSize);
+	public Task<PagedResult<Employee>> GetPage(Int32 page, Int32 pageSize);
 	public Task<Employee[]> Get(String searchText);
 }

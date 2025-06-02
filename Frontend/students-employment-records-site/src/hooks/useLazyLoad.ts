@@ -1,74 +1,68 @@
-import { useCallback, useEffect, useRef, useState } from "react"
+import { Page } from "@/tools/page"
+import { useCallback, useEffect, useRef, useState, useTransition } from "react"
+
+interface Props<T> {
+    load: (page: number) => Promise<Page<T>>
+}
 
 interface Returns<T> {
     values: T[]
     isLoading: boolean
     lastElementRef: (node: HTMLTableRowElement) => void
-    nextPage: () => void
-    updateValues: () => Promise<void>
+    refresh: () => void
 }
 
-interface Props<T> {
-    paginationFunction: (page: number, pageSize: number) => Promise<T[]>
-    pageSize?: number
-}
-
-//TODO Проверить работу функции updateValues
-const useLazyLoad = <T>({ paginationFunction, pageSize = 20 }: Props<T>): Returns<T> => {
-    const [page, setPage] = useState(1)
-    const [values, setValues] = useState<T[]>([])
-    const [isLoading, setIsLoading] = useState(false)
+function useLoadData<T>({ load }: Props<T>): Returns<T> {
+    const page = useRef(1)
     const hasMoreRef = useRef(true)
-
-    async function load() {
-        return await paginationFunction(page, pageSize)
-    }
-
+    const [values, setValues] = useState<T[]>([])
+    const [isLoading, startTransition] = useTransition()
     const observerRef = useRef<IntersectionObserver>()
-
-    const lastElementRef = useCallback(
-        (node: HTMLTableRowElement) => {
-            if (isLoading) return
-
-            if (observerRef.current) observerRef.current.disconnect()
-
-            observerRef.current = new IntersectionObserver((entries) => {
-                if (entries[0].isIntersecting) nextPage()
-            })
-
-            if (node) observerRef.current.observe(node)
-        },
-        [isLoading]
-    )
 
     useEffect(() => {
         loadData()
-    }, [page])
+    }, [])
 
-    async function loadData() {
+    const lastElementRef = useCallback((node: HTMLTableRowElement) => {
+        if (isLoading) return
+
+        if (observerRef.current) observerRef.current.disconnect()
+
+        observerRef.current = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) nextPage()
+        })
+    }, [])
+
+    const nextPage = useCallback(() => {
+        page.current += 1
+        loadData()
+    }, [])
+
+    const refresh = useCallback(() => {
+        setValues([])
+        hasMoreRef.current = true
+        page.current = 1
+        loadData()
+    }, [])
+
+    function loadData() {
         if (!hasMoreRef.current) return
 
-        setIsLoading(true)
+        startTransition(async () => {
+            const data = await load(page.current)
 
-        const data = await load()
+            setValues((prev) => {
+                const { values, totalRows } = data
 
-        setValues((prev) => [...prev, ...data])
-        hasMoreRef.current = data.length > 0
-        setIsLoading(false)
+                const newValues = [...prev, ...values]
+                hasMoreRef.current = totalRows >= newValues.length
+
+                return newValues
+            })
+        })
     }
 
-    function nextPage() {
-        setPage((prev) => prev + 1)
-    }
-
-    async function updateValues() {
-        setIsLoading(true)
-        const updatedValues = await paginationFunction(1, page * pageSize)
-        setValues(updatedValues)
-        setIsLoading(false)
-    }
-
-    return { values, nextPage, isLoading, lastElementRef, updateValues }
+    return { values, isLoading, lastElementRef, refresh }
 }
 
-export default useLazyLoad
+export default useLoadData

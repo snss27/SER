@@ -1,3 +1,4 @@
+import { Page } from "@/tools/page"
 import { Result } from "@/tools/result"
 import HttpClient from "../httpClient"
 import { Cluster } from "./models/cluster"
@@ -19,12 +20,12 @@ export class ClustersProvider {
         return result ? Cluster.fromAny(result) : null
     }
 
-    public static async getPage(page: number, pageSize: number): Promise<Cluster[]> {
+    public static async getPage(page: number, pageSize: number): Promise<Page<Cluster>> {
         const result = await HttpClient.getJsonAsync("/clusters/get_page", {
             page,
             pageSize,
         })
-        return (result as any[]).map(Cluster.fromAny)
+        return Page.fromAny(result, Cluster.fromAny)
     }
 
     public static async getBySearchText(searchText: string): Promise<Cluster[]> {

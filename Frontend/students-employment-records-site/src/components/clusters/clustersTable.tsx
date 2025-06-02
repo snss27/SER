@@ -1,4 +1,5 @@
 import PageUrls from "@/constants/pageUrls"
+import { PAGE_SIZE } from "@/constants/pagination"
 import { ClustersProvider } from "@/domain/clusters/clustersProvider"
 import useDialog from "@/hooks/useDialog/useDialog"
 import useLazyLoad from "@/hooks/useLazyLoad"
@@ -23,9 +24,14 @@ export const ClustersTable: React.FC = () => {
     const {
         values: clusters,
         lastElementRef,
-        updateValues,
-    } = useLazyLoad({ paginationFunction: ClustersProvider.getPage })
+        isLoading,
+        refresh,
+    } = useLazyLoad({ load: loadClusters })
     const confirmDialog = useDialog(ConfirmModal)
+
+    async function loadClusters(page: number) {
+        return await ClustersProvider.getPage(page, PAGE_SIZE)
+    }
 
     async function handleEditButton(id: string) {
         await navigator.push(`${PageUrls.EditCluster}/${id}`)
@@ -43,7 +49,7 @@ export const ClustersTable: React.FC = () => {
         const result = await ClustersProvider.remove(id)
         if (!result.isSuccess) return showError(result.getErrorsString)
 
-        await updateValues()
+        refresh()
 
         return showSuccess("Кластер успешно удален")
     }

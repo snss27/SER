@@ -1,3 +1,4 @@
+import { Page } from "@/tools/page"
 import { Result } from "@/tools/result"
 import HttpClient from "../httpClient"
 import { Student } from "./models/student"
@@ -5,7 +6,6 @@ import { StudentBlank } from "./models/studentBlank"
 
 export class StudentsProvider {
     public static async save(blank: StudentBlank): Promise<Result> {
-        console.log(blank)
         const result = await HttpClient.postJsonAsync("/students/save", blank)
         return Result.fromAny(result)
     }
@@ -20,11 +20,11 @@ export class StudentsProvider {
         return Student.fromAny(result)
     }
 
-    public static async getPage(page: number, pageSize: number): Promise<Student[]> {
+    public static async getPage(page: number, pageSize: number): Promise<Page<Student>> {
         const result = await HttpClient.getJsonAsync("/students/get_page", {
             page,
             pageSize,
         })
-        return (result as any[]).map(Student.fromAny)
+        return Page.fromAny(result, Student.fromAny)
     }
 }

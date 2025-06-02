@@ -6,6 +6,7 @@ using SER.Domain.Employees;
 using SER.Domain.Services;
 using SER.Services.EducationLevels.Converters;
 using SER.Services.Employees.Converters;
+using SER.Tools.Types;
 using SER.Tools.Types.IDs;
 using SER.Tools.Types.Results;
 using static SER.Tools.Utils.NumberUtils;
@@ -67,19 +68,22 @@ public class EmployeesService(SERDbContext dbContext) : IEmployeesService
 		return [.. entities.Select(e => e.ToDomain())];
 	}
 
-	//TASK Возвращать totalCount для клиента
-	public async Task<Employee[]> GetPage(Int32 page, Int32 pageSize)
+	public async Task<PagedResult<Employee>> GetPage(Int32 page, Int32 pageSize)
 	{
 		(Int32 offset, Int32 limit) = NormalizeRange(page, pageSize);
 
-		List<EmployeeEntity> entities = await dbContext.Employees
+		IQueryable<EmployeeEntity> query = dbContext.Employees.AsNoTracking();
+
+		Int32 totalRows = await query.CountAsync();
+
+		List<EmployeeEntity> entities = await query
 			.OrderByDescending(e => e.CreatedDateTimeUtc)
 			.ThenByDescending(e => e.ModifiedDateTimeUtc)
 			.Skip(offset)
 			.Take(limit)
 			.ToListAsync();
 
-		return [.. entities.Select(e => e.ToDomain())];
+		return PagedResult.Create(entities.Select(e => e.ToDomain()), totalRows);
 	}
 
 	public async Task<Employee[]> Get(String searchText)

@@ -1,4 +1,5 @@
 using SER.Domain.AdditionalQualifications;
+using SER.Tools.Types;
 using SER.Tools.Types.IDs;
 using SER.Tools.Types.Results;
 
@@ -9,6 +10,6 @@ public interface IAdditionalQualificationsService
 	public Task<OperationResult> Remove(ID id);
 	public Task<AdditionalQualification?> Get(ID id);
 	public Task<AdditionalQualification[]> Get(ID[] ids);
-	public Task<AdditionalQualification[]> GetPage(Int32 page, Int32 pageSize);
+	public Task<PagedResult<AdditionalQualification>> GetPage(Int32 page, Int32 pageSize);
 	public Task<AdditionalQualification[]> GetBySearchText(String searchText);
 }

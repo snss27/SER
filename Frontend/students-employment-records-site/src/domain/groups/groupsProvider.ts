@@ -1,4 +1,5 @@
 import { Group } from "@/domain/groups/models/group"
+import { Page } from "@/tools/page"
 import { Result } from "@/tools/result"
 import HttpClient from "../httpClient"
 import { GroupBlank } from "./models/groupBlank"
@@ -19,9 +20,9 @@ export class GroupsProvider {
         return result ? Group.fromAny(result) : null
     }
 
-    public static async getPage(page: number, pageSize: number): Promise<Group[]> {
+    public static async getPage(page: number, pageSize: number): Promise<Page<Group>> {
         const result = await HttpClient.getJsonAsync("/groups/get_page", { page, pageSize })
-        return (result as any[]).map(Group.fromAny)
+        return Page.fromAny(result, Group.fromAny)
     }
 
     public static async getBySearchText(searchText: string): Promise<Group[]> {

@@ -1,4 +1,5 @@
 import { Employee } from "@/domain/employees/models/employee"
+import { Page } from "@/tools/page"
 import { Result } from "@/tools/result"
 import HttpClient from "../httpClient"
 import { EmployeeBlank } from "./models/employeeBlank"
@@ -19,9 +20,9 @@ export class EmployeesProvider {
         return result ? Employee.fromAny(result) : null
     }
 
-    public static async getPage(page: number, pageSize: number): Promise<Employee[]> {
+    public static async getPage(page: number, pageSize: number): Promise<Page<Employee>> {
         const result = await HttpClient.getJsonAsync("/employees/get_page", { page, pageSize })
-        return (result as any[]).map(Employee.fromAny)
+        return Page.fromAny(result, Employee.fromAny)
     }
 
     public static async getBySearchText(searchText: string): Promise<Employee[]> {

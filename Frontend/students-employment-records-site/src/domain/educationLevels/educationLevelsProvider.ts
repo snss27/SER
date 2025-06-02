@@ -1,4 +1,5 @@
 import { EducationLevel } from "@/domain/educationLevels/models/educationLevel"
+import { Page } from "@/tools/page"
 import { Result } from "@/tools/result"
 import HttpClient from "../httpClient"
 import { EducationLevelBlank } from "./models/educationLevelBlank"
@@ -19,12 +20,12 @@ export class EducationLevelsProvider {
         return result ? EducationLevel.fromAny(result) : null
     }
 
-    public static async getPage(page: number, pageSize: number): Promise<EducationLevel[]> {
+    public static async getPage(page: number, pageSize: number): Promise<Page<EducationLevel>> {
         const result = await HttpClient.getJsonAsync("/education_levels/get_page", {
             page,
             pageSize,
         })
-        return (result as any[]).map(EducationLevel.fromAny)
+        return Page.fromAny(result, EducationLevel.fromAny)
     }
 
     public static async getBySearchText(searchText: string): Promise<EducationLevel[]> {

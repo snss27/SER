@@ -5,8 +5,10 @@ using SER.Database.Models.AdditionalQualifications;
 using SER.Domain.AdditionalQualifications;
 using SER.Domain.Services;
 using SER.Services.AdditionalQualifications.Converters;
+using SER.Tools.Types;
 using SER.Tools.Types.IDs;
 using SER.Tools.Types.Results;
+using static Microsoft.Extensions.Logging.EventSource.LoggingEventSource;
 using static SER.Tools.Utils.NumberUtils;
 namespace SER.Services.AdditionalQualifications;
 
@@ -68,19 +70,22 @@ public class AdditionalQualificationsService(SERDbContext dbContext) : IAddition
 		return [.. entities.Select(e => e.ToDomain())];
 	}
 
-	//TASK Возвращать totalCount для клиента
-	public async Task<AdditionalQualification[]> GetPage(Int32 page, Int32 pageSize)
+	public async Task<PagedResult<AdditionalQualification>> GetPage(Int32 page, Int32 pageSize)
 	{
 		(Int32 offset, Int32 limit) = NormalizeRange(page, pageSize);
 
-		List<AdditionalQualificationEntity> entities = await dbContext.AdditionalQualifications
+		IQueryable<AdditionalQualificationEntity> query = dbContext.AdditionalQualifications.AsNoTracking();
+
+		Int32 totalRows = await query.CountAsync();
+
+		List<AdditionalQualificationEntity> entities = await query
 			.OrderByDescending(aq => aq.CreatedDateTimeUtc)
 			.ThenByDescending(aq => aq.ModifiedDateTimeUtc)
 			.Skip(offset)
 			.Take(limit)
 			.ToListAsync();
 
-		return [.. entities.Select(e => e.ToDomain())];
+		return PagedResult.Create(entities.Select(e => e.ToDomain()), totalRows);
 	}
 
 	public async Task<AdditionalQualification[]> GetBySearchText(String searchText)

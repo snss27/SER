@@ -1,4 +1,5 @@
 import PageUrls from "@/constants/pageUrls"
+import { PAGE_SIZE } from "@/constants/pagination"
 import { StudentsProvider } from "@/domain/students/studentsProvider"
 import useDialog from "@/hooks/useDialog/useDialog"
 import useLazyLoad from "@/hooks/useLazyLoad"
@@ -23,10 +24,15 @@ export const StudentsTable: React.FC = () => {
     const { showError, showSuccess } = useNotifications()
     const {
         values: students,
+        isLoading,
         lastElementRef,
-        updateValues,
-    } = useLazyLoad({ paginationFunction: StudentsProvider.getPage })
+        refresh,
+    } = useLazyLoad({ load: loadStudents })
     const confirmDialog = useDialog(ConfirmModal)
+
+    async function loadStudents(page: number) {
+        return await StudentsProvider.getPage(page, PAGE_SIZE)
+    }
 
     async function handleEditButton(id: string) {
         await navigator.push(`${PageUrls.EditStudents}/${id}`)
@@ -44,7 +50,7 @@ export const StudentsTable: React.FC = () => {
         const result = await StudentsProvider.remove(id)
         if (!result.isSuccess) return showError(result.getErrorsString)
 
-        await updateValues()
+        refresh()
 
         return showSuccess("Студент успешно удален")
     }

@@ -1,4 +1,5 @@
 import { AdditionalQualification } from "@/domain/additionalQualifications/models/additionalQualification"
+import { Page } from "@/tools/page"
 import { Result } from "@/tools/result"
 import HttpClient from "../httpClient"
 import { AdditionalQualificationBlank } from "./models/additionalQualificationBlank"
@@ -22,12 +23,12 @@ export class AdditionalQualificationsProvider {
     public static async getPage(
         page: number,
         pageSize: number
-    ): Promise<AdditionalQualification[]> {
+    ): Promise<Page<AdditionalQualification>> {
         const result = await HttpClient.getJsonAsync("/additional_qualifications/get_page", {
             page,
             pageSize,
         })
-        return (result as any[]).map(AdditionalQualification.fromAny)
+        return Page.fromAny(result, AdditionalQualification.fromAny)
     }
 
     public static async getBySearchText(searchText: string): Promise<AdditionalQualification[]> {

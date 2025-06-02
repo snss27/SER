@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using SER.Domain.Enterprises;
 using SER.Domain.Enterprises.Converters;
 using SER.Domain.Services;
+using SER.Tools.Types;
 using SER.Tools.Types.IDs;
 using SER.Tools.Types.Results;
 
@@ -29,10 +30,13 @@ public class EnterprisesController(IEnterprisesService enterprisesService) : Con
 	}
 
 	[HttpGet("get_page")]
-	public async Task<EnterpriseDto[]> GetPage([FromQuery] Int32 page, [FromQuery] Int32 pageSize)
+	public async Task<PagedResult<EnterpriseDto>> GetPage([FromQuery] Int32 page, [FromQuery] Int32 pageSize)
 	{
-		Enterprise[] enterprises = await enterprisesService.GetPage(page, pageSize);
-		return [.. enterprises.Select(e => e.ToDto())];
+		PagedResult<Enterprise> enterprisesPage = await enterprisesService.GetPage(page, pageSize);
+		return PagedResult.Create(
+			enterprisesPage.Values.Select(e => e.ToDto()),
+			enterprisesPage.TotalRows
+		);
 	}
 
 	[HttpGet("get_by_search_text")]

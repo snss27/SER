@@ -1,4 +1,6 @@
 import PageUrls from "@/constants/pageUrls"
+import { PAGE_SIZE } from "@/constants/pagination"
+import { AdditionalQualificationsProvider } from "@/domain/additionalQualifications/additionalQualificationsProvider"
 import useDialog from "@/hooks/useDialog/useDialog"
 import useLazyLoad from "@/hooks/useLazyLoad"
 import useNotifications from "@/hooks/useNotifications"
@@ -12,11 +14,10 @@ import {
     TableRow,
 } from "@mui/material"
 import { useRouter } from "next/router"
+import React from "react"
 import { IconType } from "../shared/buttons"
 import IconButton from "../shared/buttons/iconButtons"
 import ConfirmModal from "../shared/modals/confirmModal"
-import React from "react"
-import { AdditionalQualificationsProvider } from "@/domain/additionalQualifications/additionalQualificationsProvider"
 
 export const AdditionalQualificationsTable: React.FC = () => {
     const navigator = useRouter()
@@ -24,9 +25,14 @@ export const AdditionalQualificationsTable: React.FC = () => {
     const {
         values: additionalQualifications,
         lastElementRef,
-        updateValues,
-    } = useLazyLoad({ paginationFunction: AdditionalQualificationsProvider.getPage })
+        isLoading,
+        refresh,
+    } = useLazyLoad({ load: loadAdditionalQualifications })
     const confirmDialog = useDialog(ConfirmModal)
+
+    async function loadAdditionalQualifications(page: number) {
+        return await AdditionalQualificationsProvider.getPage(page, PAGE_SIZE)
+    }
 
     async function handleEditButton(id: string) {
         await navigator.push(`${PageUrls.EditAdditionalQualification}/${id}`)
@@ -44,7 +50,7 @@ export const AdditionalQualificationsTable: React.FC = () => {
         const result = await AdditionalQualificationsProvider.remove(id)
         if (!result.isSuccess) return showError(result.getErrorsString)
 
-        await updateValues()
+        refresh()
 
         return showSuccess("Квалификация успешно удалена")
     }

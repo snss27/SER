@@ -1,6 +1,8 @@
 "use client"
 
 import PageUrls from "@/constants/pageUrls"
+import { PAGE_SIZE } from "@/constants/pagination"
+import { EmployeesProvider } from "@/domain/employees/employeesProvider"
 import useDialog from "@/hooks/useDialog/useDialog"
 import useLazyLoad from "@/hooks/useLazyLoad"
 import useNotifications from "@/hooks/useNotifications"
@@ -18,7 +20,6 @@ import React from "react"
 import { IconType } from "../shared/buttons"
 import IconButton from "../shared/buttons/iconButtons"
 import ConfirmModal from "../shared/modals/confirmModal"
-import { EmployeesProvider } from "@/domain/employees/employeesProvider"
 
 export const EmployeesTable: React.FC = () => {
     const navigator = useRouter()
@@ -26,9 +27,14 @@ export const EmployeesTable: React.FC = () => {
     const {
         values: employees,
         lastElementRef,
-        updateValues,
-    } = useLazyLoad({ paginationFunction: EmployeesProvider.getPage })
+        refresh,
+        isLoading,
+    } = useLazyLoad({ load: loadEmployees })
     const confirmDialog = useDialog(ConfirmModal)
+
+    async function loadEmployees(page: number) {
+        return await EmployeesProvider.getPage(page, PAGE_SIZE)
+    }
 
     async function handleEditButton(id: string) {
         await navigator.push(`${PageUrls.EditEmployee}/${id}`)
@@ -46,7 +52,7 @@ export const EmployeesTable: React.FC = () => {
         const result = await EmployeesProvider.remove(id)
         if (!result.isSuccess) return showError(result.getErrorsString)
 
-        await updateValues()
+        refresh()
 
         return showSuccess("Сотрудник успешно удалён")
     }
