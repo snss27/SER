@@ -29,6 +29,7 @@ public record StudentDto(
 	WorkPlaceDto? CurrentWorkplace,
 	AdditionalQualificationDto[] AdditionalQualifications,
 	Boolean IsTargetAgreement,
+	String? TargetAgreementNumber,
 	String[] TargetAgreementFiles,
 	DateTime? TargetAgreementDate,
 	EnterpriseDto? TargetAgreementEnterprise,

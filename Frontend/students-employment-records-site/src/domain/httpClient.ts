@@ -31,7 +31,7 @@ export class HttpClient {
             await fetch(fullUrl, {
                 method: "POST",
                 headers: HttpClient.headers,
-                body: JSON.stringify(data),
+                body: JSON.stringify(this.convertDatesWithOffset(data)),
             })
         )
 
@@ -80,6 +80,7 @@ export class HttpClient {
 
     private static toQueryString(obj: any) {
         if (obj == null) return ""
+        obj = this.convertDatesWithOffset(obj)
 
         const parameters = []
 
@@ -105,6 +106,27 @@ export class HttpClient {
         if (parameters.length === 0) return ""
 
         return "?" + parameters.join("&")
+    }
+
+    private static convertDatesWithOffset(obj: any): any {
+        if (obj instanceof Date) {
+            const adjusted = new Date(obj.getTime() + 3 * 60 * 60 * 1000)
+            return adjusted.toISOString()
+        }
+
+        if (Array.isArray(obj)) {
+            return obj.map((item) => this.convertDatesWithOffset(item))
+        }
+
+        if (obj !== null && typeof obj === "object") {
+            const newObj: any = {}
+            for (const key in obj) {
+                newObj[key] = this.convertDatesWithOffset(obj[key])
+            }
+            return newObj
+        }
+
+        return obj
     }
 
     private static get headers(): Headers {

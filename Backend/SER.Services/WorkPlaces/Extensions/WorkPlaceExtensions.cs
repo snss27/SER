@@ -19,7 +19,7 @@ public static class WorkPlaceExtensions
 			FinishDate = workPlace.FinishDateTime,
 			StudentId = studentId,
 			IsCurrent = workPlace.IsCurrent,
-			CreatedDateTimeUtc = DateTime.UtcNow,
+			CreatedDateTimeUtc = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Unspecified),
 			ModifiedDateTimeUtc = null
 		};
 	}
@@ -32,7 +32,7 @@ public static class WorkPlaceExtensions
 		entity.StartDate = workPlace.StartDateTime;
 		entity.FinishDate = workPlace.FinishDateTime;
 		entity.IsCurrent = workPlace.IsCurrent;
-		entity.ModifiedDateTimeUtc = DateTime.UtcNow;
+		entity.ModifiedDateTimeUtc = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Unspecified);
 	}
 
 	public static WorkPlace ToDomain(this WorkPlaceEntity workPlace)

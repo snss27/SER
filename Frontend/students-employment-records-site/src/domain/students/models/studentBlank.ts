@@ -31,8 +31,7 @@ export interface StudentBlank {
     passportIssuedDate: Date | null
     passportFiles: string[]
 
-    currentWorkplace: WorkplaceBlank | null
-    prevWorkplaces: WorkplaceBlank[]
+    workPlaces: WorkplaceBlank[]
 
     additionalQualifications: AdditionalQualification[]
 
@@ -77,9 +76,7 @@ export namespace StudentBlank {
             passportIssuedDate: null,
             passportFiles: [],
 
-            currentWorkplace: null,
-            prevWorkplaces: [],
-
+            workPlaces: [],
             additionalQualifications: [],
 
             isTargetAgreement: false,
@@ -180,11 +177,8 @@ export namespace StudentBlank {
             case "CHANGE_PASSPORT_FILES":
                 return { ...state, passportFiles: action.payload.passportFiles }
 
-            case "CHANGE_CURRENT_WORKPLACE":
-                return { ...state, currentWorkplace: action.payload.currentWorkplace }
-
-            case "CHANGE_PREV_WORKPLACES":
-                return { ...state, prevWorkplaces: action.payload.prevWorkplaces }
+            case "CHANGE_WORKPLACES":
+                return { ...state, workPlaces: action.payload.workPlaces }
 
             case "CHANGE_ADDITIONAL_QUALIFICATIONS":
                 return {
@@ -318,12 +312,8 @@ export type StudentAction =
           payload: { passportFiles: string[] }
       }
     | {
-          type: "CHANGE_CURRENT_WORKPLACE"
-          payload: { currentWorkplace: WorkplaceBlank | null }
-      }
-    | {
-          type: "CHANGE_PREV_WORKPLACES"
-          payload: { prevWorkplaces: WorkplaceBlank[] }
+          type: "CHANGE_WORKPLACES"
+          payload: { workPlaces: WorkplaceBlank[] }
       }
     | {
           type: "CHANGE_ADDITIONAL_QUALIFICATIONS"

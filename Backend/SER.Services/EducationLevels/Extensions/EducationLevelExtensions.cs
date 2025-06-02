@@ -13,7 +13,7 @@ internal static class EducationLevelExtensions
 			Code = educationLevel.Code,
 			Name = educationLevel.Name,
 			StudyTime = educationLevel.StudyTime,
-			CreatedDateTimeUtc = DateTime.UtcNow,
+			CreatedDateTimeUtc = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Unspecified),
 			ModifiedDateTimeUtc = null
 		};
 	}
@@ -24,7 +24,7 @@ internal static class EducationLevelExtensions
 		entity.Code = educationLevel.Code;
 		entity.Name = educationLevel.Name;
 		entity.StudyTime = educationLevel.StudyTime;
-		entity.ModifiedDateTimeUtc = DateTime.UtcNow;
+		entity.ModifiedDateTimeUtc = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Unspecified);
 	}
 
 	public static EducationLevel ToDomain(this EducationLevelEntity entity)

@@ -51,6 +51,9 @@ public readonly struct ID : IComparable, IEquatable<ID>
 
 	public Boolean Equals(ID other)
 	{
+		if (_id is null || other._id is null)
+			return false;
+
 		return _id.Equals(other._id);
 	}
 
@@ -79,6 +82,6 @@ public readonly struct ID : IComparable, IEquatable<ID>
 	}
 	public Byte[] ToByteArray() => _id.ToByteArray();
 
-	public static Boolean operator ==(ID? left, ID? right) => left is null ? right is null : left.Equals(right);
-	public static Boolean operator !=(ID? left, ID? right) => !(left == right);
+	public static Boolean operator ==(ID left, ID right) => left.Equals(right);
+	public static Boolean operator !=(ID left, ID right) => !left.Equals(right);
 }

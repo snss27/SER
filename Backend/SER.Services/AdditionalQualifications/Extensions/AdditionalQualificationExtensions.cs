@@ -12,7 +12,7 @@ internal static class AdditionalQualificationExtensions
 			Name = additionalQualification.Name,
 			Code = additionalQualification.Code,
 			StudyTime = additionalQualification.StudyTime,
-			CreatedDateTimeUtc = DateTime.UtcNow,
+			CreatedDateTimeUtc =  DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Unspecified),
 			ModifiedDateTimeUtc = null
 		};
 	}
@@ -22,7 +22,7 @@ internal static class AdditionalQualificationExtensions
 		entity.Name = additionalQualification.Name;
 		entity.Code = additionalQualification.Code;
 		entity.StudyTime = additionalQualification.StudyTime;
-		entity.ModifiedDateTimeUtc = DateTime.UtcNow;
+		entity.ModifiedDateTimeUtc = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Unspecified);
 	}
 
 	public static AdditionalQualification ToDomain(this AdditionalQualificationEntity entity)

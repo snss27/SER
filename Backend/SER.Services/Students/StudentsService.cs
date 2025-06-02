@@ -13,6 +13,7 @@ using SER.Domain.Groups.Converters;
 using SER.Domain.Services;
 using SER.Domain.Students;
 using SER.Domain.Workplaces;
+using SER.Services.AdditionalQualifications.Converters;
 using SER.Services.Students.Extensions;
 using SER.Services.WorkPlaces.Extensions;
 using SER.Tools.Types.IDs;
@@ -35,7 +36,8 @@ public class StudentsService(SERDbContext dbContext) : IStudentsService
 		List<AdditionalQualificationEntity> additionalQualificationEntities = await dbContext.AdditionalQualifications
 			.Where(aq => additionalQualificationIds.Contains(aq.Id))
 			.ToListAsync();
-		AdditionalQualification[] additionalQualifications = [.. blank.AdditionalQualifications.Select(aq => aq.ToDomain())];
+
+		AdditionalQualification[] additionalQualifications = [.. additionalQualificationEntities.Select(aq => aq.ToDomain())];
 
 		List<WorkPlace> workPlaces = [];
 		foreach(WorkPlaceBlank workPlaceBlank in blank.WorkPlaces)
@@ -54,15 +56,15 @@ public class StudentsService(SERDbContext dbContext) : IStudentsService
 
 		if (isNew)
 		{
-			StudentEntity entity = student.ToEntity();
+			StudentEntity entity = student.ToEntity(additionalQualificationEntities);
 			entity.WorkPlaces = [.. workPlaces.Select(wp => wp.ToEntity(entity.Id))];
 			await dbContext.AddAsync(entity);
 		}
 		else
 		{
 			StudentEntity? entity = await dbContext.Students
-				.Include(s => s.WorkPlaces)
 				.Include(s => s.AdditionalQualifications)
+				.Include(s => s.WorkPlaces)
 				.FirstOrDefaultAsync(s => s.Id == student.Id);
 			if (entity is null) return OperationResult.Fail("Студент не найден");
 
@@ -87,8 +89,7 @@ public class StudentsService(SERDbContext dbContext) : IStudentsService
 				}
 			}
 
-			entity.ApplyChanges(student);
-			dbContext.Update(entity);
+			entity.ApplyChanges(student, additionalQualificationEntities);
 		}
 
 		await dbContext.SaveChangesAsync();
@@ -116,6 +117,7 @@ public class StudentsService(SERDbContext dbContext) : IStudentsService
 			.Include(s => s.Group)
 				.ThenInclude(g => g.Cluster)
 			.Include(s => s.WorkPlaces)
+				.ThenInclude(wp => wp.Enterprise)
 			.Include(s => s.AdditionalQualifications)
 			.Include(s => s.TargetAgreementEnterprise)
 			.FirstOrDefaultAsync(s => s.Id == id);
@@ -135,6 +137,7 @@ public class StudentsService(SERDbContext dbContext) : IStudentsService
 			.Include(s => s.Group)
 				.ThenInclude(g => g.Cluster)
 			.Include(s => s.WorkPlaces)
+				.ThenInclude(wp => wp.Enterprise)
 			.Include(s => s.AdditionalQualifications)
 			.Include(s => s.TargetAgreementEnterprise)
 			.OrderByDescending(e => e.CreatedDateTimeUtc)

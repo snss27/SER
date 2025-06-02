@@ -12,7 +12,7 @@ internal static class EmployeeExtensions
 			Name = employee.FullName.First,
 			SecondName = employee.FullName.Second,
 			LastName = employee.FullName.Last,
-			CreatedDateTimeUtc = DateTime.UtcNow,
+			CreatedDateTimeUtc = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Unspecified),
 			ModifiedDateTimeUtc = null,
 		};
 	}
@@ -22,7 +22,7 @@ internal static class EmployeeExtensions
 		entity.Name = employee.FullName.First;
 		entity.SecondName = employee.FullName.Second;
 		entity.LastName = employee.FullName.Last;
-		entity.ModifiedDateTimeUtc = DateTime.UtcNow;
+		entity.ModifiedDateTimeUtc = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Unspecified);
 	}
 
 	public static Employee ToDomain(this EmployeeEntity entity)

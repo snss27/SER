@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using SER.Database.Models.AdditionalQualifications;
 using SER.Database.Models.Clusters;
 using SER.Database.Models.ConfigurationTools;
@@ -25,6 +26,13 @@ public class SERDbContext(DbContextOptions<SERDbContext> options) : DbContext(op
 	protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
 	{
 		configurationBuilder.Properties<ID>().HaveConversion<IDConverter>();
+	}
+
+	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+	{
+		optionsBuilder
+			.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()))
+			.EnableSensitiveDataLogging();
 	}
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)

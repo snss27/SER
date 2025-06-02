@@ -11,8 +11,8 @@ export class Workplace {
         public readonly finishDate: Date | null
     ) {}
 
-    public toBlank(): WorkplaceBlank {
-        return WorkplaceBlank.create(this)
+    public toBlank(isCurrent: boolean): WorkplaceBlank {
+        return WorkplaceBlank.create(this, isCurrent)
     }
 
     public static fromAny(any: any): Workplace {

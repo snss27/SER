@@ -53,9 +53,9 @@ export class Student {
 
     public toBlank(): StudentBlank {
         const currentWorkplace = this.currentWorkplace
-            ? WorkplaceBlank.create(this.currentWorkplace)
+            ? WorkplaceBlank.create(this.currentWorkplace, true)
             : null
-        const prevWorkplaces = this.prevWorkplaces.map(WorkplaceBlank.create)
+        const prevWorkplaces = this.prevWorkplaces.map((pwp) => WorkplaceBlank.create(pwp, false))
         return {
             id: this.id,
             name: this.name,
@@ -74,8 +74,7 @@ export class Student {
             passportIssuedBy: this.passportIssuedBy,
             passportIssuedDate: this.passportIssuedDate,
             passportFiles: this.passportFiles,
-            prevWorkplaces,
-            currentWorkplace,
+            workPlaces: currentWorkplace ? [currentWorkplace, ...prevWorkplaces] : prevWorkplaces,
             additionalQualifications: this.additionalQualifications,
             isTargetAgreement: this.isTargetAgreement,
             targetAgreementNumber: this.targetAgreementNumber,

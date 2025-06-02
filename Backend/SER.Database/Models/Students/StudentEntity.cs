@@ -26,23 +26,23 @@ public class StudentEntity : BaseEntity
 	public String? PassportSeries { get; set; }
 	public String? PassportIssuedBy { get; set; }
 	public DateTime? PassportIssuedDate { get; set; }
-	public List<String> PassportFiles { get; set; } = default!;
-	public List<WorkPlaceEntity> WorkPlaces { get; set; } = default!;
-	public List<AdditionalQualificationEntity> AdditionalQualifications { get; set; } = default!;
+	public List<String> PassportFiles { get; set; } = [];
+	public List<WorkPlaceEntity> WorkPlaces { get; set; } = [];
+	public List<AdditionalQualificationEntity> AdditionalQualifications { get; set; } = [];
 	public Boolean IsTargetAgreement { get; set; }
-	public String? TargetAgreementNumer { get; set; }
-	public List<String> TargetAgreementFiles { get; set; } = default!;
+	public String? TargetAgreementNumber { get; set; }
+	public List<String> TargetAgreementFiles { get; set; } = [];
 	public DateTime? TargetAgreementDate { get; set; }
 	public ID? TargetAgreementEnterpriseId { get; set; }
 	public EnterpriseEntity? TargetAgreementEnterprise { get; set; }
 	public Boolean MustServeInArmy { get; set; }
-	public List<String> ArmySubpoenaFiles { get; set; } = default!;
+	public List<String> ArmySubpoenaFiles { get; set; } = [];
 	public DateTime? ArmyCallDate { get; set; }
-	public List<SocialStatus> SocialStatuses { get; set; } = default!;
+	public List<SocialStatus> SocialStatuses { get; set; } = [];
 	public StudentStatus Status { get; set; }
 	public String? Address { get; set; }
 	public Boolean IsForeignCitizen { get; set; }
 	public String? Inn { get; set; }
 	public String? Mail { get; set; }
-	public List<String> OtherFiles { get; set; } = default!;
+	public List<String> OtherFiles { get; set; } = [];
 }

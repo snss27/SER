@@ -20,7 +20,7 @@ internal static class EnterpriseExtensions
 			Phone = enterprise.Phone,
 			Mail = enterprise.Mail,
 			IsOPK = enterprise.IsOPK,
-			CreatedDateTimeUtc = DateTime.UtcNow,
+			CreatedDateTimeUtc = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Unspecified),
 			ModifiedDateTimeUtc = null
 		};
 	}
@@ -37,7 +37,7 @@ internal static class EnterpriseExtensions
 		entity.Phone = enterprise.Phone;
 		entity.Mail = enterprise.Mail;
 		entity.IsOPK = enterprise.IsOPK;
-		entity.ModifiedDateTimeUtc = DateTime.UtcNow;
+		entity.ModifiedDateTimeUtc = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Unspecified);
 	}
 
 	public static Enterprise ToDomain(this EnterpriseEntity entity)

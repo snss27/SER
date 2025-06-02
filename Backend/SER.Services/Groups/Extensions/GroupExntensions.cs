@@ -23,7 +23,7 @@ internal static class GroupExntensions
 			CuratorId = group.Curator?.Id,
 			HasCluster = group.HasCluster,
 			ClusterId = group.Cluster?.Id,
-			CreatedDateTimeUtc = DateTime.UtcNow,
+			CreatedDateTimeUtc = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Unspecified),
 			ModifiedDateTimeUtc = null
 		};
 	}
@@ -37,7 +37,7 @@ internal static class GroupExntensions
 		entity.CuratorId = group.Curator?.Id;
 		entity.HasCluster = group.HasCluster;
 		entity.ClusterId = group.Cluster?.Id;
-		entity.ModifiedDateTimeUtc = DateTime.UtcNow;
+		entity.ModifiedDateTimeUtc = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Unspecified);
 	}
 
 	public static Group ToDomain(this GroupEntity entity)

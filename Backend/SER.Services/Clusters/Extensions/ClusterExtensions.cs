@@ -10,7 +10,7 @@ public static class ClusterExtensions
 		{
 			Id = cluster.Id,
 			Name = cluster.Name,
-			CreatedDateTimeUtc = DateTime.UtcNow,
+			CreatedDateTimeUtc = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Unspecified),
 			ModifiedDateTimeUtc = null
 		};
 	}
@@ -18,7 +18,7 @@ public static class ClusterExtensions
 	public static void ApplyChanges(this ClusterEntity entity, Cluster cluster)
 	{
 		entity.Name = cluster.Name;
-		entity.ModifiedDateTimeUtc = DateTime.UtcNow;
+		entity.ModifiedDateTimeUtc = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Unspecified);
 	}
 
 	public static Cluster ToDomain(this ClusterEntity entity)

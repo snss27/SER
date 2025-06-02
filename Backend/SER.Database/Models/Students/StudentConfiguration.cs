@@ -100,7 +100,7 @@ public class StudentConfiguration : IEntityTypeConfiguration<StudentEntity>
 			.IsRequired()
 			.HasColumnName("is_target_agreement");
 
-		builder.Property(x => x.TargetAgreementNumer)
+		builder.Property(x => x.TargetAgreementNumber)
 			.HasMaxLength(200)
 			.HasColumnName("target_agreement_number");
 

@@ -7,12 +7,13 @@ export interface WorkplaceBlank {
     workbookExtractFiles: string[]
     startDate: Date | null
     finishDate: Date | null
+    isCurrent: boolean
 
     clientId: string
 }
 
 export namespace WorkplaceBlank {
-    export function empty(): WorkplaceBlank {
+    export function empty(isCurrent: boolean): WorkplaceBlank {
         return {
             id: null,
             enterprise: null,
@@ -20,12 +21,13 @@ export namespace WorkplaceBlank {
             workbookExtractFiles: [],
             startDate: null,
             finishDate: null,
+            isCurrent,
 
             clientId: crypto.randomUUID(),
         }
     }
 
-    export function create(workPlace: Workplace): WorkplaceBlank {
+    export function create(workPlace: Workplace, isCurrent: boolean): WorkplaceBlank {
         return {
             id: workPlace.id,
             enterprise: workPlace.enterprise,
@@ -33,6 +35,7 @@ export namespace WorkplaceBlank {
             workbookExtractFiles: workPlace.workBookExtractFiles,
             startDate: workPlace.startDate,
             finishDate: workPlace.finishDate,
+            isCurrent,
 
             clientId: crypto.randomUUID(),
         }
