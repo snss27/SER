@@ -5,6 +5,7 @@ using SER.Tools.Types.IDs;
 using SER.Tools.Types.Results;
 using SER.Domain.Students.Converters;
 using SER.Tools.Types;
+using SER.Domain.Students.StudentsFilters;
 
 namespace SER.API.Controllers.Students;
 
@@ -30,10 +31,12 @@ public class StudentsController(IStudentsService studentsService) : ControllerBa
 		return student?.ToDto();
 	}
 
-	[HttpGet("get_page")]
-	public async Task<PagedResult<StudentDto>> GetPage([FromQuery] Int32 page, [FromQuery] Int32 pageSize)
+	public record StudentsPageRequest(Int32 Page, Int32 PageSize, StudentsFilter StudentsFilter);
+
+	[HttpPost("get_page")]
+	public async Task<PagedResult<StudentDto>> GetPage([FromBody] StudentsPageRequest request)
 	{
-		PagedResult<Student> studentsPage = await studentsService.GetPage(page, pageSize);
+		PagedResult<Student> studentsPage = await studentsService.GetPage(request.Page, request.PageSize, request.StudentsFilter);
 		return PagedResult.Create(
 			studentsPage.Values.Select(s => s.ToDto()),
 			studentsPage.TotalRows

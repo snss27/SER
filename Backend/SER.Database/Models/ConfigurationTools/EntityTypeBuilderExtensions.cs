@@ -21,14 +21,4 @@ public static class EntityTypeBuilderExtensions
 			.HasColumnType("timestamp")
 			.HasColumnName("modified_datetime_utc");
 	}
-
-	public static PropertyBuilder<List<TEnum>> HasEnumListConversion<TEnum>(this PropertyBuilder<List<TEnum>> builder)
-		where TEnum : Enum
-	{
-		var propBuilder = builder.HasConversion(new EnumListToIntArrayConverter<TEnum>());
-
-		propBuilder.Metadata.SetValueComparer(new EnumListValueComparer<TEnum>());
-
-		return propBuilder;
-	}
 }

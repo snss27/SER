@@ -13,7 +13,8 @@ public static class JsonTools
 
 	private static readonly JsonConverter[] Converters =
 	{
-		new IDJsonConverter()
+		new IDJsonConverter(),
+		new DateTimePeriodConverter()
 	};
 
 	public static JsonSerializerOptions AddJsonSettings(this JsonSerializerOptions options)

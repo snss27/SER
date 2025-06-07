@@ -38,7 +38,7 @@ public class StudentEntity : BaseEntity
 	public Boolean MustServeInArmy { get; set; }
 	public List<String> ArmySubpoenaFiles { get; set; } = [];
 	public DateTime? ArmyCallDate { get; set; }
-	public List<SocialStatus> SocialStatuses { get; set; } = [];
+	public List<Int32> SocialStatuses { get; set; } = [];
 	public StudentStatus Status { get; set; }
 	public String? Address { get; set; }
 	public Boolean IsForeignCitizen { get; set; }

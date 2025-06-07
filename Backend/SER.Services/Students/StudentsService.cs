@@ -1,4 +1,5 @@
 using CSharpFunctionalExtensions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using SER.Database;
 using SER.Database.Models.AdditionalQualifications;
@@ -12,6 +13,8 @@ using SER.Domain.Groups;
 using SER.Domain.Groups.Converters;
 using SER.Domain.Services;
 using SER.Domain.Students;
+using SER.Domain.Students.StudentsFilters;
+using SER.Domain.Students.StudentsFilters.Enums;
 using SER.Domain.Workplaces;
 using SER.Services.AdditionalQualifications.Converters;
 using SER.Services.Students.Extensions;
@@ -41,14 +44,14 @@ public class StudentsService(SERDbContext dbContext) : IStudentsService
 		AdditionalQualification[] additionalQualifications = [.. additionalQualificationEntities.Select(aq => aq.ToDomain())];
 
 		List<WorkPlace> workPlaces = [];
-		foreach(WorkPlaceBlank workPlaceBlank in blank.WorkPlaces)
+		foreach (WorkPlaceBlank workPlaceBlank in blank.WorkPlaces)
 		{
 			Enterprise? enterprise = workPlaceBlank.Enterprise?.ToDomain();
 			Result<WorkPlace, Error> createWorkPlaceResult = WorkPlace.Create(workPlaceBlank.Id, enterprise, workPlaceBlank.Post, workPlaceBlank.WorkBookExtractFiles, workPlaceBlank.StartDate, workPlaceBlank.FinishDate, workPlaceBlank.IsCurrent);
 			if (createWorkPlaceResult.IsFailure) return OperationResult.Fail(createWorkPlaceResult.Error);
 			workPlaces.Add(createWorkPlaceResult.Value);
 		}
- 
+
 		Result<Student, Error> result = Student.Create(blank.Id, blank.Name, blank.SecondName, blank.LastName, blank.Gender, blank.BirthDate, blank.PhoneNumber, blank.RepresentativePhoneNumber, blank.RepresentativeAlias, blank.IsOnPaidStudy, blank.Snils, group, blank.PassportNumber, blank.PassportSeries, blank.PassportIssuedBy, blank.PassportIssuedDate, blank.PassportFiles, [.. workPlaces], additionalQualifications, blank.IsTargetAgreement, blank.TargetAgreementNumber, targetAgreementEnterprise, blank.TargetAgreementDate, blank.TargetAgreementFiles, blank.MustServeInArmy, blank.ArmyCallDate, blank.ArmySubpoenaFiles, blank.SocialStatuses, blank.Status, blank.Address, blank.IsForeignCitizen, blank.Inn, blank.Mail, blank.OtherFiles);
 		if (result.IsFailure) return OperationResult.Fail(result.Error);
 		Student student = result.Value;
@@ -126,7 +129,7 @@ public class StudentsService(SERDbContext dbContext) : IStudentsService
 		return entity?.ToDomain();
 	}
 
-	public async Task<PagedResult<Student>> GetPage(Int32 page, Int32 pageSize)
+	public async Task<PagedResult<Student>> GetPage(Int32 page, Int32 pageSize, StudentsFilter filter)
 	{
 		(Int32 offset, Int32 limit) = NormalizeRange(page, pageSize);
 
@@ -142,6 +145,98 @@ public class StudentsService(SERDbContext dbContext) : IStudentsService
 				.ThenInclude(wp => wp.Enterprise)
 			.Include(s => s.AdditionalQualifications)
 			.Include(s => s.TargetAgreementEnterprise);
+
+		if (!String.IsNullOrWhiteSpace(filter.SearchText))
+		{
+			String search = $"%{filter.SearchText.Trim()}%";
+
+			query = query.Where(e =>
+				EF.Functions.ILike(e.Name, search) ||
+				EF.Functions.ILike(e.SecondName, search) ||
+				(e.LastName != null && EF.Functions.ILike(e.LastName, search))
+			);
+		}
+
+		if (filter.Gender is { } gender)
+		{
+			query = query.Where(e => e.Gender == gender);
+		}
+
+		if (filter.Statuses.Length > 0)
+		{
+			query = query.Where(s => filter.Statuses.Contains(s.Status));
+		}
+
+		if (filter.BirthDatePeriod.From is not null || filter.BirthDatePeriod.To is not null)
+		{
+			query = query.Where(s =>
+				s.BirthDate != null &&
+				(filter.BirthDatePeriod.From == null || s.BirthDate.Value >= filter.BirthDatePeriod.From.Value) &&
+				(filter.BirthDatePeriod.To == null || s.BirthDate.Value <= filter.BirthDatePeriod.To.Value)
+			);
+		}
+
+		if (filter.SocialStatuses.Length > 0)
+		{
+			Int32[] filterSocialStatusesInt = [.. filter.SocialStatuses.Select(s => (Int32)s)];
+
+			query = query.Where(s => s.SocialStatuses.Any(status => filterSocialStatusesInt.Contains(status)));
+		}
+
+		ID[] groupIds = [.. filter.Groups.Select(g => g.Id)];
+		if (groupIds.Length > 0)
+		{
+			query = query.Where(s => groupIds.Contains(s.GroupId));
+		}
+
+		query = filter.OnPaidStudyVariant switch
+		{
+			OnPaidStudyVariant.OnlyOnPaidStudy => query.Where(s => s.IsOnPaidStudy),
+			OnPaidStudyVariant.OnlyOnFreeStudy => query.Where(s => !s.IsOnPaidStudy),
+			_ => query
+		};
+
+		query = filter.ForeignCitizenVariant switch
+		{
+			ForeignCitizenVariant.OnlyForeignCitizen => query.Where(s => s.IsForeignCitizen),
+			ForeignCitizenVariant.OnlyNotForeignCitizen => query.Where(s => !s.IsForeignCitizen),
+			_ => query
+		};
+
+		ID[] additionalQualificationIds = [.. filter.AdditionalQualifications.Select(s => s.Id)];
+		if (additionalQualificationIds.Length > 0)
+		{
+			query = query.Where(s => s.AdditionalQualifications.Any(aq => additionalQualificationIds.Contains(aq.Id)));
+		}
+
+		query = filter.TargetAgreementVariant switch
+		{
+			TargetAgreementVariant.OnlyWithTargetAgreement => query.Where(s => s.IsTargetAgreement),
+			TargetAgreementVariant.OnlyWithoutTargetAgreement => query.Where(s => !s.IsTargetAgreement),
+			_ => query
+		};
+
+		ID[] targetAgreementEnterpriseIds = [.. filter.TargetAgreementEnterprises.Select(s => s.Id)];
+		if (targetAgreementEnterpriseIds.Length > 0)
+		{
+			query = query.Where(s => s.TargetAgreementEnterpriseId != null && targetAgreementEnterpriseIds.Contains(s.TargetAgreementEnterpriseId.Value));
+		}
+
+		query = filter.MustServeInArmyVariant switch
+		{
+			MustServeInArmyVariant.OnlyMustServe => query.Where(s => s.MustServeInArmy),
+			MustServeInArmyVariant.OnlyNotMustServe => query.Where(s => !s.MustServeInArmy),
+			_ => query
+		};
+
+		if (filter.ArmyCallDatePeriod.From is not null || filter.ArmyCallDatePeriod.To is not null)
+		{
+			query = query.Where(s =>
+				s.ArmyCallDate != null &&
+				(filter.ArmyCallDatePeriod.From == null || s.ArmyCallDate.Value >= filter.ArmyCallDatePeriod.From.Value) &&
+				(filter.ArmyCallDatePeriod.To == null || s.ArmyCallDate.Value <= filter.ArmyCallDatePeriod.To.Value)
+			);
+		}
 
 		Int32 totalRows = await query.CountAsync();
 

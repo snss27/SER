@@ -11,7 +11,6 @@ const DatePicker = (props: Props) => {
         <MDatePicker
             value={props.value}
             label={props.label}
-            maxDate={new Date()}
             views={["year", "month", "day"]}
             openTo="year"
             yearsOrder="desc"

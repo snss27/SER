@@ -6,6 +6,7 @@ type BaseProps<T> = {
     disabled?: boolean
     sx?: SxProps<Theme>
     defaultValue?: T
+    size?: "small" | "medium"
     getOptionLabel: (option: T) => string
     isOptionEqualToValue?: (first: T, second: T) => boolean
 }
@@ -81,6 +82,7 @@ export const Select = <T,>(props: Props<T>) => {
             renderInput={(params) => (
                 <TextField {...params} label={props.label} autoComplete="password" />
             )}
+            size={props.size}
         />
     )
 }

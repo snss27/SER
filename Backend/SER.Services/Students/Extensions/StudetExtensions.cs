@@ -4,6 +4,7 @@ using SER.Domain.AdditionalQualifications;
 using SER.Domain.Enterprises;
 using SER.Domain.Groups;
 using SER.Domain.Students;
+using SER.Domain.Students.Enums;
 using SER.Domain.Workplaces;
 using SER.Services.AdditionalQualifications.Converters;
 using SER.Services.Enterprises.Converters;
@@ -46,7 +47,7 @@ internal static class StudetExtensions
 			MustServeInArmy = student.Army.MustServe,
 			ArmyCallDate = student.Army.CallDate,
 			ArmySubpoenaFiles = [.. student.Army.SubpoenaFiles],
-			SocialStatuses = [.. student.SocialStatuses],
+			SocialStatuses = [.. student.SocialStatuses.Select(s => (Int32)s)],
 			Status = student.Status,
 			Address = student.Address,
 			IsForeignCitizen = student.IsForeignCitizen,
@@ -85,7 +86,7 @@ internal static class StudetExtensions
 		entity.ArmyCallDate = student.Army.CallDate;
 		entity.AdditionalQualifications = additionalQualifications;
 		entity.ArmySubpoenaFiles = [.. student.Army.SubpoenaFiles];
-		entity.SocialStatuses = [.. student.SocialStatuses];
+		entity.SocialStatuses = [.. student.SocialStatuses.Select(s => (Int32)s)];
 		entity.Status = student.Status;
 		entity.Address = student.Address;
 		entity.IsForeignCitizen = student.IsForeignCitizen;
@@ -102,6 +103,6 @@ internal static class StudetExtensions
 		AdditionalQualification[] additionalQualifications = [.. entity.AdditionalQualifications.Select(aq => aq.ToDomain())];
 		Enterprise? targetAdreementEnterprise = entity.TargetAgreementEnterprise?.ToDomain();
 
-		return Student.Create(entity.Id, entity.Name, entity.SecondName, entity.LastName, entity.Gender, entity.BirthDate, entity.PhoneNumber, entity.RepresentativePhoneNumber, entity.RepresentativeAlias, entity.IsOnPaidStudy, entity.Snils, group, entity.PassportNumber, entity.PassportSeries, entity.PassportIssuedBy, entity.PassportIssuedDate, [.. entity.PassportFiles], workPlaces, additionalQualifications, entity.IsTargetAgreement, entity.TargetAgreementNumber, targetAdreementEnterprise, entity.TargetAgreementDate, [.. entity.TargetAgreementFiles], entity.MustServeInArmy, entity.ArmyCallDate, [.. entity.ArmySubpoenaFiles], [.. entity.SocialStatuses], entity.Status, entity.Address, entity.IsForeignCitizen, entity.Inn, entity.Mail, [.. entity.OtherFiles]).Value;
+		return Student.Create(entity.Id, entity.Name, entity.SecondName, entity.LastName, entity.Gender, entity.BirthDate, entity.PhoneNumber, entity.RepresentativePhoneNumber, entity.RepresentativeAlias, entity.IsOnPaidStudy, entity.Snils, group, entity.PassportNumber, entity.PassportSeries, entity.PassportIssuedBy, entity.PassportIssuedDate, [.. entity.PassportFiles], workPlaces, additionalQualifications, entity.IsTargetAgreement, entity.TargetAgreementNumber, targetAdreementEnterprise, entity.TargetAgreementDate, [.. entity.TargetAgreementFiles], entity.MustServeInArmy, entity.ArmyCallDate, [.. entity.ArmySubpoenaFiles], [.. entity.SocialStatuses.Select(s => (SocialStatus)s)], entity.Status, entity.Address, entity.IsForeignCitizen, entity.Inn, entity.Mail, [.. entity.OtherFiles]).Value;
 	}
 }

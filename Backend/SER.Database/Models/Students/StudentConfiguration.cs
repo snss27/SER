@@ -138,7 +138,6 @@ public class StudentConfiguration : IEntityTypeConfiguration<StudentEntity>
 
 		builder.Property(x => x.SocialStatuses)
 			.IsRequired()
-			.HasEnumListConversion()
 			.HasColumnType("int[]")
 			.HasColumnName("social_statuses");
 

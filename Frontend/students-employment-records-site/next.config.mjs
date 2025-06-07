@@ -1,3 +1,5 @@
+import path from "path"
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     async redirects() {
@@ -8,6 +10,16 @@ const nextConfig = {
                 permanent: true,
             },
         ]
+    },
+    webpack: (config) => {
+        config.resolve.alias = {
+            ...config.resolve.alias,
+            "@mui/x-license/esm/useLicenseVerifier/useLicenseVerifier.js": path.resolve(
+                process.cwd(),
+                "hack/useLicenseVerifier.js"
+            ),
+        }
+        return config
     },
 }
 

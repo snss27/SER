@@ -15,9 +15,10 @@ interface Returns<T> {
 function useLoadData<T>({ load }: Props<T>): Returns<T> {
     const page = useRef(1)
     const hasMoreRef = useRef(true)
+    const requestNumberRef = useRef(0)
     const [values, setValues] = useState<T[]>([])
     const [isLoading, startTransition] = useTransition()
-    const observerRef = useRef<IntersectionObserver>()
+    const observerRef = useRef<IntersectionObserver | null>(null)
 
     useEffect(() => {
         loadData()
@@ -49,7 +50,10 @@ function useLoadData<T>({ load }: Props<T>): Returns<T> {
         if (!hasMoreRef.current) return
 
         startTransition(async () => {
+            requestNumberRef.current += 1
+            const requestNumber = requestNumberRef.current
             const data = await load(page.current)
+            if (requestNumberRef.current !== requestNumber) return
 
             setValues((prev) => {
                 const { values, totalRows } = data
