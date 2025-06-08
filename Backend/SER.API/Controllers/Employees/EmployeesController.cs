@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SER.Domain.Employees;
 using SER.Domain.Employees.Converters;
@@ -8,6 +9,7 @@ using SER.Tools.Types.Results;
 
 namespace SER.API.Controllers.Employees;
 
+[Authorize]
 [Route("api/employees")]
 public class EmployeesController(IEmployeesService employeesService) : ControllerBase
 {

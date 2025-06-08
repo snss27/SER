@@ -9,7 +9,7 @@ public class HomeController : ControllerBase
 	private const String _invalidOperation = "Error";
 	private const String _fileStorageUploadFolder = "Files";
 
-	private static readonly String Keyword = Environment.GetEnvironmentVariable("FILE_STORAGE_KEYWORD") ?? throw new InvalidOperationException("ENCRYPTION_KEY not set.");
+	private static readonly String Keyword = Environment.GetEnvironmentVariable("FILE_STORAGE_KEYWORD") ?? throw new InvalidOperationException("FILE_STORAGE_KEYWORD not set.");
 	private static readonly String RootPath = Path.GetFullPath(_fileStorageUploadFolder).TrimEnd(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar;
 
 	private static Boolean IsValidKeyword(String keyword) => !String.IsNullOrEmpty(keyword) && Keyword == keyword;

@@ -1,5 +1,5 @@
 import { SxProps, TextField, Theme } from "@mui/material"
-import { forwardRef } from "react"
+import { forwardRef, HTMLInputTypeAttribute } from "react"
 
 interface Props {
     value: string | null
@@ -8,6 +8,7 @@ interface Props {
     size?: "small" | "medium"
     fullWidth?: boolean
     endAdornment?: any
+    type?: HTMLInputTypeAttribute
     sx?: SxProps<Theme>
     onChange: (value: string) => void
 }
@@ -21,6 +22,7 @@ const TextInput = forwardRef(
             size = "medium",
             fullWidth = true,
             endAdornment,
+            type,
             sx,
             onChange,
         }: Props,
@@ -28,13 +30,14 @@ const TextInput = forwardRef(
     ) => {
         return (
             <TextField
+                type={type}
+                autoComplete="current-password"
                 inputRef={ref}
                 label={label ?? "Введите текст"}
                 value={value ?? ""}
                 variant="outlined"
                 placeholder={placeholder}
                 size={size}
-                autoComplete="password"
                 fullWidth={fullWidth}
                 onChange={(event) => onChange(event.target.value)}
                 slotProps={{

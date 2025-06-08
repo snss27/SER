@@ -11,14 +11,14 @@ public class EncryptedStringConverter : ValueConverter<string?, string?>
 			v => v == null ? null : Decrypt(v))
 	{ }
 
-	private static string Encrypt(string value)
+	public static string Encrypt(string value)
 	{
 		var key = Environment.GetEnvironmentVariable("ENCRYPTION_KEY")
 				  ?? throw new InvalidOperationException("ENCRYPTION_KEY is not set");
 		return EncryptionHelper.Encrypt(value, key);
 	}
 
-	private static string Decrypt(string value)
+	public static string Decrypt(string value)
 	{
 		var key = Environment.GetEnvironmentVariable("ENCRYPTION_KEY")
 				  ?? throw new InvalidOperationException("ENCRYPTION_KEY is not set");

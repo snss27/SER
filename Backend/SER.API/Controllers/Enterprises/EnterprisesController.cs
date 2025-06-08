@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SER.Domain.Enterprises;
 using SER.Domain.Enterprises.Converters;
@@ -7,6 +8,8 @@ using SER.Tools.Types.IDs;
 using SER.Tools.Types.Results;
 
 namespace SER.API.Controllers.Enterprises;
+
+[Authorize]
 [Route("/api/enterprises")]
 public class EnterprisesController(IEnterprisesService enterprisesService) : ControllerBase
 {

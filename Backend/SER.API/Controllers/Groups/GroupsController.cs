@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SER.Domain.Groups;
 using SER.Domain.Groups.Converters;
@@ -8,6 +9,7 @@ using SER.Tools.Types.Results;
 
 namespace SER.API.Controllers.Groups;
 
+[Authorize]
 [Route("api/groups")]
 public class GroupsController(IGroupsService groupsService) : ControllerBase
 {

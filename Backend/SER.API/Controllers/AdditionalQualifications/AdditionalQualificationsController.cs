@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SER.Domain.AdditionalQualifications;
 using SER.Domain.AdditionalQualifications.Converters;
@@ -8,6 +9,7 @@ using SER.Tools.Types.Results;
 
 namespace SER.API.Controllers.AdditionalQualifications;
 
+[Authorize]
 [Route("/api/additional_qualifications")]
 public class AdditionalQualificationsController(IAdditionalQualificationsService additionalQualificationsService): ControllerBase
 {

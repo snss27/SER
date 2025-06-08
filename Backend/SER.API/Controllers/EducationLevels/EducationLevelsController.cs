@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SER.Domain.EducationLevels;
 using SER.Domain.EducationLevels.Converters;
@@ -8,6 +9,7 @@ using SER.Tools.Types.Results;
 
 namespace SER.API.Controllers.EducationLevels;
 
+[Authorize]
 [Route("api/education_levels")]
 public class EducationLevelsController(IEducationLevelsService educationLevelsService) : ControllerBase
 {

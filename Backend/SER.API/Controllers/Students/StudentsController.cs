@@ -6,9 +6,11 @@ using SER.Tools.Types.Results;
 using SER.Domain.Students.Converters;
 using SER.Tools.Types;
 using SER.Domain.Students.StudentsFilters;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SER.API.Controllers.Students;
 
+[Authorize]
 [Route("api/students/")]
 public class StudentsController(IStudentsService studentsService) : ControllerBase
 {

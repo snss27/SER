@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SER.Database;
@@ -12,9 +13,11 @@ using SER.Database;
 namespace SER.Database.Migrations
 {
     [DbContext(typeof(SERDbContext))]
-    partial class SERDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250608193407_add_users")]
+    partial class add_users
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

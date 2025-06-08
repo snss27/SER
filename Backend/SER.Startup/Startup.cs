@@ -1,3 +1,5 @@
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -5,7 +7,9 @@ using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using PMS.Domain;
+using SER.Domain.JwtTokens;
 using SER.Tools.Json;
 
 namespace SER.Startup;
@@ -85,9 +89,10 @@ public static class Startup
 		if (isDebugMode || app.Environment.IsDevelopment())
 		{
 			app.UseCors(config => config
-				.AllowAnyOrigin()
-				.WithMethods("OPTIONS", "GET", "POST", "DELETE")
+				.SetIsOriginAllowed(origin => true)
+				.AllowAnyMethod()
 				.AllowAnyHeader()
+				.AllowCredentials()
 			);
 		}
 		else
@@ -99,8 +104,9 @@ public static class Startup
 					origin.EndsWith($".{domain}") ||
 					origin == "https://yandexwebcache.net"
 				)
-				.WithMethods("OPTIONS", "GET", "POST")
+				.WithMethods("OPTIONS", "GET", "POST", "DELETE")
 				.AllowAnyHeader()
+				.AllowCredentials()
 			);
 		}
 	}
@@ -109,5 +115,34 @@ public static class Startup
 	{
 		app.UseEndpoints(endpoints =>
 		endpoints.MapControllers());
+	}
+
+	public static void AddApiAuthentication(this IServiceCollection services)
+	{
+		String jwtKey = Environment.GetEnvironmentVariable("JWT_KEY") ?? throw new Exception("JWT_KEY does not set");
+		String cookiesJwtTokenKey = Environment.GetEnvironmentVariable("COOCKIES_JWT_TOKEN_KEY") ?? throw new Exception("COOCKIES_JWT_TOKEN_KEY does not set");
+
+		services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+			.AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+			{
+				options.TokenValidationParameters = new()
+				{
+					ValidateIssuer = false,
+					ValidateAudience = false,
+					ValidateLifetime = true,
+					ValidateIssuerSigningKey = true,
+					IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+				};
+
+				options.Events = new JwtBearerEvents
+				{
+					OnMessageReceived = context =>
+					{
+						context.Token = context.Request.Cookies[cookiesJwtTokenKey];
+
+						return Task.CompletedTask;
+					}
+				};
+			});
 	}
 }

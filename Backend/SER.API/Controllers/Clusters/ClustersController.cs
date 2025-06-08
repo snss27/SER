@@ -5,9 +5,11 @@ using SER.Tools.Types.IDs;
 using SER.Tools.Types.Results;
 using SER.Domain.Clusters.Converters;
 using SER.Tools.Types;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SER.API.Controllers.Clusters;
 
+[Authorize]
 [Route("api/clusters")]
 public class ClustersController(IClustersService clustersService) : ControllerBase
 {

@@ -8,6 +8,7 @@ using SER.Database.Models.Employees;
 using SER.Database.Models.Enterprises;
 using SER.Database.Models.Groups;
 using SER.Database.Models.Students;
+using SER.Database.Models.Users;
 using SER.Database.Models.WorkPlaces;
 using SER.Tools.Types.IDs;
 
@@ -22,6 +23,7 @@ public class SERDbContext(DbContextOptions<SERDbContext> options) : DbContext(op
 	public DbSet<GroupEntity> Groups { get; set; }
 	public DbSet<StudentEntity> Students { get; set; }
 	public DbSet<WorkPlaceEntity> WorkPlaces { get; set; }
+	public DbSet<UserEntity> Users { get; set; }
 
 	protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
 	{

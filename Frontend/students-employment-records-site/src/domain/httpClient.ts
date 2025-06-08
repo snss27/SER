@@ -1,7 +1,10 @@
+import { InfrastructureUrls } from "@/constants/infrastructureUrls"
+
 export class HttpClient {
     private static apiHost = process.env.NEXT_PUBLIC_API_URL
     private static fileStorageHost = process.env.NEXT_PUBLIC_FILE_STORAGE_URL
     private static fileStorageSecretKey = process.env.NEXT_PUBLIC_FILE_STORAGE_SECRET_KEY
+    private static apiKeyword: string = process.env.NEXT_PUBLIC_API_KEYWORD!
 
     public static async getJsonAsync(url: string, params?: any): Promise<any> {
         const fullUrl = `${this.apiHost}${url}${HttpClient.toQueryString(params)}`
@@ -10,6 +13,7 @@ export class HttpClient {
             await fetch(fullUrl, {
                 method: "GET",
                 headers: HttpClient.headers,
+                credentials: "include",
             })
         )
 
@@ -32,6 +36,7 @@ export class HttpClient {
                 method: "POST",
                 headers: HttpClient.headers,
                 body: JSON.stringify(this.convertDatesWithOffset(data)),
+                credentials: "include",
             })
         )
 
@@ -135,6 +140,7 @@ export class HttpClient {
         headers.append("X-Requested-With", "XMLHttpRequest")
         headers.append("Content-Type", "application/json")
         headers.append("Accept", "application/json")
+        headers.append("KeywordApi", this.apiKeyword)
 
         return headers
     }
@@ -147,15 +153,12 @@ export class HttpClient {
 
         if (response.ok) return Promise.resolve(response)
 
-        //TODO Сделать страницы с ошибками?
-        // switch (response.status) {
-        //     case 403:
-        //         window.location.href = InfrastructureLinks.forbidden
-        //         return Promise.reject(new Error('Forbidden'));
-        //     case 404:
-        //         window.location.href = InfrastructureLinks.notFound;
-        //         return Promise.reject(new Error('Not Found'));
-        // }
+        switch (response.status) {
+            case 401: {
+                window.location.href = InfrastructureUrls.Login
+                return Promise.reject(new Error("Unauthorized"))
+            }
+        }
 
         return Promise.reject(`${response.status} - unknown status code`)
     }
