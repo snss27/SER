@@ -9,19 +9,22 @@ import { AdditionalQualificationsProvider } from "@/domain/additionalQualificati
 import { EnterprisesProvider } from "@/domain/enterprises/enterprisesProvider"
 import { WorkPlaceGroupingVariant } from "@/domain/reports/enums/workPlaceGroupingVariant"
 import { ReportGroupingOptions } from "@/domain/reports/models/reportGroupingOptions"
+import { ReportVisibilityOptions } from "@/domain/reports/models/reportVisibilityOptions"
 import { ForeignCitizenVariant } from "@/domain/students/enums/foreignCitizenVariant"
 import { Gender } from "@/domain/students/enums/gender"
 import { OnPaidStudyVariant } from "@/domain/students/enums/onPaidStudyVariant"
 import { SocialStatus } from "@/domain/students/enums/socialStatus"
 import { StudentStatus } from "@/domain/students/enums/studentStatus"
 import { Box } from "@mui/material"
-import { useReducer } from "react"
+import { useReducer, useState } from "react"
 
 const ReportsPage = () => {
     const [groupingOptions, dispatch] = useReducer(
         ReportGroupingOptions.reducer,
         ReportGroupingOptions.empty()
     )
+
+    const [visibilityOptions, setVisibilityOptions] = useState(ReportVisibilityOptions.getDefault)
 
     const stepContent = [
         <Box
@@ -217,129 +220,372 @@ const ReportsPage = () => {
             sx={{ p: 2, flex: 1, display: "flex", flexDirection: "column", gap: 3 }}>
             <Box sx={{ display: "flex", gap: 2 }}>
                 <Box sx={{ flex: 1 }}>
-                    <Switch value={true} label="Пол" onChange={() => {}} />
+                    <Switch
+                        value={visibilityOptions.gender}
+                        label="Пол"
+                        onChange={() =>
+                            setVisibilityOptions({
+                                ...visibilityOptions,
+                                gender: !visibilityOptions.gender,
+                            })
+                        }
+                    />
                 </Box>
                 <Box sx={{ flex: 1 }}>
-                    <Switch value={true} label="Дата рождения" onChange={() => {}} />
+                    <Switch
+                        value={visibilityOptions.birthDate}
+                        label="Дата рождения"
+                        onChange={() =>
+                            setVisibilityOptions({
+                                ...visibilityOptions,
+                                birthDate: !visibilityOptions.birthDate,
+                            })
+                        }
+                    />
                 </Box>
                 <Box sx={{ flex: 1 }}>
-                    <Switch value={true} label="Номер телефона" onChange={() => {}} />
+                    <Switch
+                        value={visibilityOptions.phoneNumber}
+                        label="Номер телефона"
+                        onChange={() =>
+                            setVisibilityOptions({
+                                ...visibilityOptions,
+                                phoneNumber: !visibilityOptions.phoneNumber,
+                            })
+                        }
+                    />
                 </Box>
             </Box>
             <Box sx={{ display: "flex", gap: 2 }}>
                 <Box sx={{ flex: 1 }}>
                     <Switch
-                        value={false}
+                        value={visibilityOptions.representativePhoneNumber}
                         label="Номер телефона представителя"
-                        onChange={() => {}}
+                        onChange={() =>
+                            setVisibilityOptions({
+                                ...visibilityOptions,
+                                representativePhoneNumber:
+                                    !visibilityOptions.representativePhoneNumber,
+                            })
+                        }
                     />
                 </Box>
                 <Box sx={{ flex: 1 }}>
                     <Switch
-                        value={false}
+                        value={visibilityOptions.representativeAlias}
                         label="Как обратиться к представителю"
-                        onChange={() => {}}
+                        onChange={() =>
+                            setVisibilityOptions({
+                                ...visibilityOptions,
+                                representativeAlias: !visibilityOptions.representativeAlias,
+                            })
+                        }
                     />
                 </Box>
                 <Box sx={{ flex: 1 }}>
-                    <Switch value={false} label="Обучение на платной основе?" onChange={() => {}} />
+                    <Switch
+                        value={visibilityOptions.isOnPaidStudy}
+                        label="Обучение на платной основе?"
+                        onChange={() =>
+                            setVisibilityOptions({
+                                ...visibilityOptions,
+                                isOnPaidStudy: !visibilityOptions.isOnPaidStudy,
+                            })
+                        }
+                    />
                 </Box>
             </Box>
             <Box sx={{ display: "flex", gap: 2 }}>
                 <Box sx={{ flex: 1 }}>
-                    <Switch value={false} label="Снилс" onChange={() => {}} />
-                </Box>
-                <Box sx={{ flex: 1 }}>
-                    <Switch value={false} label="Номер группы" onChange={() => {}} />
-                </Box>
-                <Box sx={{ flex: 1 }}>
-                    <Switch value={true} label="Структурное подразделение" onChange={() => {}} />
-                </Box>
-            </Box>
-            <Box sx={{ display: "flex", gap: 2 }}>
-                <Box sx={{ flex: 1 }}>
-                    <Switch value={false} label="Тип уровня образования" onChange={() => {}} />
-                </Box>
-                <Box sx={{ flex: 1 }}>
-                    <Switch value={true} label="Название уровня образования" onChange={() => {}} />
-                </Box>
-                <Box sx={{ flex: 1 }}>
-                    <Switch value={true} label="Код уровня образования" onChange={() => {}} />
-                </Box>
-            </Box>
-            <Box sx={{ display: "flex", gap: 2 }}>
-                <Box sx={{ flex: 1 }}>
-                    <Switch value={false} label="Год поступления" onChange={() => {}} />
-                </Box>
-                <Box sx={{ flex: 1 }}>
-                    <Switch value={false} label="Куратор" onChange={() => {}} />
-                </Box>
-                <Box sx={{ flex: 1 }}>
-                    <Switch value={false} label="Название кластера" onChange={() => {}} />
-                </Box>
-            </Box>
-            <Box sx={{ display: "flex", gap: 2 }}>
-                <Box sx={{ flex: 1 }}>
-                    <Switch value={false} label="Номер паспорта" onChange={() => {}} />
-                </Box>
-                <Box sx={{ flex: 1 }}>
-                    <Switch value={false} label="Серия паспорта" onChange={() => {}} />
-                </Box>
-                <Box sx={{ flex: 1 }}>
-                    <Switch value={true} label="Кем выдан паспорт" onChange={() => {}} />
-                </Box>
-            </Box>
-            <Box sx={{ display: "flex", gap: 2 }}>
-                <Box sx={{ flex: 1 }}>
-                    <Switch value={false} label="Дата получения паспорта" onChange={() => {}} />
+                    <Switch
+                        value={visibilityOptions.snils}
+                        label="Снилс"
+                        onChange={() =>
+                            setVisibilityOptions({
+                                ...visibilityOptions,
+                                snils: !visibilityOptions.snils,
+                            })
+                        }
+                    />
                 </Box>
                 <Box sx={{ flex: 1 }}>
                     <Switch
-                        value={true}
+                        value={visibilityOptions.groupNumber}
+                        label="Номер группы"
+                        onChange={() =>
+                            setVisibilityOptions({
+                                ...visibilityOptions,
+                                groupNumber: !visibilityOptions.groupNumber,
+                            })
+                        }
+                    />
+                </Box>
+                <Box sx={{ flex: 1 }}>
+                    <Switch
+                        value={visibilityOptions.structuralUnit}
+                        label="Структурное подразделение"
+                        onChange={() =>
+                            setVisibilityOptions({
+                                ...visibilityOptions,
+                                structuralUnit: !visibilityOptions.structuralUnit,
+                            })
+                        }
+                    />
+                </Box>
+            </Box>
+            <Box sx={{ display: "flex", gap: 2 }}>
+                <Box sx={{ flex: 1 }}>
+                    <Switch
+                        value={visibilityOptions.educationLevelType}
+                        label="Тип уровня образования"
+                        onChange={() =>
+                            setVisibilityOptions({
+                                ...visibilityOptions,
+                                educationLevelType: !visibilityOptions.educationLevelType,
+                            })
+                        }
+                    />
+                </Box>
+                <Box sx={{ flex: 1 }}>
+                    <Switch
+                        value={visibilityOptions.educationLevelName}
+                        label="Название уровня образования"
+                        onChange={() =>
+                            setVisibilityOptions({
+                                ...visibilityOptions,
+                                educationLevelName: !visibilityOptions.educationLevelName,
+                            })
+                        }
+                    />
+                </Box>
+                <Box sx={{ flex: 1 }}>
+                    <Switch
+                        value={visibilityOptions.educationLevelCode}
+                        label="Код уровня образования"
+                        onChange={() =>
+                            setVisibilityOptions({
+                                ...visibilityOptions,
+                                educationLevelCode: !visibilityOptions.educationLevelCode,
+                            })
+                        }
+                    />
+                </Box>
+            </Box>
+            <Box sx={{ display: "flex", gap: 2 }}>
+                <Box sx={{ flex: 1 }}>
+                    <Switch
+                        value={visibilityOptions.enrollmentYear}
+                        label="Год поступления"
+                        onChange={() =>
+                            setVisibilityOptions({
+                                ...visibilityOptions,
+                                enrollmentYear: !visibilityOptions.enrollmentYear,
+                            })
+                        }
+                    />
+                </Box>
+                <Box sx={{ flex: 1 }}>
+                    <Switch
+                        value={visibilityOptions.curator}
+                        label="Куратор"
+                        onChange={() =>
+                            setVisibilityOptions({
+                                ...visibilityOptions,
+                                curator: !visibilityOptions.curator,
+                            })
+                        }
+                    />
+                </Box>
+                <Box sx={{ flex: 1 }}>
+                    <Switch
+                        value={visibilityOptions.clusterName}
+                        label="Наименование кластера"
+                        onChange={() =>
+                            setVisibilityOptions({
+                                ...visibilityOptions,
+                                clusterName: !visibilityOptions.clusterName,
+                            })
+                        }
+                    />
+                </Box>
+            </Box>
+            <Box sx={{ display: "flex", gap: 2 }}>
+                <Box sx={{ flex: 1 }}>
+                    <Switch
+                        value={visibilityOptions.passportNumber}
+                        label="Номер паспорта"
+                        onChange={() =>
+                            setVisibilityOptions({
+                                ...visibilityOptions,
+                                passportNumber: !visibilityOptions.passportNumber,
+                            })
+                        }
+                    />
+                </Box>
+                <Box sx={{ flex: 1 }}>
+                    <Switch
+                        value={visibilityOptions.passportSeries}
+                        label="Серия паспорта"
+                        onChange={() =>
+                            setVisibilityOptions({
+                                ...visibilityOptions,
+                                passportSeries: !visibilityOptions.passportSeries,
+                            })
+                        }
+                    />
+                </Box>
+                <Box sx={{ flex: 1 }}>
+                    <Switch
+                        value={visibilityOptions.passportIssuedBy}
+                        label="Кем выдан паспорт"
+                        onChange={() =>
+                            setVisibilityOptions({
+                                ...visibilityOptions,
+                                passportIssuedBy: !visibilityOptions.passportIssuedBy,
+                            })
+                        }
+                    />
+                </Box>
+            </Box>
+            <Box sx={{ display: "flex", gap: 2 }}>
+                <Box sx={{ flex: 1 }}>
+                    <Switch
+                        value={visibilityOptions.passportIssueDate}
+                        label="Дата получения паспорта"
+                        onChange={() =>
+                            setVisibilityOptions({
+                                ...visibilityOptions,
+                                passportIssueDate: !visibilityOptions.passportIssueDate,
+                            })
+                        }
+                    />
+                </Box>
+                <Box sx={{ flex: 1 }}>
+                    <Switch
+                        value={visibilityOptions.targetAgreementNumber}
                         label="Номер договора о целевом обучении"
-                        onChange={() => {}}
+                        onChange={() =>
+                            setVisibilityOptions({
+                                ...visibilityOptions,
+                                targetAgreementNumber: !visibilityOptions.targetAgreementNumber,
+                            })
+                        }
                     />
                 </Box>
                 <Box sx={{ flex: 1 }}>
                     <Switch
-                        value={true}
+                        value={visibilityOptions.targetAgreementEnterpriseName}
                         label="Название предприятие, с которым заключен договор о целевом обучении"
-                        onChange={() => {}}
+                        onChange={() =>
+                            setVisibilityOptions({
+                                ...visibilityOptions,
+                                targetAgreementEnterpriseName:
+                                    !visibilityOptions.targetAgreementEnterpriseName,
+                            })
+                        }
                     />
                 </Box>
             </Box>
             <Box sx={{ display: "flex", gap: 2 }}>
                 <Box sx={{ flex: 1 }}>
                     <Switch
-                        value={true}
+                        value={visibilityOptions.targetAgreementDate}
                         label="Дата заключения договора о целевом обучении"
-                        onChange={() => {}}
+                        onChange={() =>
+                            setVisibilityOptions({
+                                ...visibilityOptions,
+                                targetAgreementDate: !visibilityOptions.targetAgreementDate,
+                            })
+                        }
                     />
                 </Box>
                 <Box sx={{ flex: 1 }}>
-                    <Switch value={true} label="Дата призыва" onChange={() => {}} />
+                    <Switch
+                        value={visibilityOptions.armyCallDate}
+                        label="Дата призыва"
+                        onChange={() =>
+                            setVisibilityOptions({
+                                ...visibilityOptions,
+                                armyCallDate: !visibilityOptions.armyCallDate,
+                            })
+                        }
+                    />
                 </Box>
                 <Box sx={{ flex: 1 }}>
-                    <Switch value={true} label="Социальные статусы" onChange={() => {}} />
+                    <Switch
+                        value={visibilityOptions.socialStatuses}
+                        label="Социальные статусы"
+                        onChange={() =>
+                            setVisibilityOptions({
+                                ...visibilityOptions,
+                                socialStatuses: !visibilityOptions.socialStatuses,
+                            })
+                        }
+                    />
                 </Box>
             </Box>
             <Box sx={{ display: "flex", gap: 2 }}>
                 <Box sx={{ flex: 1 }}>
-                    <Switch value={false} label="Статус" onChange={() => {}} />
+                    <Switch
+                        value={visibilityOptions.status}
+                        label="Статус"
+                        onChange={() =>
+                            setVisibilityOptions({
+                                ...visibilityOptions,
+                                status: !visibilityOptions.status,
+                            })
+                        }
+                    />
                 </Box>
                 <Box sx={{ flex: 1 }}>
-                    <Switch value={false} label="Адрес" onChange={() => {}} />
+                    <Switch
+                        value={visibilityOptions.address}
+                        label="Адрес"
+                        onChange={() =>
+                            setVisibilityOptions({
+                                ...visibilityOptions,
+                                address: !visibilityOptions.address,
+                            })
+                        }
+                    />
                 </Box>
                 <Box sx={{ flex: 1 }}>
-                    <Switch value={false} label="Иностранный гражданин?" onChange={() => {}} />
+                    <Switch
+                        value={visibilityOptions.isForeignCitizen}
+                        label="Иностранный гражданин?"
+                        onChange={() =>
+                            setVisibilityOptions({
+                                ...visibilityOptions,
+                                isForeignCitizen: !visibilityOptions.isForeignCitizen,
+                            })
+                        }
+                    />
                 </Box>
             </Box>
             <Box sx={{ display: "flex", gap: 2 }}>
                 <Box sx={{ flex: 1 }}>
-                    <Switch value={false} label="Инн" onChange={() => {}} />
+                    <Switch
+                        value={visibilityOptions.inn}
+                        label="Инн"
+                        onChange={() =>
+                            setVisibilityOptions({
+                                ...visibilityOptions,
+                                inn: !visibilityOptions.inn,
+                            })
+                        }
+                    />
                 </Box>
                 <Box sx={{ flex: 1 }}>
-                    <Switch value={false} label="Почта" onChange={() => {}} />
+                    <Switch
+                        value={visibilityOptions.email}
+                        label="Почта"
+                        onChange={() =>
+                            setVisibilityOptions({
+                                ...visibilityOptions,
+                                email: !visibilityOptions.email,
+                            })
+                        }
+                    />
                 </Box>
                 <Box sx={{ flex: 1 }} />
             </Box>
