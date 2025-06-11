@@ -23,15 +23,8 @@ const EditStudentPage: React.FC = () => {
     if (studentBlank === null) return null
 
     return (
-        <Box
-            sx={{
-                width: "100%",
-                height: "100%",
-                display: "flex",
-                flexDirection: "column",
-                gap: 1.5,
-            }}>
-            <Typography variant="h1" textAlign="center">
+        <Box className="container" sx={{ px: 4, pt: 4, g: 2 }}>
+            <Typography variant="h1" textAlign="center" gutterBottom>
                 Редактирование студента
             </Typography>
             <EditStudentForm initialStudentBlank={studentBlank} />

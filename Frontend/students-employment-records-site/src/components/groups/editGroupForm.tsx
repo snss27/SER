@@ -39,7 +39,16 @@ export const EditGroupForm = (props: Props) => {
     }
 
     return (
-        <Box component="form" className="edit-form-container">
+        <Box
+            sx={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 2,
+                flex: 1,
+                py: 2,
+                width: "50%",
+                alignSelf: "center",
+            }}>
             <GroupNumberInput
                 value={groupBlank.number}
                 onChange={(number) =>

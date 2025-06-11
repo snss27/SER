@@ -8,7 +8,7 @@ import { useParams } from "next/navigation"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 
-const EditSpecialityPage = () => {
+const EditSpecialtyPage = () => {
     const [educationLevelBlank, setEducationLevelBlank] = useState<EducationLevelBlank | null>(null)
 
     const navigator = useRouter()
@@ -34,15 +34,13 @@ const EditSpecialityPage = () => {
     if (educationLevelBlank === null) return null
 
     return (
-        <Box className="container-fill">
-            <Box className="edit-page-container">
-                <Typography variant="h1" textAlign="center">
-                    Редактирование уровня образования
-                </Typography>
-                <EditEducationLevelForm initialBlank={educationLevelBlank} />
-            </Box>
+        <Box className="container" sx={{ px: 4, pt: 4, g: 2 }}>
+            <Typography variant="h1" textAlign="center" gutterBottom>
+                Редактирование уровня образования
+            </Typography>
+            <EditEducationLevelForm initialBlank={educationLevelBlank} />
         </Box>
     )
 }
 
-export default EditSpecialityPage
+export default EditSpecialtyPage

@@ -33,13 +33,11 @@ const EditEnterprisePage = () => {
     if (enterpriseBlank === null) return null
 
     return (
-        <Box className="container-fill">
-            <Box className="edit-page-container">
-                <Typography variant="h1" textAlign="center">
-                    Редактирование организации
-                </Typography>
-                <EditEnterpriseForm initialBlank={enterpriseBlank} />
-            </Box>
+        <Box className="container" sx={{ px: 4, pt: 4, g: 2 }}>
+            <Typography variant="h1" textAlign="center" gutterBottom>
+                Редактирование организации
+            </Typography>
+            <EditEnterpriseForm initialBlank={enterpriseBlank} />
         </Box>
     )
 }

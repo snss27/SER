@@ -1,3 +1,4 @@
+import { AdditionalQualificationsProvider } from "@/domain/additionalQualifications/additionalQualificationsProvider"
 import { AdditionalQualificationBlank } from "@/domain/additionalQualifications/models/additionalQualificationBlank"
 import useNotifications from "@/hooks/useNotifications"
 import { Box } from "@mui/material"
@@ -6,7 +7,6 @@ import React, { useReducer } from "react"
 import { IconPosition, IconType } from "../shared/buttons"
 import Button from "../shared/buttons/button"
 import TextInput from "../shared/inputs/textInput"
-import { AdditionalQualificationsProvider } from "@/domain/additionalQualifications/additionalQualificationsProvider"
 
 interface Props {
     initialBlank: AdditionalQualificationBlank
@@ -34,7 +34,16 @@ export const EditAdditionalQualificationForm: React.FC<Props> = ({ initialBlank 
     }
 
     return (
-        <Box component="form" className="edit-form-container">
+        <Box
+            sx={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 2,
+                flex: 1,
+                py: 2,
+                width: "50%",
+                alignSelf: "center",
+            }}>
             <TextInput
                 value={additionalQualificationBlank.name}
                 label="Наименование"

@@ -50,7 +50,14 @@ export const EditStudentForm: React.FC<Props> = ({ initialStudentBlank }) => {
     }
 
     return (
-        <Box component="form" className="edit-form-container">
+        <Box
+            sx={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 2,
+                flex: 1,
+                py: 2,
+            }}>
             <TextInput
                 value={studentBlank.name}
                 onChange={(name) => dispatch({ type: "CHANGE_NAME", payload: { name } })}

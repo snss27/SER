@@ -33,7 +33,16 @@ export const EditEducationLevelForm = ({ initialBlank }: Props) => {
     }
 
     return (
-        <Box component="form" className="edit-form-container">
+        <Box
+            sx={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 2,
+                flex: 1,
+                py: 2,
+                width: "50%",
+                alignSelf: "center",
+            }}>
             <Select
                 options={EducationLevelTypes.getAll()}
                 value={educationLevelBlank.type}

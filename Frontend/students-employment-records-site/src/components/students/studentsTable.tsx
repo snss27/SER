@@ -100,7 +100,7 @@ export const StudentsTable: React.FC = () => {
     )
 
     return (
-        <Box>
+        <Box sx={{ display: "flex", flexDirection: "column", flex: 1 }}>
             <Box sx={{ display: "flex", justifyContent: "flex-end", pb: 2 }}>
                 <TextInput
                     label="Поиск"

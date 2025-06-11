@@ -2,7 +2,6 @@
 *.refsignored
 *.cache
 *.user
-*.env
 .suo
 .vs/
 .idea/

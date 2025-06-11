@@ -10,20 +10,18 @@ const AdditionalQualificationsPage: React.FC = () => {
     const navigator = useRouter()
 
     return (
-        <Box className="container-fill">
-            <Box className="inner-container">
-                <Box className="header-container">
-                    <Typography variant="h1" sx={{ flex: 1 }} textAlign="center">
-                        Дополнительные квалификации
-                    </Typography>
-                    <Button
-                        text="Добавить квалификацию"
-                        onClick={() => navigator.push(PageUrls.AddAdditionalQualification)}
-                        icon={{ type: IconType.Add, position: IconPosition.Start }}
-                    />
-                </Box>
-                <AdditionalQualificationsTable />
+        <Box className="container" sx={{ p: 4, gap: 2 }}>
+            <Box className="header-container">
+                <Typography variant="h1" sx={{ flex: 1 }} textAlign="center">
+                    Дополнительные квалификации
+                </Typography>
+                <Button
+                    text="Добавить квалификацию"
+                    onClick={() => navigator.push(PageUrls.AddAdditionalQualification)}
+                    icon={{ type: IconType.Add, position: IconPosition.Start }}
+                />
             </Box>
+            <AdditionalQualificationsTable />
         </Box>
     )
 }

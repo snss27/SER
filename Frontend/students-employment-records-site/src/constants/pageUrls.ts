@@ -20,6 +20,7 @@ enum PageUrls {
     Clusters = "/clusters",
     AddCluster = "/clusters/add",
     EditCluster = "/clusters/edit",
+    Reports = "/reports",
 }
 
 export default PageUrls

@@ -2,12 +2,14 @@ import PageUrls from "@/constants/pageUrls"
 import { enumToArrayNumber } from "@/tools/enums/enumUtils"
 import { NeverUnreachable } from "@/tools/neverUreachable"
 import ApartmentIcon from "@mui/icons-material/Apartment"
+import AssessmentIcon from "@mui/icons-material/Assessment"
 import EmojiPeopleIcon from "@mui/icons-material/EmojiPeople"
 import EngineeringIcon from "@mui/icons-material/Engineering"
 import GroupsIcon from "@mui/icons-material/Groups"
 import SchemaIcon from "@mui/icons-material/Schema"
 import SchoolIcon from "@mui/icons-material/School"
 import WorkIcon from "@mui/icons-material/Work"
+import { JSX } from "react"
 
 export enum SideBarElements {
     Students = 1,
@@ -17,6 +19,7 @@ export enum SideBarElements {
     AdditionalQualifications = 5,
     Enterprises = 6,
     Clusters = 7,
+    Reports = 8,
 }
 
 export namespace SideBarElements {
@@ -44,6 +47,8 @@ export namespace SideBarElements {
                 return <ApartmentIcon />
             case SideBarElements.Clusters:
                 return <SchemaIcon />
+            case SideBarElements.Reports:
+                return <AssessmentIcon />
             default:
                 throw new NeverUnreachable(element)
         }
@@ -65,6 +70,8 @@ export namespace SideBarElements {
                 return "Организации"
             case SideBarElements.Clusters:
                 return "Кластеры"
+            case SideBarElements.Reports:
+                return "Генерация отчета"
             default:
                 throw new NeverUnreachable(element)
         }
@@ -86,6 +93,8 @@ export namespace SideBarElements {
                 return PageUrls.Enterprises
             case SideBarElements.Clusters:
                 return PageUrls.Clusters
+            case SideBarElements.Reports:
+                return PageUrls.Reports
             default:
                 throw new NeverUnreachable(element)
         }

@@ -33,13 +33,11 @@ const EditEmployeePage: React.FC = () => {
     if (employeeBlank === null) return null
 
     return (
-        <Box className="container-fill">
-            <Box className="edit-page-container">
-                <Typography variant="h1" textAlign="center">
-                    Редактирование сотрудника
-                </Typography>
-                <EditEmployeeForm initialBlank={employeeBlank} />
-            </Box>
+        <Box className="container" sx={{ px: 4, pt: 4, g: 2 }}>
+            <Typography variant="h1" textAlign="center" gutterBottom>
+                Редактирование сотрудника
+            </Typography>
+            <EditEmployeeForm initialBlank={employeeBlank} />
         </Box>
     )
 }
