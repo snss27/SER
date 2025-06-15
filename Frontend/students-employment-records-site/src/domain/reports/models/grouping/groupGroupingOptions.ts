@@ -2,7 +2,7 @@ import { Cluster } from "@/domain/clusters/models/cluster"
 import { Employee } from "@/domain/employees/models/employee"
 import { StructuralUnits } from "@/domain/groups/enums/structuralUnits"
 import { Group } from "@/domain/groups/models/group"
-import { GroupGroupingType } from "../enums/groupGroupingType"
+import { GroupGroupingType } from "../../enums/groupGroupingType"
 import { EducationLevelGroupingOptions } from "./educationLevelGroupingOptions"
 
 export type GroupGroupingOptions =

@@ -31,7 +31,7 @@ export namespace GroupGroupingType {
             case GroupGroupingType.Clusters:
                 return "По кластерам"
             case GroupGroupingType.NotGrouping:
-                return "Не группировать"
+                return "Не фильтровать"
             default:
                 throw new NeverUnreachable(type)
         }

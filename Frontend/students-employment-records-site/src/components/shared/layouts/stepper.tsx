@@ -69,7 +69,7 @@ const StepperComponent = ({ steps, stepContent, onComplete, onReset }: StepperCo
                     <Button text="Сбросить" onClick={handleReset} />
                 </Box>
                 <Button
-                    text={isLastStep ? "Завершить" : "Далее"}
+                    text={isLastStep ? "Сгенерировать" : "Далее"}
                     variant="contained"
                     onClick={handleNext}
                 />

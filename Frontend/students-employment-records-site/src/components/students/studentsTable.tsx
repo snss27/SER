@@ -1,5 +1,7 @@
 import PageUrls from "@/constants/pageUrls"
 import { PAGE_SIZE } from "@/constants/pagination"
+import { Gender } from "@/domain/students/enums/gender"
+import { StudentStatus } from "@/domain/students/enums/studentStatus"
 import { StudentsFilter } from "@/domain/students/models/studentsFilter"
 import { StudentsProvider } from "@/domain/students/studentsProvider"
 import useDebounce from "@/hooks/useDebounce"
@@ -121,12 +123,8 @@ export const StudentsTable: React.FC = () => {
                         <TableRow>
                             <TableCell sx={{ width: "25%", fontWeight: "bold" }}>ФИО</TableCell>
                             <TableCell sx={{ width: "20%", fontWeight: "bold" }}>Группа</TableCell>
-                            <TableCell sx={{ width: "15%", fontWeight: "bold" }}>
-                                Целевое обучение?
-                            </TableCell>
-                            <TableCell sx={{ width: "20%", fontWeight: "bold" }}>
-                                Иностранный гражданин?
-                            </TableCell>
+                            <TableCell sx={{ width: "15%", fontWeight: "bold" }}>Пол</TableCell>
+                            <TableCell sx={{ width: "20%", fontWeight: "bold" }}>Статус</TableCell>
                             <TableCell sx={{ width: "10%", fontWeight: "bold" }}>
                                 Платное обучение?
                             </TableCell>
@@ -146,10 +144,10 @@ export const StudentsTable: React.FC = () => {
                                     {student.group.displayName}
                                 </TableCell>
                                 <TableCell sx={{ width: "15%" }}>
-                                    {student.isTargetAgreement ? "Да" : "Нет"}
+                                    {Gender.getDisplayText(student.gender)}
                                 </TableCell>
                                 <TableCell sx={{ width: "20%" }}>
-                                    {student.isForeignCitizen ? "Да" : "Нет"}
+                                    {StudentStatus.getDisplayText(student.status)}
                                 </TableCell>
                                 <TableCell sx={{ width: "10%" }}>
                                     {student.isOnPaidStudy ? "Да" : "Нет"}

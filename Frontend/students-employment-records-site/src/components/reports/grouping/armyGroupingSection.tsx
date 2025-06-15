@@ -1,28 +1,29 @@
-import { ArmyGroupingVariant } from "@/domain/reports/models/armyGroupingVariant"
-import { Action } from "@/domain/reports/models/reportGroupingOptions"
-import { Box, Collapse, FormControlLabel, Radio, Switch } from "@mui/material"
-import { DateRangePicker } from "../shared/inputs/dateRangePicker"
+import Switch from "@/components/shared/buttons/switch"
+import { DateRangePicker } from "@/components/shared/inputs/dateRangePicker"
+import { ArmyGroupingOptions } from "@/domain/reports/models/grouping/armyGroupingVariant"
+import { Action } from "@/domain/reports/models/grouping/reportGroupingOptions"
+import { Box, Collapse, FormControlLabel, Radio } from "@mui/material"
 
 export const ArmyGroupingSection = ({
-    armyGroupingVariant,
+    armyGroupingOptions,
     dispatch,
 }: {
-    armyGroupingVariant: ArmyGroupingVariant | null
+    armyGroupingOptions: ArmyGroupingOptions | null
     dispatch: React.Dispatch<Action>
 }) => {
     const handleMustServeChange = (mustServe: boolean | null) => {
         if (mustServe === null) {
             dispatch({
-                type: "CHANGE_ARMY_GROUPING_VARIANT",
-                payload: { armyGroupingVariant: null },
+                type: "CHANGE_ARMY_GROUPING_OPTIONS",
+                payload: { armyGroupingOptions: null },
             })
             return
         }
 
         dispatch({
-            type: "CHANGE_ARMY_GROUPING_VARIANT",
+            type: "CHANGE_ARMY_GROUPING_OPTIONS",
             payload: {
-                armyGroupingVariant: mustServe
+                armyGroupingOptions: mustServe
                     ? { mustServe: true, armyCallDatePeriod: [null, null] }
                     : { mustServe: false },
             },
@@ -30,12 +31,12 @@ export const ArmyGroupingSection = ({
     }
 
     const handlePeriodChange = (period: [Date | null, Date | null]) => {
-        if (!armyGroupingVariant || !armyGroupingVariant.mustServe) return
+        if (!armyGroupingOptions || !armyGroupingOptions.mustServe) return
 
         dispatch({
-            type: "CHANGE_ARMY_GROUPING_VARIANT",
+            type: "CHANGE_ARMY_GROUPING_OPTIONS",
             payload: {
-                armyGroupingVariant: {
+                armyGroupingOptions: {
                     mustServe: true,
                     armyCallDatePeriod: period,
                 },
@@ -45,23 +46,19 @@ export const ArmyGroupingSection = ({
 
     return (
         <Box sx={{ display: "flex", flexDirection: "column" }}>
-            <FormControlLabel
-                control={
-                    <Switch
-                        checked={armyGroupingVariant !== null}
-                        onChange={(e) => handleMustServeChange(e.target.checked ? true : null)}
-                    />
-                }
-                label="Группировать по службе в армии"
+            <Switch
+                label="Фильтровать по службе в армии"
+                value={armyGroupingOptions !== null}
+                onChange={(isChecked) => handleMustServeChange(isChecked ? true : null)}
             />
 
             <Collapse
-                in={armyGroupingVariant !== null}
+                in={armyGroupingOptions !== null}
                 sx={{ display: "flex", flexDirection: "column" }}>
                 <FormControlLabel
                     control={
                         <Radio
-                            checked={armyGroupingVariant ? armyGroupingVariant.mustServe : false}
+                            checked={armyGroupingOptions ? armyGroupingOptions.mustServe : false}
                             onChange={() => handleMustServeChange(true)}
                         />
                     }
@@ -71,19 +68,19 @@ export const ArmyGroupingSection = ({
                 <FormControlLabel
                     control={
                         <Radio
-                            checked={armyGroupingVariant ? !armyGroupingVariant.mustServe : false}
+                            checked={armyGroupingOptions ? !armyGroupingOptions.mustServe : false}
                             onChange={() => handleMustServeChange(false)}
                         />
                     }
                     label="Только НЕ подлежащие призыву"
                 />
 
-                <Collapse in={armyGroupingVariant?.mustServe} sx={{ mt: 1 }}>
+                <Collapse in={armyGroupingOptions?.mustServe} sx={{ mt: 1 }}>
                     <DateRangePicker
                         label="Период повестки"
                         value={
-                            armyGroupingVariant?.mustServe
-                                ? armyGroupingVariant.armyCallDatePeriod
+                            armyGroupingOptions?.mustServe
+                                ? armyGroupingOptions.armyCallDatePeriod
                                 : [null, null]
                         }
                         onChange={handlePeriodChange}

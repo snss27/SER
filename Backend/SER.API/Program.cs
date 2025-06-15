@@ -5,8 +5,10 @@ using SER.Services.Configurator;
 using SER.Startup;
 using SER.Tools.Binders;
 using Microsoft.AspNetCore.CookiePolicy;
+using OfficeOpenXml;
 
 Env.TraversePath().Load();
+ExcelPackage.License.SetNonCommercialOrganization("College-Colomna");
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 

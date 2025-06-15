@@ -24,6 +24,11 @@ public class FullName : ValueObject
 		return new FullName(first, second, last);
 	}
 
+	public String DisplayName()
+	{
+		return Second + First + Last ?? "";
+	}
+
 	protected override IEnumerable<Object?> GetEqualityComponents()
 	{
 		yield return First;

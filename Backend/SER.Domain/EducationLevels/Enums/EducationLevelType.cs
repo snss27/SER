@@ -5,3 +5,17 @@ public enum EducationLevelType
 	Profession = 2,
 	ProfessionalEducation = 3
 }
+
+public static class EducationLevelTypeExtensions
+{
+	public static String DisplayName(this EducationLevelType type)
+	{
+		return type switch
+		{
+			EducationLevelType.Speciality => "Специальность",
+			EducationLevelType.Profession => "Профессия",
+			EducationLevelType.ProfessionalEducation => "Профессиональное обучение",
+			_ => throw new Exception()
+		};
+	}
+}

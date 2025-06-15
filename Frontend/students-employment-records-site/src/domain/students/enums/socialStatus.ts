@@ -12,16 +12,16 @@ export namespace SocialStatus {
         return enumToArrayNumber<SocialStatus>(SocialStatus)
     }
 
-    export function getDisplayText(peculiarity: SocialStatus): string {
-        switch (peculiarity) {
+    export function getDisplayText(status: SocialStatus): string {
+        switch (status) {
             case SocialStatus.Orphan:
-                return "Инвалидность"
-            case SocialStatus.Invalid:
                 return "Сирота"
+            case SocialStatus.Invalid:
+                return "Инвалидность"
             case SocialStatus.OVZ:
                 return "ОВЗ"
             default:
-                throw new NeverUnreachable(peculiarity)
+                throw new NeverUnreachable(status)
         }
     }
 }

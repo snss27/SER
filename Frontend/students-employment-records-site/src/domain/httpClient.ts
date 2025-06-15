@@ -43,6 +43,29 @@ export class HttpClient {
         return await response.json()
     }
 
+    public static async postBlobAsync(
+        url: string,
+        data: any = null,
+        params: any = null
+    ): Promise<Blob> {
+        const fullUrl = `${this.apiHost}${url}${
+            params != null ? HttpClient.toQueryString(params) : ""
+        }`
+
+        const response = await fetch(fullUrl, {
+            method: "POST",
+            headers: HttpClient.headers,
+            body: JSON.stringify(this.convertDatesWithOffset(data)),
+            credentials: "include",
+        })
+
+        if (!response.ok) {
+            throw new Error(`Ошибка при загрузке файла: ${response.status}`)
+        }
+
+        return await response.blob()
+    }
+
     public static async uploadFilesAsync(files: File[], folder: string): Promise<string[]> {
         const keyword = this.fileStorageSecretKey
 

@@ -25,13 +25,15 @@ function useLoadData<T>({ load }: Props<T>): Returns<T> {
     }, [])
 
     const lastElementRef = useCallback((node: HTMLTableRowElement) => {
-        if (isLoading) return
+        if (isLoading || !node) return
 
         if (observerRef.current) observerRef.current.disconnect()
 
         observerRef.current = new IntersectionObserver((entries) => {
             if (entries[0].isIntersecting) nextPage()
         })
+
+        observerRef.current.observe(node)
     }, [])
 
     const nextPage = useCallback(() => {

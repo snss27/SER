@@ -1,17 +1,17 @@
+import { AsyncAutocomplete } from "@/components/shared/inputs/asyncAutocomplete"
+import { DateRangePicker } from "@/components/shared/inputs/dateRangePicker"
+import { Select } from "@/components/shared/inputs/select"
 import { ClustersProvider } from "@/domain/clusters/clustersProvider"
 import { EducationLevelsProvider } from "@/domain/educationLevels/educationLevelsProvider"
 import { EducationLevelTypes } from "@/domain/educationLevels/enums/EducationLevelTypes"
 import { EmployeesProvider } from "@/domain/employees/employeesProvider"
 import { StructuralUnits } from "@/domain/groups/enums/structuralUnits"
 import { GroupsProvider } from "@/domain/groups/groupsProvider"
-import { EducationLevelGroupingVariant } from "@/domain/reports/enums/educationLevelGroupingVariant"
+import { EducationLevelGroupingType } from "@/domain/reports/enums/educationLevelGroupingVariant"
 import { GroupGroupingType } from "@/domain/reports/enums/groupGroupingType"
-import { GroupGroupingOptions } from "@/domain/reports/models/groupGroupingOptions"
-import { Action } from "@/domain/reports/models/reportGroupingOptions"
+import { GroupGroupingOptions } from "@/domain/reports/models/grouping/groupGroupingOptions"
+import { Action } from "@/domain/reports/models/grouping/reportGroupingOptions"
 import { Box } from "@mui/material"
-import { AsyncAutocomplete } from "../shared/inputs/asyncAutocomplete"
-import { DateRangePicker } from "../shared/inputs/dateRangePicker"
-import { Select } from "../shared/inputs/select"
 
 export const GroupGroupingSection = ({
     groupingOptions,
@@ -44,7 +44,7 @@ export const GroupGroupingSection = ({
                 baseOptions = {
                     type,
                     educationLevelGroupingOptions: {
-                        variant: EducationLevelGroupingVariant.EducationLevelTypes,
+                        variant: EducationLevelGroupingType.EducationLevelTypes,
                         educationLevelTypes: [],
                     },
                 }
@@ -71,19 +71,19 @@ export const GroupGroupingSection = ({
         })
     }
 
-    const handleEducationVariantChange = (variant: EducationLevelGroupingVariant) => {
+    const handleEducationVariantChange = (variant: EducationLevelGroupingType) => {
         if (groupingOptions.type !== GroupGroupingType.EducationLevel) return
 
         const updatedOptions: GroupGroupingOptions = {
             ...groupingOptions,
             educationLevelGroupingOptions:
-                variant === EducationLevelGroupingVariant.EducationLevelTypes
+                variant === EducationLevelGroupingType.EducationLevelTypes
                     ? {
-                          variant: EducationLevelGroupingVariant.EducationLevelTypes,
+                          variant: EducationLevelGroupingType.EducationLevelTypes,
                           educationLevelTypes: [],
                       }
                     : {
-                          variant: EducationLevelGroupingVariant.EducationLevels,
+                          variant: EducationLevelGroupingType.EducationLevels,
                           educationLevels: [],
                       },
         }
@@ -98,7 +98,7 @@ export const GroupGroupingSection = ({
         <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
             <Select
                 required
-                label="Группировка по группам"
+                label="Фильтрация по группам"
                 value={groupingOptions.type}
                 options={GroupGroupingType.getAll()}
                 getOptionLabel={GroupGroupingType.getDisplayName}
@@ -153,11 +153,11 @@ export const GroupGroupingSection = ({
                         <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
                             <Select
                                 required
-                                label="Вариант группировки"
+                                label="Вариант фильтрации"
                                 value={groupingOptions.educationLevelGroupingOptions.variant}
-                                options={EducationLevelGroupingVariant.getAll()}
+                                options={EducationLevelGroupingType.getAll()}
                                 getOptionLabel={(variant) =>
-                                    variant === EducationLevelGroupingVariant.EducationLevelTypes
+                                    variant === EducationLevelGroupingType.EducationLevelTypes
                                         ? "По типу уровня образования"
                                         : "По уровню образования"
                                 }
@@ -165,7 +165,7 @@ export const GroupGroupingSection = ({
                             />
 
                             {groupingOptions.educationLevelGroupingOptions.variant ===
-                                EducationLevelGroupingVariant.EducationLevelTypes && (
+                                EducationLevelGroupingType.EducationLevelTypes && (
                                 <Select
                                     multiple
                                     label="Типы уровней образования"
@@ -183,7 +183,7 @@ export const GroupGroupingSection = ({
                                                     ...groupingOptions,
                                                     educationLevelGroupingOptions: {
                                                         variant:
-                                                            EducationLevelGroupingVariant.EducationLevelTypes,
+                                                            EducationLevelGroupingType.EducationLevelTypes,
                                                         educationLevelTypes,
                                                     },
                                                 },
@@ -194,7 +194,7 @@ export const GroupGroupingSection = ({
                             )}
 
                             {groupingOptions.educationLevelGroupingOptions.variant ===
-                                EducationLevelGroupingVariant.EducationLevels && (
+                                EducationLevelGroupingType.EducationLevels && (
                                 <AsyncAutocomplete
                                     multiple
                                     label="Уровни образования"
@@ -212,7 +212,7 @@ export const GroupGroupingSection = ({
                                                     ...groupingOptions,
                                                     educationLevelGroupingOptions: {
                                                         variant:
-                                                            EducationLevelGroupingVariant.EducationLevels,
+                                                            EducationLevelGroupingType.EducationLevels,
                                                         educationLevels,
                                                     },
                                                 },

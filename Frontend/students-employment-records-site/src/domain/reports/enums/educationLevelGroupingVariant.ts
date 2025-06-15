@@ -1,12 +1,12 @@
 import { enumToArrayNumber } from "@/tools/enums/enumUtils"
 
-export enum EducationLevelGroupingVariant {
+export enum EducationLevelGroupingType {
     EducationLevelTypes = 1,
     EducationLevels = 2,
 }
 
-export namespace EducationLevelGroupingVariant {
+export namespace EducationLevelGroupingType {
     export function getAll() {
-        return enumToArrayNumber<EducationLevelGroupingVariant>(EducationLevelGroupingVariant)
+        return enumToArrayNumber<EducationLevelGroupingType>(EducationLevelGroupingType)
     }
 }

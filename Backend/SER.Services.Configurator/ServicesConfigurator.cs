@@ -8,6 +8,7 @@ using SER.Services.EducationLevels;
 using SER.Services.Employees;
 using SER.Services.Enterprises;
 using SER.Services.Groups;
+using SER.Services.Reports;
 using SER.Services.Students;
 using SER.Services.Users;
 
@@ -26,6 +27,7 @@ public static class ServicesConfigurator
 		services.AddScoped<IEnterprisesService, EnterprisesService>();
 		services.AddScoped<IClustersService, ClustersService>();
 		services.AddScoped<IUsersService, UsersService>();
+		services.AddScoped<IReportsService, ReportsService>();
 		services.AddScoped<JwtProvider>();
 
         #endregion
