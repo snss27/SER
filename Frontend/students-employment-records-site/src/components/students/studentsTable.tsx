@@ -2,6 +2,7 @@ import PageUrls from "@/constants/pageUrls"
 import { PAGE_SIZE } from "@/constants/pagination"
 import { Gender } from "@/domain/students/enums/gender"
 import { StudentStatus } from "@/domain/students/enums/studentStatus"
+import { Student } from "@/domain/students/models/student"
 import { StudentsFilter } from "@/domain/students/models/studentsFilter"
 import { StudentsProvider } from "@/domain/students/studentsProvider"
 import useDebounce from "@/hooks/useDebounce"
@@ -25,6 +26,7 @@ import { IconType } from "../shared/buttons"
 import IconButton from "../shared/buttons/iconButtons"
 import TextInput from "../shared/inputs/textInput"
 import ConfirmModal from "../shared/modals/confirmModal"
+import { StudentInfoModal } from "./modals/studentInfoModal"
 import { StudentsFilterModal } from "./modals/studentsFilterModal"
 
 export const StudentsTable: React.FC = () => {
@@ -38,6 +40,7 @@ export const StudentsTable: React.FC = () => {
     } = useLazyLoad({ load: loadStudents })
     const confirmDialog = useDialog(ConfirmModal)
     const filterDialog = useDialog(StudentsFilterModal)
+    const studentInfo = useDialog(StudentInfoModal)
     const didMountRef = useRef(false)
 
     const [searchText, setSearchText] = useState("")
@@ -78,6 +81,10 @@ export const StudentsTable: React.FC = () => {
         if (!result.isAccepted) return
 
         dispatch({ type: "SET", payload: { studentsFilter: result.studentsFilter } })
+    }
+
+    async function handlePressStudent(student: Student) {
+        await studentInfo.show({ student })
     }
 
     useEffect(() => {
@@ -137,7 +144,12 @@ export const StudentsTable: React.FC = () => {
                         {students.map((student, index) => (
                             <TableRow
                                 key={student.id}
-                                sx={{ paddingX: 1 }}
+                                sx={{
+                                    paddingX: 1,
+                                    cursor: "pointer",
+                                    ":hover": { backgroundColor: "#DCDCDC" },
+                                }}
+                                onClick={() => handlePressStudent(student)}
                                 ref={index === students.length - 1 ? lastElementRef : undefined}>
                                 <TableCell sx={{ width: "25%" }}>{student.displayName}</TableCell>
                                 <TableCell sx={{ width: "20%" }}>
@@ -155,11 +167,17 @@ export const StudentsTable: React.FC = () => {
                                 <TableCell align="right" sx={{ width: "10%" }}>
                                     <IconButton
                                         icon={IconType.Edit}
-                                        onClick={() => handleEditButton(student.id)}
+                                        onClick={(e) => {
+                                            e.stopPropagation()
+                                            handleEditButton(student.id)
+                                        }}
                                     />
                                     <IconButton
                                         icon={IconType.Delete}
-                                        onClick={() => handleRemoveButton(student.id)}
+                                        onClick={(e) => {
+                                            e.stopPropagation()
+                                            handleRemoveButton(student.id)
+                                        }}
                                     />
                                 </TableCell>
                             </TableRow>

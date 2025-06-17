@@ -29,7 +29,7 @@ const LoginPage = () => {
     return (
         <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", flex: 1 }}>
             <Stack direction="column" sx={{ width: 440, gap: 3 }}>
-                <Typography variant="h1">Авторизация</Typography>
+                <Typography variant="h1">Вход</Typography>
                 <TextInput
                     label="Логин"
                     value={authRequest.login}
