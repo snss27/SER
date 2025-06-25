@@ -1,11 +1,11 @@
 using DotNetEnv;
+using Microsoft.AspNetCore.CookiePolicy;
+using OfficeOpenXml;
 using SER.API.Infrastructure;
 using SER.Database;
 using SER.Services.Configurator;
 using SER.Startup;
 using SER.Tools.Binders;
-using Microsoft.AspNetCore.CookiePolicy;
-using OfficeOpenXml;
 
 Env.TraversePath().Load();
 ExcelPackage.License.SetNonCommercialOrganization("College-Colomna");
@@ -33,9 +33,9 @@ app.UseCors(domain);
 
 app.UseCookiePolicy(new CookiePolicyOptions
 {
-	MinimumSameSitePolicy = SameSiteMode.None,
-	HttpOnly = HttpOnlyPolicy.Always,
-	Secure = CookieSecurePolicy.Always
+	MinimumSameSitePolicy = SameSiteMode.Lax,
+	HttpOnly = HttpOnlyPolicy.None,
+	Secure = CookieSecurePolicy.None
 });
 
 app.UseAuthentication();

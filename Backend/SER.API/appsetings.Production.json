@@ -8,9 +8,9 @@
 	"AllowedHosts": "api.ser.ru",
 	"Kestrel": {
 		"Endpoints": {
-			"Https": {
-				"Url": "https://+:443"
-			}
+				"Https": {
+					"Url": "https://+:443"
+				}
 		}
 	}
 }
